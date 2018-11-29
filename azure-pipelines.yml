@@ -51,4 +51,4 @@ phases:
           command: push
           nuGetFeedType: external
           publishFeedCredentials: 'GivePenny Nuget'
-          packagesToPush: '**/GivePenny.GherkinSpec.TestAdapter.nupkg'
+          packagesToPush: '**/GivePenny.GherkinSpec.TestAdapter.*.nupkg'
