@@ -3,7 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28306.52
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GivePenny.GherkinCore.TestAdapter", "GivePenny.GherkinCore.TestAdapter\GivePenny.GherkinCore.TestAdapter.csproj", "{84DA2C3E-C51B-43BF-82D7-C54025718958}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GivePenny.GherkinCore.TestAdapter", "GivePenny.GherkinCore.TestAdapter\GivePenny.GherkinCore.TestAdapter.csproj", "{84DA2C3E-C51B-43BF-82D7-C54025718958}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GivePenny.GherkinCore.Model", "GivePenny.GherkinCore.Model\GivePenny.GherkinCore.Model.csproj", "{E16736FD-6057-45A5-A097-0817384F9F2D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GivePenny.GherkinCore.Model.UnitTests", "GivePenny.GherkinCore.Model.UnitTests\GivePenny.GherkinCore.Model.UnitTests.csproj", "{B94927BC-7C17-48B7-B41A-F5B2E014B564}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GivePenny.GherkinCore.TestModel", "GivePenny.GherkinCore.TestModel\GivePenny.GherkinCore.TestModel.csproj", "{E91B84EC-22A2-4950-870A-47FD85976E42}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GivePenny.GherkinCore.TestAdapter.UnitTests", "GivePenny.GherkinCore.TestAdapter.UnitTests\GivePenny.GherkinCore.TestAdapter.UnitTests.csproj", "{9B13EDC5-80AD-4C6B-8117-BF6E04177CE1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +23,22 @@ Global
 		{84DA2C3E-C51B-43BF-82D7-C54025718958}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84DA2C3E-C51B-43BF-82D7-C54025718958}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84DA2C3E-C51B-43BF-82D7-C54025718958}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E16736FD-6057-45A5-A097-0817384F9F2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E16736FD-6057-45A5-A097-0817384F9F2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E16736FD-6057-45A5-A097-0817384F9F2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E16736FD-6057-45A5-A097-0817384F9F2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B94927BC-7C17-48B7-B41A-F5B2E014B564}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B94927BC-7C17-48B7-B41A-F5B2E014B564}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B94927BC-7C17-48B7-B41A-F5B2E014B564}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B94927BC-7C17-48B7-B41A-F5B2E014B564}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E91B84EC-22A2-4950-870A-47FD85976E42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E91B84EC-22A2-4950-870A-47FD85976E42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E91B84EC-22A2-4950-870A-47FD85976E42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E91B84EC-22A2-4950-870A-47FD85976E42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B13EDC5-80AD-4C6B-8117-BF6E04177CE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B13EDC5-80AD-4C6B-8117-BF6E04177CE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B13EDC5-80AD-4C6B-8117-BF6E04177CE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B13EDC5-80AD-4C6B-8117-BF6E04177CE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
