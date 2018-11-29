@@ -20,6 +20,9 @@ phases:
         inputs:
           version: 2.1.403
 
+      - task: NuGetToolInstaller@0
+        displayName: 'Use NuGet tooling'
+
       - task: DotNetCoreCLI@2
         displayName: 'Build'
         inputs:
@@ -42,9 +45,9 @@ phases:
           nobuild: true
           versioningScheme: byBuildNumber
       
-      - task: DotNetCoreCLI@2
-        displayName: 'dotnet push'
+      - task: NuGetCommand@2
+        displayName: 'NuGet push'
         inputs:
           command: push
-          packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-          publishVstsFeed: '3a11ebcd-cd3d-4c54-9a2d-9e8d1c12a874'
+          nuGetFeedType: external
+          publishFeedCredentials: 'GivePenny Nuget'
