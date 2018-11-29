@@ -1,0 +1,50 @@
+name: 0.1$(Rev:.r)
+
+resources:
+  - repo: self
+    clean: true
+
+trigger:
+  - master
+
+phases:
+
+  - phase: Phase
+    displayName: Windows agent
+    queue:
+        name: Private VS2017
+
+    steps:
+      - task: DotNetCoreInstaller@0
+        displayName: 'Use .NET Core sdk 2.1.403'
+        inputs:
+          version: 2.1.403
+
+      - task: DotNetCoreCLI@2
+        displayName: 'Build'
+        inputs:
+          projects: '**/*.csproj'
+          arguments: '--configuration Release'
+
+      - task: DotNetCoreCLI@2
+        displayName: 'Run unit tests'
+        inputs:
+          command: test
+          nobuild: true
+          projects: '**/*.UnitTests.csproj'
+
+      - task: DotNetCoreCLI@2
+        displayName: 'dotnet pack'
+        inputs:
+          command: pack
+          projects: '**/GivePenny.GherkinSpec.TestAdapter.csproj'
+          configuration: Release
+          nobuild: true
+          versioningScheme: byBuildNumber
+      
+      - task: DotNetCoreCLI@2
+        displayName: 'dotnet push'
+        inputs:
+          command: push
+          packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+          publishVstsFeed: '3a11ebcd-cd3d-4c54-9a2d-9e8d1c12a874'
