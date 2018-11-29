@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.0.64-alpha</Version>
+    <Version>0.0.65-alpha</Version>
     <Authors>GivePenny</Authors>
     <Company>GivePenny</Company>
     <Product>GivePenny GherkinSpec</Product>

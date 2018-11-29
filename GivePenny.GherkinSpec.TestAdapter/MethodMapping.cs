@@ -43,7 +43,7 @@ namespace GivePenny.GherkinSpec.TestAdapter
                 }
             }
 
-            var result = methodInfo.Invoke(stepsClassInstance, null);
+            var result = methodInfo.Invoke(stepsClassInstance, arguments);
 
             if (methodInfo.ReturnType.IsSubclassOf(typeof(Task)) || methodInfo.ReturnType == typeof(Task))
             {

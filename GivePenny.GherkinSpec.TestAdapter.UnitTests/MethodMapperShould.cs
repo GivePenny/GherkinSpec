@@ -76,6 +76,19 @@ namespace GivePenny.GherkinSpec.TestAdapter.UnitTests
         }
 
         [TestMethod]
+        public void FindNonStaticMethods()
+        {
+            var mapper = new MethodMapper();
+            var mapping = mapper.GetMappingFor(
+                new GivenStep("Given a plain value in a non-static method"),
+                Assembly.GetExecutingAssembly(),
+                mockLogger.Object);
+
+            Assert.AreEqual("GivenANonStaticPlainTextMatch", mapping.Name);
+            Assert.AreEqual(1, mapping.Arguments.Length);
+        }
+
+        [TestMethod]
         public void ThrowExceptionIfMethodRequiresMoreArgumentsThanTheStepAttributeProvides()
         {
             var mapper = new MethodMapper();
