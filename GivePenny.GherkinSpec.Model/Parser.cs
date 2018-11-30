@@ -105,7 +105,7 @@ namespace GivePenny.GherkinSpec.Model
                 return new ThenStep(reader.CurrentLine);
             }
 
-            if (!reader.IsAndLine)
+            if (!reader.IsAndLine && !reader.IsButLine)
             {
                 throw new NotSupportedException(
                     $"Unrecognised step type in line '{reader.CurrentLine}'.");
