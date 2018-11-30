@@ -16,7 +16,7 @@
     <RepositoryUrl>https://github.com/GivePenny/GherkinSpec</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>Gherkin, BDD, TDD</PackageTags>
-    <PackageIconUrl>https://raw.githubusercontent.com/GivePenny/GherkinSpec/blob/master/docs/G-logo-128x128.png</PackageIconUrl>
+    <PackageIconUrl>https://secure.gravatar.com/avatar/96b7defc765a3a242e00557bb65d37ef?s=256</PackageIconUrl>
   </PropertyGroup>
 
   <ItemGroup>
