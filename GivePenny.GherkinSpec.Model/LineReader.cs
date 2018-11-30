@@ -6,10 +6,12 @@ namespace GivePenny.GherkinSpec.Model
     {
         private const string FeatureLineStart = "Feature:";
         private const string ScenarioLineStart = "Scenario:";
+        private const string ExampleLineStart = "Example:";
         public const string GivenLineStart = "Given ";
         public const string WhenLineStart = "When ";
         public const string ThenLineStart = "Then ";
         private const string AndLineStart = "And ";
+        private const string ButLineStart = "But ";
 
         private readonly TextReader textReader;
 
@@ -44,10 +46,13 @@ namespace GivePenny.GherkinSpec.Model
             => CurrentLine.Substring(FeatureLineStart.Length).Trim();
 
         public bool IsScenarioStartLine
-            => CurrentLineStartsWith(ScenarioLineStart);
+            => CurrentLineStartsWith(ScenarioLineStart)
+                || CurrentLineStartsWith(ExampleLineStart);
 
         public string CurrentLineScenarioTitle
-            => CurrentLine.Substring(ScenarioLineStart.Length).Trim();
+            => CurrentLineStartsWith(ScenarioLineStart)
+                ? CurrentLine.Substring(ScenarioLineStart.Length).Trim()
+                : CurrentLine.Substring(ExampleLineStart.Length).Trim();
 
         public bool IsGivenLine
             => CurrentLineStartsWith(GivenLineStart);
@@ -61,8 +66,11 @@ namespace GivePenny.GherkinSpec.Model
         public bool IsAndLine
             => CurrentLineStartsWith(AndLineStart);
 
+        public bool IsButLine
+            => CurrentLineStartsWith(ButLineStart);
+
         public bool IsStepLine
-            => IsGivenLine || IsWhenLine || IsThenLine || IsAndLine;
+            => IsGivenLine || IsWhenLine || IsThenLine || IsAndLine || IsButLine;
 
         public bool IsEndOfFile
             => CurrentLine == null;

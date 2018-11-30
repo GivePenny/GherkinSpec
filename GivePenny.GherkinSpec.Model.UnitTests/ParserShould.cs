@@ -25,7 +25,7 @@ namespace GivePenny.GherkinSpec.Model.UnitTests
             var feature = parser.Parse(text);
             Assert.AreEqual(@"As a developer
 I want things to work
-So that I can have more fun", feature.Motivation);
+So that I can have more fun", feature.Narrative);
         }
 
         [TestMethod]
@@ -39,12 +39,22 @@ So that I can have more fun", feature.Motivation);
         }
 
         [TestMethod]
+        public void ReadExampleAsAScenario()
+        {
+            var text = Resources.GetString("Example.feature");
+            var parser = new Parser();
+            var feature = parser.Parse(text);
+            Assert.AreEqual(1, feature.Scenarios.Count());
+            Assert.AreEqual(@"This is a scenario", feature.Scenarios.First().Title);
+        }
+
+        [TestMethod]
         public void SkipCommentLines()
         {
             var text = Resources.GetString("Comment.feature");
             var parser = new Parser();
             var feature = parser.Parse(text);
-            Assert.IsTrue(string.IsNullOrEmpty(feature.Motivation));
+            Assert.IsTrue(string.IsNullOrEmpty(feature.Narrative));
         }
 
         [TestMethod]
@@ -53,7 +63,7 @@ So that I can have more fun", feature.Motivation);
             var text = Resources.GetString("Whitespace.feature");
             var parser = new Parser();
             var feature = parser.Parse(text);
-            Assert.AreEqual("Motivation", feature.Motivation);
+            Assert.AreEqual("Motivation", feature.Narrative);
         }
 
         [TestMethod]
@@ -86,7 +96,31 @@ So that I can have more fun", feature.Motivation);
 
             Assert.AreEqual(2, feature.Scenarios.Count());
             Assert.AreEqual(4, feature.Scenarios.First().Steps.Count);
-            Assert.AreEqual(2, feature.Scenarios.Skip(1).First().Steps.Count);
+            Assert.AreEqual(3, feature.Scenarios.Skip(1).First().Steps.Count);
+        }
+
+        [TestMethod]
+        public void TreatAndAsTheLastDefinedGivenWhenOrThen()
+        {
+            var text = Resources.GetString("ScenarioSteps.feature");
+            var parser = new Parser();
+            var feature = parser.Parse(text);
+
+            Assert.IsInstanceOfType(
+                feature.Scenarios.First().Steps.Skip(1).First(),
+                typeof(GivenStep));
+        }
+
+        [TestMethod]
+        public void TreatButAsTheLastDefinedGivenWhenOrThen()
+        {
+            var text = Resources.GetString("ScenarioSteps.feature");
+            var parser = new Parser();
+            var feature = parser.Parse(text);
+
+            Assert.IsInstanceOfType(
+                feature.Scenarios.Skip(1).First().Steps.Skip(2).First(),
+                typeof(ThenStep));
         }
     }
 }
