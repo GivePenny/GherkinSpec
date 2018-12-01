@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace GivePenny.GherkinSpec.Model
+namespace GivePenny.GherkinSpec.Model.Parsing
 {
     public class Parser
     {
@@ -30,12 +30,15 @@ namespace GivePenny.GherkinSpec.Model
             }
 
             var featureTitle = reader.CurrentLineFeatureTitle;
-            var featureMotivation = new StringBuilder();
+            var featureNarrative = new StringBuilder();
 
             reader.ReadNextLine();
-            while (!reader.IsEndOfFile && !reader.IsScenarioStartLine)
+            while (
+                !reader.IsEndOfFile
+                && !reader.IsScenarioStartLine
+                && !reader.IsBackgroundStartLine)
             {
-                featureMotivation.AppendLine(reader.CurrentLine);
+                featureNarrative.AppendLine(reader.CurrentLine);
                 reader.ReadNextLine();
             }
 
@@ -43,12 +46,14 @@ namespace GivePenny.GherkinSpec.Model
             {
                 return new Feature(
                     featureTitle,
-                    featureMotivation.ToString()?.Trim(),
+                    featureNarrative.ToString()?.Trim(),
+                    Background.Empty,
                     Enumerable.Empty<Scenario>());
             }
 
-            var scenarios = new List<Scenario>();
+            var featureBackground = BackgroundParser.ParseBackgroundIfPresent(reader);
 
+            var scenarios = new List<Scenario>();
             do
             {
                 if (!reader.IsScenarioStartLine)
@@ -62,7 +67,8 @@ namespace GivePenny.GherkinSpec.Model
 
             return new Feature(
                 featureTitle,
-                featureMotivation.ToString()?.Trim(),
+                featureNarrative.ToString()?.Trim(),
+                featureBackground,
                 scenarios);
         }
 
@@ -105,7 +111,7 @@ namespace GivePenny.GherkinSpec.Model
                 return new ThenStep(reader.CurrentLine);
             }
 
-            if (!reader.IsAndLine)
+            if (!reader.IsAndLine && !reader.IsButLine)
             {
                 throw new NotSupportedException(
                     $"Unrecognised step type in line '{reader.CurrentLine}'.");

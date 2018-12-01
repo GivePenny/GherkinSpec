@@ -31,20 +31,31 @@ namespace GivePenny.GherkinSpec.TestAdapter
                     throw new ArgumentNullException(nameof(testData));
                 }
 
-                var steps = testData?.Scenario?.Steps;
+                var hasAnySteps = testData.Feature.Background.Steps
+                    .Concat(testData.Scenario.Steps)
+                    .Any();
 
-                if (!steps.Any())
+                if (!hasAnySteps)
                 {
                     MarkAsSkipped(testResult);
                 }
                 else
                 {
-                    await ExecuteSteps(testResult, steps, testData, testRunContext, logger);
+                    using (var serviceScope = testRunContext.ServiceProvider.CreateScope())
+                    {
+                        await ExecuteSteps(serviceScope.ServiceProvider, testResult, testData.Feature.Background.Steps, testData, logger);
+
+                        // TODO Cucumber docs say run BeforeHooks here.
+
+                        await ExecuteSteps(serviceScope.ServiceProvider, testResult, testData.Scenario.Steps, testData, logger);
+                    }
+
+                    testResult.Outcome = TestOutcome.Passed;
                 }
             }
             catch (Exception exception)
             {
-                RecordFailedTest(testCase, testResult, exception, logger);
+                MarkAsFailed(testCase, testResult, exception, logger);
             }
 
             testResult.Duration = TimeSpan.FromSeconds(
@@ -55,7 +66,7 @@ namespace GivePenny.GherkinSpec.TestAdapter
             return testResult;
         }
 
-        private static void RecordFailedTest(TestCase testCase, TestResult testResult, Exception exception, IMessageLogger logger)
+        private static void MarkAsFailed(TestCase testCase, TestResult testResult, Exception exception, IMessageLogger logger)
         {
             logger.SendMessage(
                 TestMessageLevel.Error,
@@ -76,10 +87,13 @@ namespace GivePenny.GherkinSpec.TestAdapter
             testResult.Outcome = TestOutcome.Skipped;
         }
 
-        private async Task ExecuteSteps(TestResult testResult, IEnumerable<IStep> steps, DiscoveredTestData testData, TestRunContext testRunContext, IMessageLogger logger)
+        private async Task ExecuteSteps(
+            IServiceProvider serviceProvider,
+            TestResult testResult,
+            IEnumerable<IStep> steps,
+            DiscoveredTestData testData,
+            IMessageLogger logger)
         {
-            using (var serviceScope = testRunContext.ServiceProvider.CreateScope())
-            {
                 foreach (var step in steps)
                 {
                     testResult.Messages.Add(
@@ -91,7 +105,7 @@ namespace GivePenny.GherkinSpec.TestAdapter
                     {
                         var method = methodMapper.GetMappingFor(step, testData.Assembly, logger);
                         await method
-                            .Execute(serviceScope, testResult.Messages)
+                            .Execute(serviceProvider, testResult.Messages)
                             .ConfigureAwait(false);
                     }
                     catch (Exception exception)
@@ -113,9 +127,6 @@ namespace GivePenny.GherkinSpec.TestAdapter
                             TestResultMessage.StandardOutCategory,
                             $"  Completed{Environment.NewLine}"));
                 }
-            }
-
-            testResult.Outcome = TestOutcome.Passed;
         }
     }
 }

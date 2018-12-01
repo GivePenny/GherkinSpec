@@ -12,3 +12,4 @@ Scenario: Add two numbers together
 Scenario: Add two numbers together when one of them is zero
 	When I do nothing
 	Then nothing happens
+	But this reads well

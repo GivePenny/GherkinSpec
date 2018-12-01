@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Background.feature" />
     <None Remove="Resources\Comment.feature" />
+    <None Remove="Resources\Example.feature" />
     <None Remove="Resources\FeatureMotivationScenarioTitle.feature" />
     <None Remove="Resources\ScenarioSteps.feature" />
     <None Remove="Resources\ScenarioTitle.feature" />
@@ -16,7 +18,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\Background.feature">
+      <Generator></Generator>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\ScenarioSteps.feature">
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Example.feature">
       <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ScenarioTitles.feature">
