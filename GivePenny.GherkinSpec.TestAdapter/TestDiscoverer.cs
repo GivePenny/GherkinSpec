@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using GivePenny.GherkinSpec.Model;
+using GivePenny.GherkinSpec.Model.Parsing;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
@@ -89,6 +90,7 @@ namespace GivePenny.GherkinSpec.TestAdapter
 
                 // TODO Strip dots/special-chars from names
                 // TODO Unicode?
+
                 var featureName = feature.Title;
 
                 foreach (var scenario in feature.Scenarios)
@@ -97,7 +99,7 @@ namespace GivePenny.GherkinSpec.TestAdapter
                     var testCase = new TestCase(featureName + "." + scenarioName, TestExecutor.ExecutorUriStronglyTyped, source)
                     {
                         DisplayName = scenarioName,
-                        LocalExtensionData = new DiscoveredTestData(assembly, scenario),
+                        LocalExtensionData = new DiscoveredTestData(assembly, feature, scenario),
                         CodeFilePath = featureFileName,
                         LineNumber = scenario.StartingLineNumber
                     };

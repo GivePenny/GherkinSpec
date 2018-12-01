@@ -5,6 +5,7 @@ namespace GivePenny.GherkinSpec.Model
     class LineReader
     {
         private const string FeatureLineStart = "Feature:";
+        private const string BackgroundLineStart = "Background:";
         private const string ScenarioLineStart = "Scenario:";
         private const string ExampleLineStart = "Example:";
         public const string GivenLineStart = "Given ";
@@ -44,6 +45,9 @@ namespace GivePenny.GherkinSpec.Model
 
         public string CurrentLineFeatureTitle
             => CurrentLine.Substring(FeatureLineStart.Length).Trim();
+
+        public bool IsBackgroundStartLine
+            => CurrentLineStartsWith(BackgroundLineStart);
 
         public bool IsScenarioStartLine
             => CurrentLineStartsWith(ScenarioLineStart)
