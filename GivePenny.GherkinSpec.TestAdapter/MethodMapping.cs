@@ -25,7 +25,7 @@ namespace GivePenny.GherkinSpec.TestAdapter
 
         public object[] Arguments => arguments;
 
-        public Task Execute(IServiceScope serviceScope, Collection<TestResultMessage> messages)
+        public Task Execute(IServiceProvider serviceProvider, Collection<TestResultMessage> messages)
         {
             messages.Add(
                 new TestResultMessage(
@@ -35,7 +35,7 @@ namespace GivePenny.GherkinSpec.TestAdapter
             object stepsClassInstance = null;
             if (!methodInfo.IsStatic)
             {
-                stepsClassInstance = serviceScope.ServiceProvider.GetService(methodInfo.DeclaringType);
+                stepsClassInstance = serviceProvider.GetService(methodInfo.DeclaringType);
                 if (stepsClassInstance == null)
                 {
                     throw new StepBindingException(

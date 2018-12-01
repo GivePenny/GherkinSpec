@@ -5,13 +5,15 @@ namespace GivePenny.GherkinSpec.TestAdapter
 {
     class DiscoveredTestData
     {
-        public DiscoveredTestData(Assembly assembly, Scenario scenario)
+        public DiscoveredTestData(Assembly assembly, Feature feature, Scenario scenario)
         {
             Assembly = assembly;
+            Feature = feature;
             Scenario = scenario;
         }
 
         public Assembly Assembly { get; }
+        public Feature Feature { get; }
         public Scenario Scenario { get; }
     }
 }
