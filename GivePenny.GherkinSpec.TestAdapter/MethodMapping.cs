@@ -1,5 +1,4 @@
 ﻿using GivePenny.GherkinSpec.Model;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using System;
 using System.Collections.ObjectModel;
@@ -8,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GivePenny.GherkinSpec.TestAdapter
 {
-    class MethodMapping
+    class MethodMapping : IMethodMapping
     {
         private readonly IStep step;
         private readonly MethodInfo methodInfo;

@@ -2,7 +2,7 @@
 
 ## Overview
 
-A lightweight, cross-platform .NET Standard test adapter that discovers Gherkin tests from feature files and executes them.  Inspired by the giants of Cucumber, SpecFlow and BDDfy, filling a niche between them for microservice tests that are both lightweight (BDDfy) yet self-documenting in a natural language (SpecFlow/Cucumber).
+A lightweight, cross-platform .NET Standard test adapter that discovers Gherkin tests from feature files and executes them.  Inspired by the giants of Cucumber, SpecFlow and BDDfy, filling a niche between them for microservice tests that are both lightweight (e.g. BDDfy) yet self-documenting in a natural language (e.g. SpecFlow/Cucumber).
 
 Published package: https://www.nuget.org/packages/GivePenny.GherkinSpec.TestAdapter
 
@@ -16,7 +16,9 @@ Published package: https://www.nuget.org/packages/GivePenny.GherkinSpec.TestAdap
 
 ## Getting started
 
-See [the simple example repository](https://github.com/GivePenny/GherkinSpec.SimpleExample), download the code, try it out.
+The best way to pick GherkinSpec up us to see [the simple example repository](https://github.com/GivePenny/GherkinSpec.SimpleExample), download the code and just try it out.
+
+If you want to create a new test project from scratch ...
 
 1. Create a new .NET Core project for your tests.
 2. Add Nuget package references to [GivePenny.GherkinSpec.TestAdapter](https://www.nuget.org/packages/GivePenny.GherkinSpec.TestAdapter) and [Microsoft.NET.Test.Sdk](https://www.nuget.org/packages/Microsoft.NET.Test.Sdk).
@@ -24,7 +26,7 @@ See [the simple example repository](https://github.com/GivePenny/GherkinSpec.Sim
 4. Write your C# steps, tagging the class with a `[Steps]` attribute and your methods with `[Given]` or `[When]` or `[Then]`
 5. Add a reference to a unit test framework of your choice if you would like to perform Assertions, for example [MSTest.TestFramework](https://www.nuget.org/packages/MSTest.TestFramework)
 
-Steps 1, 2 and 5 can be speeded up by creating your test project using this template in Visual Studio (you will still need to add a reference to GivePenny.GherkinSpec.TestAdapter).
+Steps 1, 2 and 5 can be speeded up by creating your test project using one of these templates in Visual Studio, either for MS Test, NUnit or xUnit.  You will still need to add a reference to GivePenny.GherkinSpec.TestAdapter.
 
 ![Screenshot showing a new .NET Core MS Test project](docs/MSTestProject.png)
 
@@ -43,15 +45,12 @@ Steps 1, 2 and 5 can be speeded up by creating your test project using this temp
 * If you keep getting .designer.cs files appear, uninstall the SpecFlow Extension for Visual Studio or name your files .gherkin instead of .feature.
 * Make sure you add the Test SDK package to your test project, again see the csproj for the simple example (`<PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />`).
 
-## Roadmap
+## Reference guide / concepts
 
-The project's next steps are (in no particular order):
+* [Before/after hooks](docs/Hooks.md)
+* [Roadmap](docs/Roadmap.md)
 
-* Further documentation (including contribution guidelines)
-* Support for the full Gherkin syntax (currently only Feature, Scenario, Given, When and Then are supported)
-* Full example showing dependency injection, configuration, logging and async/await.
-
-## References and useful links
+## Third-party references and useful links
 
 * [Full Gherkin syntax](https://docs.cucumber.io/gherkin/reference/)
 * For VSCode Gherkin syntax highlighting try [other community extensions, such as this one](https://marketplace.visualstudio.com/items?itemName=stevejpurves.cucumber).

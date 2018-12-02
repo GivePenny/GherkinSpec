@@ -2,8 +2,6 @@
 
 namespace GivePenny.GherkinSpec.TestAdapter
 {
-    public delegate object ObjectFactory(Type typeToInstantiate);
-
     public class TestRunContext
     {
         public TestRunContext(IServiceProvider defaultServiceProvider)
