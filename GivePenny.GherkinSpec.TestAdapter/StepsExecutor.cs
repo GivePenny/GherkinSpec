@@ -12,9 +12,9 @@ namespace GivePenny.GherkinSpec.TestAdapter
 {
     internal class StepsExecutor
     {
-        private readonly MethodMapper methodMapper;
+        private readonly IMethodMapper methodMapper;
 
-        public StepsExecutor(MethodMapper methodMapper)
+        public StepsExecutor(IMethodMapper methodMapper)
         {
             this.methodMapper = methodMapper;
         }
@@ -43,11 +43,13 @@ namespace GivePenny.GherkinSpec.TestAdapter
                 {
                     using (var serviceScope = testRunContext.ServiceProvider.CreateScope())
                     {
-                        await ExecuteSteps(serviceScope.ServiceProvider, testResult, testData.Feature.Background.Steps, testData, logger);
+                        await ExecuteSteps(serviceScope.ServiceProvider, testResult, testData.Feature.Background.Steps, testData)
+                            .ConfigureAwait(false);
 
                         // TODO Cucumber docs say run BeforeHooks here.
 
-                        await ExecuteSteps(serviceScope.ServiceProvider, testResult, testData.Scenario.Steps, testData, logger);
+                        await ExecuteSteps(serviceScope.ServiceProvider, testResult, testData.Scenario.Steps, testData)
+                            .ConfigureAwait(false);
                     }
 
                     testResult.Outcome = TestOutcome.Passed;
@@ -91,8 +93,7 @@ namespace GivePenny.GherkinSpec.TestAdapter
             IServiceProvider serviceProvider,
             TestResult testResult,
             IEnumerable<IStep> steps,
-            DiscoveredTestData testData,
-            IMessageLogger logger)
+            DiscoveredTestData testData)
         {
                 foreach (var step in steps)
                 {
@@ -103,7 +104,7 @@ namespace GivePenny.GherkinSpec.TestAdapter
 
                     try
                     {
-                        var method = methodMapper.GetMappingFor(step, testData.Assembly, logger);
+                        var method = methodMapper.GetMappingFor(step, testData.Assembly);
                         await method
                             .Execute(serviceProvider, testResult.Messages)
                             .ConfigureAwait(false);

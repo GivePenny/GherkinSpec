@@ -21,8 +21,7 @@ namespace GivePenny.GherkinSpec.TestAdapter.UnitTests
             var mapper = new MethodMapper();
             var mapping = mapper.GetMappingFor(
                 new GivenStep("Given a plain text match"),
-                Assembly.GetExecutingAssembly(),
-                mockLogger.Object);
+                Assembly.GetExecutingAssembly());
 
             Assert.AreEqual("GivenAPlainTextMatch", mapping.Name);
         }
@@ -52,8 +51,7 @@ namespace GivePenny.GherkinSpec.TestAdapter.UnitTests
             var mapper = new MethodMapper();
             var mapping = mapper.GetMappingFor(
                 new GivenStep($"Given a single {typeof(TArgumentType).Name} match of {stepValue}"),
-                Assembly.GetExecutingAssembly(),
-                mockLogger.Object);
+                Assembly.GetExecutingAssembly());
 
             Assert.AreEqual($"GivenASingle{typeof(TArgumentType).Name}Match", mapping.Name);
             Assert.AreEqual(1, mapping.Arguments.Length);
@@ -66,8 +64,7 @@ namespace GivePenny.GherkinSpec.TestAdapter.UnitTests
             var mapper = new MethodMapper();
             var mapping = mapper.GetMappingFor(
                 new GivenStep("Given a single 'value-here' match and 'another here'"),
-                Assembly.GetExecutingAssembly(),
-                mockLogger.Object);
+                Assembly.GetExecutingAssembly());
 
             Assert.AreEqual("GivenAMultipleStringMatch", mapping.Name);
             Assert.AreEqual(2, mapping.Arguments.Length);
@@ -81,8 +78,7 @@ namespace GivePenny.GherkinSpec.TestAdapter.UnitTests
             var mapper = new MethodMapper();
             var mapping = mapper.GetMappingFor(
                 new GivenStep("Given a plain value in a non-static method"),
-                Assembly.GetExecutingAssembly(),
-                mockLogger.Object);
+                Assembly.GetExecutingAssembly());
 
             Assert.AreEqual("GivenANonStaticPlainTextMatch", mapping.Name);
             Assert.AreEqual(1, mapping.Arguments.Length);
@@ -97,8 +93,7 @@ namespace GivePenny.GherkinSpec.TestAdapter.UnitTests
                 () =>
                     mapper.GetMappingFor(
                         new GivenStep("Given not enough captures to satisfy method arguments"),
-                        Assembly.GetExecutingAssembly(),
-                        mockLogger.Object));
+                        Assembly.GetExecutingAssembly()));
 
             Assert.AreEqual(
                 @"The step ""Given not enough captures to satisfy method arguments"" matches the method ""GivenNotEnoughCaptures"" on class ""GivePenny.GherkinSpec.TestAdapter.UnitTests.Samples.StepBindingStaticSamples"". That method expects 2 parameters but the step only provides 1.",

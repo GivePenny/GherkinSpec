@@ -59,9 +59,21 @@ namespace GivePenny.GherkinSpec.TestAdapter
         {
             frameworkHandle.SendMessage(TestMessageLevel.Informational, "Running tests");
 
-            using (var serviceProvider = new DefaultServiceProvider())
+            using (var defaultServiceProvider = new DefaultServiceProvider())
             {
-                var testRunContext = new TestRunContext(serviceProvider);
+                var testRunContext = new TestRunContext(defaultServiceProvider);
+
+                var runHooks = new RunHooks(
+                    testRunContext,
+                    mappedTests
+                        .Select(
+                            test => test
+                                .DiscoveredData()
+                                .Assembly)
+                        .Distinct());
+
+                runHooks.ExecuteBeforeRun().Wait();
+
                 var methodMapper = new MethodMapper();
 
                 var tasks = new List<Task>();
@@ -75,10 +87,11 @@ namespace GivePenny.GherkinSpec.TestAdapter
                     }
 
                     tasks.Add(
-                        RunMappedTest(testCase, (DiscoveredTestData)testCase.LocalExtensionData, testRunContext, methodMapper, runContext, frameworkHandle));
+                        RunMappedTest(testCase, testCase.DiscoveredData(), testRunContext, methodMapper, runContext, frameworkHandle));
                 }
 
                 Task.WhenAll(tasks).Wait();
+                runHooks.ExecuteAfterRun().Wait();
             }
         }
 

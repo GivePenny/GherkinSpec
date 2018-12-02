@@ -1,6 +1,5 @@
 ﻿using GivePenny.GherkinSpec.Model;
 using GivePenny.GherkinSpec.TestModel;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,18 +9,18 @@ using System.Text.RegularExpressions;
 
 namespace GivePenny.GherkinSpec.TestAdapter
 {
-    class MethodMapper
+    class MethodMapper : IMethodMapper
     {
-        public MethodMapping GetMappingFor(IStep step, Assembly testAssembly, IMessageLogger logger)
+        public IMethodMapping GetMappingFor(IStep step, Assembly testAssembly)
         {
             // TODO Cache list of methods and regexs, and separate list of steps to methods
             // TODO Referenced assemblies
 
             MethodMapping candidate = null;
 
-            foreach(var type in FindStepsClassesIn(testAssembly))
+            foreach(var type in StepsClasses.FindIn(testAssembly))
             {
-                foreach (var method in FindMatchingStepMethodsIn(type, step, logger))
+                foreach (var method in FindMatchingStepMethodsIn(type, step))
                 {
                     if (candidate != null)
                     {
@@ -43,27 +42,20 @@ namespace GivePenny.GherkinSpec.TestAdapter
             return candidate;
         }
 
-        private static IEnumerable<Type> FindStepsClassesIn(Assembly assembly)
-            => assembly.GetTypes().Where(
-                type => type.IsClass
-                    && type.GetCustomAttributes(
-                        typeof(StepsAttribute),
-                        true).Any());
-
-        private static IEnumerable<MethodMapping> FindMatchingStepMethodsIn(Type type, IStep step, IMessageLogger logger)
+        private static IEnumerable<MethodMapping> FindMatchingStepMethodsIn(Type type, IStep step)
         {
             foreach(var method in type.GetMethods(BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance))
             {
-                foreach (var match in GetMatches<GivenStep, GivenAttribute>(method, step, logger)
-                    .Concat(GetMatches<WhenStep, WhenAttribute>(method, step, logger))
-                    .Concat(GetMatches<ThenStep, ThenAttribute>(method, step, logger)))
+                foreach (var match in GetMatches<GivenStep, GivenAttribute>(method, step)
+                    .Concat(GetMatches<WhenStep, WhenAttribute>(method, step))
+                    .Concat(GetMatches<ThenStep, ThenAttribute>(method, step)))
                 {
                     yield return match;
                 }
             }
         }
 
-        private static IEnumerable<MethodMapping> GetMatches<TStep, TAttribute>(MethodInfo method, IStep step, IMessageLogger logger)
+        private static IEnumerable<MethodMapping> GetMatches<TStep, TAttribute>(MethodInfo method, IStep step)
             where TStep : IStep
             where TAttribute : Attribute, IStepAttribute
         {
