@@ -1,4 +1,5 @@
 ﻿using GivePenny.GherkinSpec.TestAdapter.DependencyInjection;
+using GivePenny.GherkinSpec.TestModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;

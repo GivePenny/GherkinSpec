@@ -1,5 +1,6 @@
 ﻿using GivePenny.GherkinSpec.TestAdapter.DependencyInjection;
 using GivePenny.GherkinSpec.TestAdapter.UnitTests.Samples;
+using GivePenny.GherkinSpec.TestModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Reflection;
 using System.Threading.Tasks;

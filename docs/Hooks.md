@@ -1,8 +1,8 @@
 # Hooks
 
-Hooks are methods that are automatically at various points of the test run.  Currently the following hooks are supported.
+Hooks are methods that are automatically executed at various points of the test run.  Currently the following hooks are supported.
 
-  Note that any class containing hook methods must be decorated with the `[Steps]` attribute before the methods will be detected and executed.
+  Any class containing hook methods must be decorated with the `[Steps]` attribute before the methods will be detected and executed.
 
 ## BeforeRun
 

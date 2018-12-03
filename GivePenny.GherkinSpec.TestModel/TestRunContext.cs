@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GivePenny.GherkinSpec.TestAdapter
+namespace GivePenny.GherkinSpec.TestModel
 {
     public class TestRunContext
     {
