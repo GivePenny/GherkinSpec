@@ -48,6 +48,7 @@ Steps 1, 2 and 5 can be speeded up by creating your test project using one of th
 ## Reference guide / concepts
 
 * [Before/after hooks](docs/Hooks.md)
+* [Dependency injection](docs/DependencyInjection.md)
 * [Roadmap](docs/Roadmap.md)
 
 ## Third-party references and useful links
