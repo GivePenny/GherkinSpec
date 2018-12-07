@@ -70,7 +70,7 @@ namespace GivePenny.GherkinSpec.Model.Parsing
             => CurrentLine == ExamplesLine;
 
         public bool IsTableLine
-            => CurrentLine.StartsWith("|");
+            => CurrentLineStartsWith("|");
 
         public bool IsGivenLine
             => CurrentLineStartsWith(GivenLineStart);

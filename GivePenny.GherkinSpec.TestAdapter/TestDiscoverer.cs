@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using GivePenny.GherkinSpec.Model;
 using GivePenny.GherkinSpec.Model.Parsing;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
@@ -50,7 +49,9 @@ namespace GivePenny.GherkinSpec.TestAdapter
             try
             {
                 var assembly = Assembly.LoadFrom(sourceAssemblyPath);
-                return DiscoverTests(source, assembly, logger);
+
+                // ToArray forces the enumeration to be avaluated so any exceptions are caught and logged fully here.
+                return DiscoverTests(source, assembly, logger).ToArray();
             }
             catch (BadImageFormatException exception)
             {
