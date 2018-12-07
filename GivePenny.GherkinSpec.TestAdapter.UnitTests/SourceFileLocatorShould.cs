@@ -12,7 +12,14 @@ namespace GivePenny.GherkinSpec.TestAdapter.UnitTests
         private readonly Mock<IMessageLogger> mockLogger = new Mock<IMessageLogger>();
 
         [TestMethod]
-        public void FindFeatureFile()
+        public void FindFeatureFileWithFeatureExtension()
+            => FindFeatureFile("feature");
+
+        [TestMethod]
+        public void FindFeatureFileWithGherkinExtension()
+            => FindFeatureFile("gherkin");
+
+        private void FindFeatureFile(string extension)
         {
             var locator = new SourceFileLocator(
                 assemblyDllPath: Assembly.GetExecutingAssembly().Location);
@@ -20,7 +27,7 @@ namespace GivePenny.GherkinSpec.TestAdapter.UnitTests
             var resourceNameToFind = Assembly
                 .GetExecutingAssembly()
                 .GetManifestResourceNames()
-                .Where(name => name.EndsWith("FindMe.feature"))
+                .Where(name => name.EndsWith($"FindMe.{extension}"))
                 .Single();
 
             var foundFile = locator.FindFeatureFileNameIfPossible(
@@ -30,7 +37,9 @@ namespace GivePenny.GherkinSpec.TestAdapter.UnitTests
             Assert.IsNotNull(foundFile);
             foundFile = foundFile.Replace("\\", "/");
 
-            Assert.IsTrue(foundFile.EndsWith("GivePenny.GherkinSpec.TestAdapter.UnitTests/FeaturesToFind/FindMe.feature"));
+            Assert.IsTrue(
+                foundFile.EndsWith(
+                    $"GivePenny.GherkinSpec.TestAdapter.UnitTests/FeaturesToFind/FindMe.{extension}"));
         }
     }
 }
