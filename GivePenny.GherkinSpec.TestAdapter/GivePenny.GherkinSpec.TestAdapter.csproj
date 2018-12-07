@@ -2,11 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <PackageId>GivePenny.GherkinSpec</PackageId>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Version>0.0.65-alpha</Version>
     <Authors>GivePenny</Authors>
     <Company>GivePenny</Company>
-    <Product>GivePenny GherkinSpec</Product>
+    <Product>GherkinSpec</Product>
     <Copyright>Copyright 2018 Raising Technology Ltd</Copyright>
     <BuildOutputTargetFolder>build</BuildOutputTargetFolder>
     <ContentTargetFolders>build/netcoreapp2.1</ContentTargetFolders>

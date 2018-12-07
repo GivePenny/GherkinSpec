@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GivePenny.GherkinSpec.Model
+namespace GivePenny.GherkinSpec.Model.Parsing
 {
     public class InvalidGherkinSyntaxException : Exception
     {

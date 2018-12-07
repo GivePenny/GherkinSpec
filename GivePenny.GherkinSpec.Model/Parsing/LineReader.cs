@@ -1,13 +1,15 @@
 ﻿using System.IO;
 
-namespace GivePenny.GherkinSpec.Model
+namespace GivePenny.GherkinSpec.Model.Parsing
 {
     class LineReader
     {
         private const string FeatureLineStart = "Feature:";
         private const string BackgroundLineStart = "Background:";
         private const string ScenarioLineStart = "Scenario:";
+        private const string ScenarioOutlineLineStart = "Scenario Outline:";
         private const string ExampleLineStart = "Example:";
+        private const string ExamplesLine = "Examples:";
         public const string GivenLineStart = "Given ";
         public const string WhenLineStart = "When ";
         public const string ThenLineStart = "Then ";
@@ -57,6 +59,18 @@ namespace GivePenny.GherkinSpec.Model
             => CurrentLineStartsWith(ScenarioLineStart)
                 ? CurrentLine.Substring(ScenarioLineStart.Length).Trim()
                 : CurrentLine.Substring(ExampleLineStart.Length).Trim();
+
+        public bool IsScenarioOutlineStartLine
+            => CurrentLineStartsWith(ScenarioOutlineLineStart);
+
+        public string CurrentLineScenarioOutlineTitle
+            => CurrentLine.Substring(ScenarioOutlineLineStart.Length).Trim();
+
+        public bool IsExamplesStartLine
+            => CurrentLine == ExamplesLine;
+
+        public bool IsTableLine
+            => CurrentLine.StartsWith("|");
 
         public bool IsGivenLine
             => CurrentLineStartsWith(GivenLineStart);

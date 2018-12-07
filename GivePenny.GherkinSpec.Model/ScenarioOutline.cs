@@ -3,11 +3,12 @@ using System.Linq;
 
 namespace GivePenny.GherkinSpec.Model
 {
-    public class Scenario
+    public class ScenarioOutline
     {
-        public Scenario(string title, IEnumerable<IStep> steps, int startingLineNumber)
+        public ScenarioOutline(string title, IEnumerable<IStep> steps, DataTable examples, int startingLineNumber)
         {
             Title = title;
+            Examples = examples;
             StartingLineNumber = startingLineNumber;
             Steps = steps.ToList().AsReadOnly();
         }
@@ -15,5 +16,6 @@ namespace GivePenny.GherkinSpec.Model
         public string Title { get; }
         public int StartingLineNumber { get; }
         public IReadOnlyCollection<IStep> Steps { get; }
+        public DataTable Examples { get; }
     }
 }
