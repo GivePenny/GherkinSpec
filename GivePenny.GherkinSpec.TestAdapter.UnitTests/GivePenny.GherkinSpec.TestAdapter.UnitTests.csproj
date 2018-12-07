@@ -8,9 +8,13 @@
 
   <ItemGroup>
     <None Remove="FeaturesToFind\FindMe.feature" />
+    <None Remove="FeaturesToFind\FindMe.gherkin" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="FeaturesToFind\FindMe.gherkin">
+      <Generator></Generator>
+    </EmbeddedResource>
     <EmbeddedResource Include="FeaturesToFind\FindMe.feature">
       <Generator></Generator>
     </EmbeddedResource>

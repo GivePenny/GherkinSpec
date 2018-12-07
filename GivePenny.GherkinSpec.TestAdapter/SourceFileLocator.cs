@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
+using System;
 using System.IO;
 using System.Linq;
 
@@ -17,8 +18,13 @@ namespace GivePenny.GherkinSpec.TestAdapter
         {
             var folderName = assemblyDllPath;
 
-            // TODO Check for gherkin extension if resourceName ends with that instead of feature
-            // TODO Stop runaway process scanning entire disk
+            var filePatternToFind = "*.feature";
+            if (resourceName.EndsWith(
+                ".gherkin",
+                StringComparison.OrdinalIgnoreCase))
+            {
+                filePatternToFind = "*.gherkin";
+            }
 
             do
             {
@@ -37,9 +43,8 @@ namespace GivePenny.GherkinSpec.TestAdapter
                     continue;
                 }
 
-                // Grab paths of all feature files
-                foreach (var featureFile in Directory
-                    .EnumerateFiles(folderName, "*.feature", SearchOption.AllDirectories))
+                foreach (var featureFile in
+                    Directory.EnumerateFiles(folderName, filePatternToFind, SearchOption.AllDirectories))
                 {
                     var possibleResourcifiedName = featureFile
                         .Substring(folderName.Length)
