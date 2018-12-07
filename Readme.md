@@ -8,10 +8,11 @@ Published package: https://www.nuget.org/packages/GivePenny.GherkinSpec.TestAdap
 
 ![Screenshot showing Test Explorer, a Gherkin Feature file and C# steps](docs/Preview.png)
 
-## Key features
+## Highlights
 
 * Fully cross-platform (.NET Standard)
-* No generated code files (e.g. *.Designer.cs)
+* No generated code files means cleaner pull requests (i.e. no *.Designer.cs)
+* Use with any unit test framework or assertions library
 * Supports dependency injection
 
 ## Getting started
@@ -36,8 +37,13 @@ Steps 1, 2 and 5 can be speeded up by creating your test project using one of th
 * .NET CLI compatible (`dotnet test`)
 * Visual Studio / Visual Studio Code compatible
 * Azure DevOps compatible (test results reported)
-* Supports `async`/`await`able steps
-* Efficiently runs tests in parallel (if they contain `async` steps)
+* Supports `async`/`await` steps
+* Efficiently runs tests in parallel (if they contain `async` steps) - great for eventually-consistent message-based microservices
+* Fully cross-platform (.NET Standard)
+* No generated code files means cleaner pull requests (e.g. no *.Designer.cs files)
+* Minimal 3rd-party dependencies
+* Use with any unit test framework or assertions library (MS Test, NUnit, xUnit)
+* Supports dependency injection
 
 ## Gotchas
 
