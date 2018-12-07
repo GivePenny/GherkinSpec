@@ -44,6 +44,7 @@ phases:
           configuration: Release
           nobuild: true
           versioningScheme: byBuildNumber
+          verbosityPack: Normal
       
       - task: NuGetCommand@2
         displayName: 'NuGet push'
