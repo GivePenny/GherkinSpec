@@ -148,13 +148,13 @@ So that I can have more fun", feature.Narrative);
         }
 
         [TestMethod]
-        public void ReadScenariosAfterOutlines()
+        public void ReadScenariosBeforeAndAfterOutlines()
         {
             var text = Resources.GetString("ScenarioOutline.feature");
             var parser = new Parser();
             var feature = parser.Parse(text);
 
-            Assert.AreEqual(1, feature.Scenarios.Count);
+            Assert.AreEqual(2, feature.Scenarios.Count);
         }
 
         [TestMethod]
