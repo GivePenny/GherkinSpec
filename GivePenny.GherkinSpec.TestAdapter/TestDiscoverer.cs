@@ -89,17 +89,16 @@ namespace GivePenny.GherkinSpec.TestAdapter
 
                 var feature = gherkinParser.Parse(featureText);
 
-                // TODO Strip dots/special-chars from names
                 // TODO Unicode?
 
-                var featureName = feature.Title;
+                var cleanedFeatureName = CleanDisallowedCharacters(feature.Title);
 
                 foreach (var scenario in feature.AllScenarios)
                 {
-                    var scenarioName = scenario.Title;
-                    var testCase = new TestCase(featureName + "." + scenarioName, TestExecutor.ExecutorUriStronglyTyped, source)
+                    var cleanedScenarioName = CleanDisallowedCharacters(scenario.Title);
+                    var testCase = new TestCase(cleanedFeatureName + "." + cleanedScenarioName, TestExecutor.ExecutorUriStronglyTyped, source)
                     {
-                        DisplayName = scenarioName,
+                        DisplayName = scenario.Title,
                         LocalExtensionData = new DiscoveredTestData(assembly, feature, scenario),
                         CodeFilePath = featureFileName,
                         LineNumber = scenario.StartingLineNumber
@@ -109,6 +108,11 @@ namespace GivePenny.GherkinSpec.TestAdapter
                     yield return testCase;
                 }
             }
+        }
+
+        private static string CleanDisallowedCharacters(string text)
+        {
+            return text?.Replace('.', '-');
         }
 
         private static string ReadResourceText(Assembly assembly, string resourceName)
