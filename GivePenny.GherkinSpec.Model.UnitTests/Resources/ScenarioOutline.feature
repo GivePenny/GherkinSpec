@@ -1,5 +1,9 @@
 ﻿Feature: Add two numbers
 
+Scenario: Scenario before an outline
+	When I do nothing
+	Then nothing happens
+
 Scenario Outline: Example scenario outline
 	Given a first step <columnA>
 	And another <columnB>
