@@ -11,6 +11,7 @@
     <None Remove="Resources\Comment.feature" />
     <None Remove="Resources\Example.feature" />
     <None Remove="Resources\FeatureMotivationScenarioTitle.feature" />
+    <None Remove="Resources\ScenarioOutline.feature" />
     <None Remove="Resources\ScenarioSteps.feature" />
     <None Remove="Resources\ScenarioTitle.feature" />
     <None Remove="Resources\ScenarioTitles.feature" />
@@ -19,6 +20,9 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\Background.feature">
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ScenarioOutline.feature">
       <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ScenarioSteps.feature">

@@ -135,5 +135,67 @@ So that I can have more fun", feature.Narrative);
             Assert.AreEqual(@"Given a first step", feature.Background.Steps.First().Title);
             Assert.AreEqual(@"And another", feature.Background.Steps.Second().Title);
         }
+
+        [TestMethod]
+        public void ReadScenarioOutlineTitle()
+        {
+            var text = Resources.GetString("ScenarioOutline.feature");
+            var parser = new Parser();
+            var feature = parser.Parse(text);
+
+            Assert.AreEqual(1, feature.ScenarioOutlines.Count());
+            Assert.AreEqual("Example scenario outline", feature.ScenarioOutlines.First().Title);
+        }
+
+        [TestMethod]
+        public void ReadScenariosAfterOutlines()
+        {
+            var text = Resources.GetString("ScenarioOutline.feature");
+            var parser = new Parser();
+            var feature = parser.Parse(text);
+
+            Assert.AreEqual(1, feature.Scenarios.Count);
+        }
+
+        [TestMethod]
+        public void ReadScenarioOutlineSteps()
+        {
+            var text = Resources.GetString("ScenarioOutline.feature");
+            var parser = new Parser();
+            var feature = parser.Parse(text);
+
+            var outlineSteps = feature.ScenarioOutlines.First().Steps;
+            Assert.AreEqual(@"Given a first step <columnA>", outlineSteps.First().Title);
+            Assert.AreEqual(@"And another <columnB>", outlineSteps.Second().Title);
+        }
+
+        [TestMethod]
+        public void ReadScenarioOutlineExampleTable()
+        {
+            var text = Resources.GetString("ScenarioOutline.feature");
+            var parser = new Parser();
+            var feature = parser.Parse(text);
+
+            var exampleRows = feature.ScenarioOutlines.First().Examples.Rows;
+            Assert.AreEqual(3, exampleRows.Count());
+            Assert.AreEqual(2, exampleRows.First().Cells.Count());
+            Assert.AreEqual(2, exampleRows.Second().Cells.Count());
+        }
+
+        [TestMethod]
+        public void ReadScenarioOutlineExampleTableValues()
+        {
+            var text = Resources.GetString("ScenarioOutline.feature");
+            var parser = new Parser();
+            var feature = parser.Parse(text);
+
+            var exampleRows = feature.ScenarioOutlines.First().Examples.Rows;
+            Assert.AreEqual("columnA", exampleRows.First().Cells.First().Value);
+            Assert.AreEqual("columnB", exampleRows.First().Cells.Second().Value);
+            Assert.AreEqual("A1", exampleRows.Second().Cells.First().Value);
+            Assert.AreEqual("B1", exampleRows.Second().Cells.Second().Value);
+            Assert.AreEqual("A2", exampleRows.Third().Cells.First().Value);
+            Assert.AreEqual("B2", exampleRows.Third().Cells.Second().Value);
+        }
     }
 }

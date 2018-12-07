@@ -8,7 +8,7 @@ namespace GivePenny.GherkinSpec.Model
         public Background(IEnumerable<GivenStep> steps, int startingLineNumber)
         {
             StartingLineNumber = startingLineNumber;
-            Steps = new List<GivenStep>(steps).AsReadOnly();
+            Steps = steps.ToList().AsReadOnly();
         }
 
         public int StartingLineNumber { get; }

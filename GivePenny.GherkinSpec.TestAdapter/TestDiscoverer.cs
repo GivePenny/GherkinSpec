@@ -93,7 +93,7 @@ namespace GivePenny.GherkinSpec.TestAdapter
 
                 var featureName = feature.Title;
 
-                foreach (var scenario in feature.Scenarios)
+                foreach (var scenario in feature.AllScenarios)
                 {
                     var scenarioName = scenario.Title;
                     var testCase = new TestCase(featureName + "." + scenarioName, TestExecutor.ExecutorUriStronglyTyped, source)
