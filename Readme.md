@@ -17,7 +17,7 @@ Published package: https://www.nuget.org/packages/GivePenny.GherkinSpec.TestAdap
 
 ## Getting started
 
-The best way to pick GherkinSpec up us to see [the simple example repository](https://github.com/GivePenny/GherkinSpec.SimpleExample), download the code and just try it out.
+The best way to pick GherkinSpec up is to see [the simple example repository](https://github.com/GivePenny/GherkinSpec.SimpleExample), download the code and just try it out.
 
 If you want to create a new test project from scratch ...
 
@@ -47,12 +47,23 @@ Steps 1, 2 and 5 can be speeded up by creating your test project using one of th
 
 ## Gotchas
 
-* When creating a new .feature file, make sure that it is added as an Embedded Resource (see the [csproj of the simple example](https://github.com/GivePenny/GherkinSpec.SimpleExample/blob/master/GivePenny.GherkinSpec.SimpleExample.Tests/GivePenny.GherkinSpec.SimpleExample.Tests.csproj) - in Visual Studio this can also be set in the Properties pane when the file is selected)
-* If you keep getting .designer.cs files appear, uninstall the SpecFlow Extension for Visual Studio or name your files .gherkin instead of .feature.
-* Make sure you add the Test SDK package to your test project, again see the csproj for the simple example (`<PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />`).
+* Make sure you add the Test SDK package to your test project, again see the csproj for the simple example (e.g. `<PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />`).  If you don't then tests won't get detected.
+* When creating a new .feature file, make sure that it is added as an Embedded Resource (see the [csproj of the simple example](https://github.com/GivePenny/GherkinSpec.SimpleExample/blob/master/GivePenny.GherkinSpec.SimpleExample.Tests/GivePenny.GherkinSpec.SimpleExample.Tests.csproj) - in Visual Studio this can also be set in the Properties pane when the file is selected).
+
+```xml
+  <ItemGroup>
+    <EmbeddedResource Include="Features/**/*.feature"/>
+  </ItemGroup>
+```
+
+* If you keep getting .designer.cs files appear, uninstall (or disable) the SpecFlow Extension for Visual Studio or name your files .gherkin instead of .feature.
+  * See the "useful links" section below for a replacement syntax highlighting extension (although the files must end in .feature )
+  * After uninstalling the SpecFlow extension, feature/gherkin files can be created just by creating plain text files ending in .feature or .gherkin.  Remember to mark them as an Embedded Resource if you haven't set the catch-all in the csproj.
 
 ## Reference guide / concepts
 
+* [Simple example repository](https://github.com/GivePenny/GherkinSpec.SimpleExample)
+* [Feature-rich example repository](https://github.com/GivePenny/GherkinSpec.ComplexExample)
 * [Before/after hooks](docs/Hooks.md)
 * [Dependency injection](docs/DependencyInjection.md)
 * [Roadmap](docs/Roadmap.md)
@@ -60,4 +71,8 @@ Steps 1, 2 and 5 can be speeded up by creating your test project using one of th
 ## Third-party references and useful links
 
 * [Full Gherkin syntax](https://docs.cucumber.io/gherkin/reference/)
-* For VSCode Gherkin syntax highlighting try [other community extensions, such as this one](https://marketplace.visualstudio.com/items?itemName=stevejpurves.cucumber).
+* Visual Studio Code Gherkin syntax highlighting and templating extensions:
+  * [Steve Purves' extension](https://marketplace.visualstudio.com/items?itemName=stevejpurves.cucumber)
+  * [Interesting review of 3 extensions](https://automationpanda.com/2018/08/09/gherkin-syntax-highlighting-in-visual-studio-code/)
+* Visual Studio Gherkin syntax highlighting:
+  * https://marketplace.visualstudio.com/items?itemName=MadsKristensen.SyntaxHighlightingPack

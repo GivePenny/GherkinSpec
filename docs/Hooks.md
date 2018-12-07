@@ -12,7 +12,7 @@ The method must be `public static` and must take exactly one argument of type `T
 
 Typically this method is used to set up Dependency Injection and to load configuration.
 
-For a more complete example, see the [feature-rich example code - COMING SOON](https://github.com/GivePenny/GherkinSpec.ComplexExample)
+For a more complete example, see the [feature-rich example code](https://github.com/GivePenny/GherkinSpec.ComplexExample)
 
 Example:
 
