@@ -1,4 +1,5 @@
-﻿Feature: Adding things up
+﻿@ignore, @featureTag
+Feature: Adding things up
 
 @ignore, @somethingElse
 Scenario: This is a scenario 

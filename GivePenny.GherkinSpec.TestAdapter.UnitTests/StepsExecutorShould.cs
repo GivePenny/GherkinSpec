@@ -50,7 +50,8 @@ namespace GivePenny.GherkinSpec.TestAdapter.UnitTests
                         1,
                         Enumerable.Empty<Tag>())
                 },
-                Enumerable.Empty<ScenarioOutline>());
+                Enumerable.Empty<ScenarioOutline>(),
+                Enumerable.Empty<Tag>());
 
             var testData = new DiscoveredTestData(testAssembly, testFeature, testFeature.Scenarios.First());
 
