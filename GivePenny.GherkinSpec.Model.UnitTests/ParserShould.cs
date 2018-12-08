@@ -239,5 +239,17 @@ So that I can have more fun", feature.Narrative);
             Assert.AreEqual("ignore", firstScenarioOutline.Tags.First().Label);
             Assert.AreEqual("somethingOther", firstScenarioOutline.Tags.Second().Label);
         }
+
+        [TestMethod]
+        public void ReadFeatureTagsAndPreserveCase()
+        {
+            var text = Resources.GetString("Tags.feature");
+            var parser = new Parser();
+            var feature = parser.Parse(text);
+
+            Assert.AreEqual(2, feature.Tags.Count());
+            Assert.AreEqual("ignore", feature.Tags.First().Label);
+            Assert.AreEqual("featureTag", feature.Tags.Second().Label);
+        }
     }
 }

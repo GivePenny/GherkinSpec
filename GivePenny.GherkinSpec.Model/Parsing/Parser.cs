@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -23,10 +22,12 @@ namespace GivePenny.GherkinSpec.Model.Parsing
         {
             reader.ReadNextLine();
 
+            var featureTags = ParseTagsIfPresent(reader);
+
             if (!reader.IsFeatureStartLine)
             {
                 throw new InvalidGherkinSyntaxException(
-                    $"Expected the first line of a feature file to start with 'Feature:'.", reader.CurrentLineNumber);
+                    $"Expected the first line of a feature file to start with 'Feature:' or a tag.", reader.CurrentLineNumber);
             }
 
             var featureTitle = reader.CurrentLineFeatureTitle;
@@ -51,7 +52,8 @@ namespace GivePenny.GherkinSpec.Model.Parsing
                     featureNarrative.ToString()?.Trim(),
                     Background.Empty,
                     Enumerable.Empty<Scenario>(),
-                    Enumerable.Empty<ScenarioOutline>());
+                    Enumerable.Empty<ScenarioOutline>(),
+                    featureTags);
             }
 
             var featureBackground = BackgroundParser.ParseBackgroundIfPresent(reader);
@@ -88,7 +90,8 @@ namespace GivePenny.GherkinSpec.Model.Parsing
                 featureNarrative.ToString()?.Trim(),
                 featureBackground,
                 scenarios,
-                scenarioOutlines);
+                scenarioOutlines,
+                featureTags);
         }
 
         private IEnumerable<Tag> ParseTagsIfPresent(LineReader reader)

@@ -41,7 +41,8 @@ namespace GivePenny.GherkinSpec.Model.UnitTests
                             }),
                         2,
                         Enumerable.Empty<Tag>())
-                });
+                },
+                Enumerable.Empty<Tag>());
 
             var allScenarios = feature.AllScenarios.ToArray();
 
