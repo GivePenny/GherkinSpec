@@ -1,10 +1,10 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace GivePenny.GherkinSpec.Model
 {
-    public class DataTable
+    public class DataTable : IEnumerable<DataTableRow>
     {
         public DataTable(IEnumerable<DataTableRow> rows)
         {
@@ -22,16 +22,44 @@ namespace GivePenny.GherkinSpec.Model
 
         public IReadOnlyCollection<DataTableRow> Rows { get; }
 
-        public string ReplacePlaceholdersWithValues(string text, DataTableRow row)
+        public IEnumerator<DataTableRow> GetEnumerator()
+            => Rows.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator()
+            => Rows.GetEnumerator();
+
+        public bool IsEmpty
+            => Rows.Count == 0;
+
+        public string ReplacePlaceholdersWithValues(string text, DataTableRow rowProvidingValues)
         {
             var cellIndex = 0;
             foreach (var columnName in ColumnNames)
             {
-                text = text.Replace("<" + columnName + ">", row.Cells[cellIndex].Value);
+                text = text.Replace("<" + columnName + ">", rowProvidingValues.Cells[cellIndex].Value);
                 cellIndex++;
             }
 
             return text;
+        }
+
+        public DataTable ReplacePlaceholdersWithValues(DataTable tableToCloneThenUpdate, DataTableRow rowProvidingValues)
+        {
+            var targetRows = new List<DataTableRow>();
+            foreach (var sourceRow in tableToCloneThenUpdate.Rows)
+            {
+                var targetCells = new List<DataTableCell>();
+                foreach (var sourceCell in sourceRow.Cells)
+                {
+                    var targetCell = new DataTableCell(
+                        ReplacePlaceholdersWithValues(
+                            sourceCell.Value,
+                            rowProvidingValues));
+                    targetCells.Add(targetCell);
+                }
+                targetRows.Add(new DataTableRow(targetCells));
+            }
+            return new DataTable(targetRows);
         }
     }
 }

@@ -16,7 +16,6 @@ namespace GivePenny.GherkinSpec.Model.Parsing
             while (reader.IsStepLine)
             {
                 steps.Add(ParseStep(reader, steps.LastOrDefault()));
-                reader.ReadNextLine();
 
                 if (!reader.IsEndOfFile
                     && !reader.IsStepLine
@@ -42,8 +41,8 @@ namespace GivePenny.GherkinSpec.Model.Parsing
             reader.ReadNextLine();
             while (reader.IsStepLine)
             {
-                steps.Add(ParseStep(reader, steps.LastOrDefault()));
-                reader.ReadNextLine();
+                steps.Add(
+                    ParseStep(reader, steps.LastOrDefault()));
 
                 if (reader.IsExamplesStartLine)
                 {
@@ -86,57 +85,26 @@ namespace GivePenny.GherkinSpec.Model.Parsing
         private static DataTable ParseExamples(LineReader reader)
         {
             reader.ReadNextLine();
-            return ParseDataTable(reader);
-        }
-
-        private static DataTable ParseDataTable(LineReader reader)
-        {
-            var rows = new List<DataTableRow>();
-
-            while (reader.IsTableLine)
-            {
-                rows.Add(ParseDataTableRow(reader));
-                reader.ReadNextLine();
-            };
-
-            return new DataTable(rows);
-        }
-
-        private static DataTableRow ParseDataTableRow(LineReader reader)
-        {
-            var column = reader
-                .CurrentLine
-                .RemoveFirstAndLastPipes(
-                    reader.CurrentLineNumber)
-                .Split('|');
-
-            var cells = new List<DataTableCell>();
-
-            foreach (var value in column)
-            {
-                cells.Add(
-                    new DataTableCell(
-                        value.Trim()));
-            }
-
-            return new DataTableRow(cells);
+            return DataTableParser.ParseDataTable(reader);
         }
 
         private static IStep ParseStep(LineReader reader, IStep previousStep)
         {
+            var stepTitle = reader.CurrentLine;
+
             if (reader.IsGivenLine)
             {
-                return new GivenStep(reader.CurrentLine);
+                return ParseStep(reader, table => new GivenStep(stepTitle, table));
             }
 
             if (reader.IsWhenLine)
             {
-                return new WhenStep(reader.CurrentLine);
+                return ParseStep(reader, table => new WhenStep(stepTitle, table));
             }
 
             if (reader.IsThenLine)
             {
-                return new ThenStep(reader.CurrentLine);
+                return ParseStep(reader, table => new ThenStep(stepTitle, table));
             }
 
             if (!reader.IsAndLine && !reader.IsButLine)
@@ -151,7 +119,20 @@ namespace GivePenny.GherkinSpec.Model.Parsing
                     $"The first step in a scenario cannot start with 'And'. Expected Given, When or Then", reader.CurrentLineNumber);
             }
 
-            return previousStep.CreateAnother(reader.CurrentLine);
+            return ParseStep(reader, table => previousStep.CreateAnother(stepTitle, table));
+        }
+
+        private static IStep ParseStep(LineReader reader, Func<DataTable, IStep> stepFactory)
+        {
+            reader.ReadNextLine();
+
+            var dataTable = DataTable.Empty;
+            if (reader.IsTableLine)
+            {
+                dataTable = DataTableParser.ParseDataTable(reader);
+            }
+
+            return stepFactory(dataTable);
         }
     }
 }

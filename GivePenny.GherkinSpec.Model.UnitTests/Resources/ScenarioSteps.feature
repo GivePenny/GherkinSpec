@@ -10,6 +10,9 @@ Scenario: Add two numbers together
 	Then the result should be 11
 
 Scenario: Add two numbers together when one of them is zero
+	Given I have a table
+		| column 1 | column 2 |
+		| value 1  | value 2  |
 	When I do nothing
 	Then nothing happens
 	But this reads well

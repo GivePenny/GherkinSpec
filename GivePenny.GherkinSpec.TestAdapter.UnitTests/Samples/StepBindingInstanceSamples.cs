@@ -1,4 +1,5 @@
-﻿using GivePenny.GherkinSpec.TestModel;
+﻿using GivePenny.GherkinSpec.Model;
+using GivePenny.GherkinSpec.TestModel;
 
 namespace GivePenny.GherkinSpec.TestAdapter.UnitTests.Samples
 {
@@ -7,6 +8,11 @@ namespace GivePenny.GherkinSpec.TestAdapter.UnitTests.Samples
     {
         [Given("a plain (.+) in a non-static method")]
         public void GivenANonStaticPlainTextMatch(string value)
+        {
+        }
+
+        [Given("a table")]
+        public void GivenATable(DataTable table)
         {
         }
     }

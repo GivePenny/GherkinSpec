@@ -20,7 +20,7 @@ namespace GivePenny.GherkinSpec.TestAdapter.UnitTests
         {
             var mapper = new MethodMapper();
             var mapping = mapper.GetMappingFor(
-                new GivenStep("Given a plain text match"),
+                new GivenStep("Given a plain text match", DataTable.Empty),
                 Assembly.GetExecutingAssembly());
 
             Assert.AreEqual("GivenAPlainTextMatch", mapping.Name);
@@ -50,7 +50,7 @@ namespace GivePenny.GherkinSpec.TestAdapter.UnitTests
         {
             var mapper = new MethodMapper();
             var mapping = mapper.GetMappingFor(
-                new GivenStep($"Given a single {typeof(TArgumentType).Name} match of {stepValue}"),
+                new GivenStep($"Given a single {typeof(TArgumentType).Name} match of {stepValue}", DataTable.Empty),
                 Assembly.GetExecutingAssembly());
 
             Assert.AreEqual($"GivenASingle{typeof(TArgumentType).Name}Match", mapping.Name);
@@ -63,7 +63,7 @@ namespace GivePenny.GherkinSpec.TestAdapter.UnitTests
         {
             var mapper = new MethodMapper();
             var mapping = mapper.GetMappingFor(
-                new GivenStep("Given a single 'value-here' match and 'another here'"),
+                new GivenStep("Given a single 'value-here' match and 'another here'", DataTable.Empty),
                 Assembly.GetExecutingAssembly());
 
             Assert.AreEqual("GivenAMultipleStringMatch", mapping.Name);
@@ -77,7 +77,7 @@ namespace GivePenny.GherkinSpec.TestAdapter.UnitTests
         {
             var mapper = new MethodMapper();
             var mapping = mapper.GetMappingFor(
-                new GivenStep("Given a plain value in a non-static method"),
+                new GivenStep("Given a plain value in a non-static method", DataTable.Empty),
                 Assembly.GetExecutingAssembly());
 
             Assert.AreEqual("GivenANonStaticPlainTextMatch", mapping.Name);
@@ -92,12 +92,68 @@ namespace GivePenny.GherkinSpec.TestAdapter.UnitTests
             var exception = Assert.ThrowsException<StepBindingException>(
                 () =>
                     mapper.GetMappingFor(
-                        new GivenStep("Given not enough captures to satisfy method arguments"),
+                        new GivenStep("Given not enough captures to satisfy method arguments", DataTable.Empty),
                         Assembly.GetExecutingAssembly()));
 
             Assert.AreEqual(
                 @"The step ""Given not enough captures to satisfy method arguments"" matches the method ""GivenNotEnoughCaptures"" on class ""GivePenny.GherkinSpec.TestAdapter.UnitTests.Samples.StepBindingStaticSamples"". That method expects 2 parameters but the step only provides 1.",
                 exception.Message);
         }
+
+        [TestMethod]
+        public void ThrowExceptionIfTableProvidedButMethodDoesNotTakeTableParameter()
+        {
+            var mapper = new MethodMapper();
+
+            var exception = Assert.ThrowsException<StepBindingException>(
+                () =>
+                    mapper.GetMappingFor(
+                        new GivenStep("Given a plain value in a non-static method", NonEmptyDataTable),
+                        Assembly.GetExecutingAssembly()));
+
+            Assert.AreEqual(
+                @"The step ""Given a plain value in a non-static method"" matches the method ""GivenANonStaticPlainTextMatch"" on class ""GivePenny.GherkinSpec.TestAdapter.UnitTests.Samples.StepBindingInstanceSamples"". That method does not expect a table argument but the step provides one.",
+                exception.Message);
+        }
+
+        [TestMethod]
+        public void ThrowExceptionIfMethodTakesTableParameterButNoneProvided()
+        {
+            var mapper = new MethodMapper();
+
+            var exception = Assert.ThrowsException<StepBindingException>(
+                () =>
+                    mapper.GetMappingFor(
+                        new GivenStep("Given a table", DataTable.Empty),
+                        Assembly.GetExecutingAssembly()));
+
+            Assert.AreEqual(
+                @"The step ""Given a table"" matches the method ""GivenATable"" on class ""GivePenny.GherkinSpec.TestAdapter.UnitTests.Samples.StepBindingInstanceSamples"". That method expects a table argument but the step does not provide one.",
+                exception.Message);
+        }
+
+        [TestMethod]
+        public void PassTableParameterToMethod()
+        {
+            var mapper = new MethodMapper();
+            var mapping = mapper.GetMappingFor(
+                new GivenStep("Given a table", NonEmptyDataTable),
+                Assembly.GetExecutingAssembly());
+
+            Assert.AreEqual("GivenATable", mapping.Name);
+            Assert.AreEqual(1, mapping.Arguments.Length);
+            Assert.IsInstanceOfType(mapping.Arguments[0], typeof(DataTable));
+        }
+
+        private DataTable NonEmptyDataTable
+            => new DataTable(
+                new[]
+                {
+                    new DataTableRow(
+                        new[]
+                        {
+                            new DataTableCell("cell")
+                        })
+                });
     }
 }

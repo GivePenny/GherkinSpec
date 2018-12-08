@@ -30,8 +30,8 @@ namespace GivePenny.GherkinSpec.Model.Parsing
                         reader.CurrentLineNumber);
                 }
 
-                steps.Add(ParseBackgroundStep(reader));
-                reader.ReadNextLine();
+                steps.Add(
+                    ParseBackgroundStep(reader));
             }
 
             return new Background(steps, startingLineNumber);
@@ -45,7 +45,18 @@ namespace GivePenny.GherkinSpec.Model.Parsing
                     $"Unrecognised step type on line '{reader.CurrentLine}'. Only Given, And or But steps can be used in a Background.");
             }
 
-            return new GivenStep(reader.CurrentLine);
+            var stepTitle = reader.CurrentLine;
+            reader.ReadNextLine();
+
+            var dataTable = DataTable.Empty;
+            if (reader.IsTableLine)
+            {
+                dataTable = DataTableParser.ParseDataTable(reader);
+            }
+
+            return new GivenStep(
+                stepTitle,
+                dataTable);
         }
     }
 }
