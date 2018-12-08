@@ -44,6 +44,7 @@ Steps 1, 2 and 5 can be speeded up by creating your test project using one of th
 * Minimal 3rd-party dependencies
 * Use with any unit test framework or assertions library (MS Test, NUnit, xUnit)
 * Supports dependency injection
+* Support for the full Gherkin syntax, including tables and doc-strings
 
 ## Gotchas
 

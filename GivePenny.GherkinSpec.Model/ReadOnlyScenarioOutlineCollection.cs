@@ -35,10 +35,11 @@ namespace GivePenny.GherkinSpec.Model
             {
                 var newTitle = dataTable.ReplacePlaceholdersWithValues(outlineStep.Title, row);
                 var newTable = dataTable.ReplacePlaceholdersWithValues(outlineStep.TableArgument, row);
+                var newMultiLineString = dataTable.ReplacePlaceholdersWithValues(outlineStep.MultiLineStringArgument, row);
 
                 scenarioSteps.Add(
                     outlineStep.CreateAnother(
-                        newTitle, newTable));
+                        newTitle, newTable, newMultiLineString));
             }
 
             return new Scenario(

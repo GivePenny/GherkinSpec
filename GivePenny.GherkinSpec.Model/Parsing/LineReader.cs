@@ -16,6 +16,7 @@ namespace GivePenny.GherkinSpec.Model.Parsing
         private const string AndLineStart = "And ";
         private const string ButLineStart = "But ";
         private const string TagLineStart = "@";
+        private const string MultiLineStringLineStart = "\"\"\"";
 
         private readonly TextReader textReader;
 
@@ -24,30 +25,50 @@ namespace GivePenny.GherkinSpec.Model.Parsing
             this.textReader = textReader;
         }
 
-        public string CurrentLine { get; private set;  }
+        public string CurrentLineTrimmed { get; private set; }
+        public string CurrentLineUntrimmed { get; private set; }
         public int CurrentLineNumber { get; private set; }
 
         public bool ReadNextLine()
         {
-            var text = textReader.ReadLine()?.Trim();
+            var textUntrimmed = textReader.ReadLine();
+            var textTrimmed = textUntrimmed?.Trim();
             CurrentLineNumber++;
 
-            while (text != null
-                && (text.StartsWith("#") || text == string.Empty))
+            while (textTrimmed != null
+                && (textTrimmed.StartsWith("#") || textTrimmed == string.Empty))
             {
-                text = textReader.ReadLine()?.Trim();
+                textUntrimmed = textReader.ReadLine();
+                textTrimmed = textUntrimmed?.Trim();
                 CurrentLineNumber++;
             }
 
-            CurrentLine = text;
-            return text != null;
+            CurrentLineTrimmed = textTrimmed;
+            CurrentLineUntrimmed = textUntrimmed;
+
+            return textTrimmed != null;
         }
+
+        public bool ReadNextLineRaw()
+        {
+            var textUntrimmed = textReader.ReadLine();
+            CurrentLineTrimmed = textUntrimmed?.Trim();
+            CurrentLineUntrimmed = textUntrimmed;
+            CurrentLineNumber++;
+
+            return textUntrimmed != null;
+        }
+
+        public string CurrentLineIndentation
+            => CurrentLineUntrimmed.Substring(
+                0,
+                CurrentLineUntrimmed.Length - CurrentLineUntrimmed.TrimStart().Length);
 
         public bool IsFeatureStartLine
             => CurrentLineStartsWith(FeatureLineStart);
 
         public string CurrentLineFeatureTitle
-            => CurrentLine.Substring(FeatureLineStart.Length).Trim();
+            => CurrentLineTrimmed.Substring(FeatureLineStart.Length).Trim();
 
         public bool IsBackgroundStartLine
             => CurrentLineStartsWith(BackgroundLineStart);
@@ -61,20 +82,23 @@ namespace GivePenny.GherkinSpec.Model.Parsing
 
         public string CurrentLineScenarioTitle
             => CurrentLineStartsWith(ScenarioLineStart)
-                ? CurrentLine.Substring(ScenarioLineStart.Length).Trim()
-                : CurrentLine.Substring(ExampleLineStart.Length).Trim();
+                ? CurrentLineTrimmed.Substring(ScenarioLineStart.Length).Trim()
+                : CurrentLineTrimmed.Substring(ExampleLineStart.Length).Trim();
 
         public bool IsScenarioOutlineStartLine
             => CurrentLineStartsWith(ScenarioOutlineLineStart);
 
         public string CurrentLineScenarioOutlineTitle
-            => CurrentLine.Substring(ScenarioOutlineLineStart.Length).Trim();
+            => CurrentLineTrimmed.Substring(ScenarioOutlineLineStart.Length).Trim();
 
         public bool IsExamplesStartLine
-            => CurrentLine == ExamplesLine;
+            => CurrentLineTrimmed == ExamplesLine;
 
         public bool IsTableLine
             => CurrentLineStartsWith("|");
+
+        public bool IsMultiLineStringStartOrEndLine
+            => CurrentLineStartsWith(MultiLineStringLineStart);
 
         public bool IsGivenLine
             => CurrentLineStartsWith(GivenLineStart);
@@ -95,9 +119,9 @@ namespace GivePenny.GherkinSpec.Model.Parsing
             => IsGivenLine || IsWhenLine || IsThenLine || IsAndLine || IsButLine;
 
         public bool IsEndOfFile
-            => CurrentLine == null;
+            => CurrentLineTrimmed == null;
 
         private bool CurrentLineStartsWith(string prefix)
-            => (CurrentLine?.StartsWith(prefix)).GetValueOrDefault(false);
+            => (CurrentLineTrimmed?.StartsWith(prefix)).GetValueOrDefault(false);
     }
 }

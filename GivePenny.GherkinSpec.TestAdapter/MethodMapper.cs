@@ -75,16 +75,23 @@ namespace GivePenny.GherkinSpec.TestAdapter
                 var match = regex.Match(step.TitleAfterType);
                 if (match != null && match.Success)
                 {
+                    var stepArguments = match.Groups.Skip(1).Select(group => group.Value);
+
+                    if(step.MultiLineStringArgument!=null)
+                    {
+                        stepArguments = stepArguments.Append(step.MultiLineStringArgument);
+                    }
+
                     var arguments = ParseArgumentValues(
                         step: step,
-                        stepTitleExtracts: match.Groups.Skip(1).Select(group => group.Value).ToArray(),
+                        stepArguments: stepArguments.ToArray(),
                         method: method);
                     yield return new MethodMapping(step, method, arguments);
                 }
             }
         }
 
-        private static object[] ParseArgumentValues(IStep step, string[] stepTitleExtracts, MethodInfo method)
+        private static object[] ParseArgumentValues(IStep step, string[] stepArguments, MethodInfo method)
         {
             var typedValues = new List<object>();
             var parameters = method.GetParameters();
@@ -94,7 +101,7 @@ namespace GivePenny.GherkinSpec.TestAdapter
 
             ThrowIfExpectsTableButNoneProvided(step, method, parameters, methodHasTableArgument);
             ThrowIfTableProvidedButNoneExpected(step, method, methodHasTableArgument);
-            ThrowIfNotEnoughParametersProvided(step, stepTitleExtracts, method, parameters, methodHasTableArgument);
+            ThrowIfNotEnoughParametersProvided(step, stepArguments, method, parameters, methodHasTableArgument);
 
             var index = 0;
             foreach (var parameter in parameters)
@@ -106,7 +113,7 @@ namespace GivePenny.GherkinSpec.TestAdapter
                 }
 
                 typedValues.Add(
-                    ConvertValue(stepTitleExtracts[index], parameter.ParameterType));
+                    ConvertValue(stepArguments[index], parameter.ParameterType));
                 index++;
             }
 
@@ -122,12 +129,12 @@ namespace GivePenny.GherkinSpec.TestAdapter
             }
         }
 
-        private static void ThrowIfNotEnoughParametersProvided(IStep step, string[] stepTitleExtracts, MethodInfo method, ParameterInfo[] parameters, bool methodHasTableArgument)
+        private static void ThrowIfNotEnoughParametersProvided(IStep step, string[] stepArguments, MethodInfo method, ParameterInfo[] parameters, bool methodHasTableArgument)
         {
-            if (parameters.Length > (stepTitleExtracts.Length + (methodHasTableArgument ? 1 : 0)))
+            if (parameters.Length > (stepArguments.Length + (methodHasTableArgument ? 1 : 0)))
             {
                 throw new StepBindingException(
-                    $"The step \"{step.Title}\" matches the method \"{method.Name}\" on class \"{method.DeclaringType.FullName}\". That method expects {parameters.Length} parameters but the step only provides {stepTitleExtracts.Length}.");
+                    $"The step \"{step.Title}\" matches the method \"{method.Name}\" on class \"{method.DeclaringType.FullName}\". That method expects {parameters.Length} parameters but the step only provides {stepArguments.Length}.");
             }
         }
 
