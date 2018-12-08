@@ -40,7 +40,7 @@ phases:
         displayName: 'dotnet pack'
         inputs:
           command: pack
-          projects: '**/GivePenny.GherkinSpec.TestAdapter.csproj'
+          projects: '**/GherkinSpec.TestAdapter.csproj'
           configuration: Release
           nobuild: true
           versioningScheme: byBuildNumber

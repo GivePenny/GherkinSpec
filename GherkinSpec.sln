@@ -1,0 +1,66 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28306.52
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GherkinSpec.TestAdapter", "GherkinSpec.TestAdapter\GherkinSpec.TestAdapter.csproj", "{84DA2C3E-C51B-43BF-82D7-C54025718958}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GherkinSpec.Model", "GherkinSpec.Model\GherkinSpec.Model.csproj", "{E16736FD-6057-45A5-A097-0817384F9F2D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GherkinSpec.Model.UnitTests", "GherkinSpec.Model.UnitTests\GherkinSpec.Model.UnitTests.csproj", "{B94927BC-7C17-48B7-B41A-F5B2E014B564}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GherkinSpec.TestModel", "GherkinSpec.TestModel\GherkinSpec.TestModel.csproj", "{E91B84EC-22A2-4950-870A-47FD85976E42}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GherkinSpec.TestAdapter.UnitTests", "GherkinSpec.TestAdapter.UnitTests\GherkinSpec.TestAdapter.UnitTests.csproj", "{9B13EDC5-80AD-4C6B-8117-BF6E04177CE1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DB88CEF1-AA2C-44B1-9E92-98C4BF1C3FF0}"
+	ProjectSection(SolutionItems) = preProject
+		azure-pipelines.yml = azure-pipelines.yml
+		Licence.md = Licence.md
+		Readme.md = Readme.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{288CE073-188A-4BD8-BDE4-2AF272B760C0}"
+	ProjectSection(SolutionItems) = preProject
+		docs\DependencyInjection-DatabaseContexts.md = docs\DependencyInjection-DatabaseContexts.md
+		docs\DependencyInjection.md = docs\DependencyInjection.md
+		docs\Hooks.md = docs\Hooks.md
+		docs\MSTestProject.png = docs\MSTestProject.png
+		docs\Preview.png = docs\Preview.png
+		docs\Roadmap.md = docs\Roadmap.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{84DA2C3E-C51B-43BF-82D7-C54025718958}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84DA2C3E-C51B-43BF-82D7-C54025718958}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84DA2C3E-C51B-43BF-82D7-C54025718958}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84DA2C3E-C51B-43BF-82D7-C54025718958}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E16736FD-6057-45A5-A097-0817384F9F2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E16736FD-6057-45A5-A097-0817384F9F2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E16736FD-6057-45A5-A097-0817384F9F2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E16736FD-6057-45A5-A097-0817384F9F2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B94927BC-7C17-48B7-B41A-F5B2E014B564}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B94927BC-7C17-48B7-B41A-F5B2E014B564}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B94927BC-7C17-48B7-B41A-F5B2E014B564}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B94927BC-7C17-48B7-B41A-F5B2E014B564}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E91B84EC-22A2-4950-870A-47FD85976E42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E91B84EC-22A2-4950-870A-47FD85976E42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E91B84EC-22A2-4950-870A-47FD85976E42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E91B84EC-22A2-4950-870A-47FD85976E42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B13EDC5-80AD-4C6B-8117-BF6E04177CE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B13EDC5-80AD-4C6B-8117-BF6E04177CE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B13EDC5-80AD-4C6B-8117-BF6E04177CE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B13EDC5-80AD-4C6B-8117-BF6E04177CE1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B2F29ACA-9D7D-40CF-8192-83F27CCB2A76}
+	EndGlobalSection
+EndGlobal
