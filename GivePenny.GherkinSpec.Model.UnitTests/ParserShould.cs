@@ -97,7 +97,21 @@ So that I can have more fun", feature.Narrative);
 
             Assert.AreEqual(2, feature.Scenarios.Count());
             Assert.AreEqual(4, feature.Scenarios.First().Steps.Count);
-            Assert.AreEqual(3, feature.Scenarios.Second().Steps.Count);
+            Assert.AreEqual(4, feature.Scenarios.Second().Steps.Count);
+        }
+
+        [TestMethod]
+        public void ReadScenarioStepDataTableArguments()
+        {
+            var text = Resources.GetString("ScenarioSteps.feature");
+            var parser = new Parser();
+            var feature = parser.Parse(text);
+
+            var secondScenario = feature.Scenarios.Second();
+            Assert.AreEqual(2, secondScenario.Steps.First().TableArgument.Rows.Count);
+
+            var secondTableRow = secondScenario.Steps.First().TableArgument.Rows.Second();
+            Assert.AreEqual("value 2", secondTableRow.Cells.Second().Value);
         }
 
         [TestMethod]

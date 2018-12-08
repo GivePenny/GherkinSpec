@@ -2,16 +2,18 @@
 {
     public class WhenStep : IStep
     {
-        public WhenStep(string title)
+        public WhenStep(string title, DataTable tableArgument)
         {
             Title = title;
+            TableArgument = tableArgument;
         }
 
         public string Title { get; }
+        public DataTable TableArgument { get; }
 
         public string TitleAfterType => (Title.StartsWith("When ") ? Title.Substring(5) : Title.Substring(4)).Trim();
 
-        public IStep CreateAnother(string newText)
-            => new WhenStep(newText);
+        public IStep CreateAnother(string newText, DataTable tableArgument)
+            => new WhenStep(newText, tableArgument);
     }
 }

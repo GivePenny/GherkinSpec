@@ -35,8 +35,8 @@ namespace GivePenny.GherkinSpec.TestAdapter.UnitTests
         [TestMethod]
         public async Task ExecuteFeatureBackgroundStepsThenScenarioSteps()
         {
-            var backgroundStep = new GivenStep("Background step");
-            var scenarioStep = new GivenStep("Scenario step");
+            var backgroundStep = new GivenStep("Background step", DataTable.Empty);
+            var scenarioStep = new GivenStep("Scenario step", DataTable.Empty);
 
             var testFeature = new Feature("Feature", null,
                 new Background(

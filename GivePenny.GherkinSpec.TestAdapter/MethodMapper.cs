@@ -89,20 +89,55 @@ namespace GivePenny.GherkinSpec.TestAdapter
             var typedValues = new List<object>();
             var parameters = method.GetParameters();
 
-            if (parameters.Length > stepTitleExtracts.Length)
-            {
-                throw new StepBindingException(
-                    $"The step \"{step.Title}\" matches the method \"{method.Name}\" on class \"{method.DeclaringType.FullName}\". That method expects {parameters.Length} parameters but the step only provides {stepTitleExtracts.Length}.");
-            }
+            var methodHasTableArgument = parameters.Length > 0
+                && parameters.Last().ParameterType == typeof(DataTable);
+
+            ThrowIfExpectsTableButNoneProvided(step, method, parameters, methodHasTableArgument);
+            ThrowIfTableProvidedButNoneExpected(step, method, methodHasTableArgument);
+            ThrowIfNotEnoughParametersProvided(step, stepTitleExtracts, method, parameters, methodHasTableArgument);
 
             var index = 0;
             foreach (var parameter in parameters)
             {
-                typedValues.Add(ConvertValue(stepTitleExtracts[index], parameter.ParameterType));
+                if (methodHasTableArgument && parameter.ParameterType == typeof(DataTable))
+                {
+                    typedValues.Add(step.TableArgument);
+                    continue;
+                }
+
+                typedValues.Add(
+                    ConvertValue(stepTitleExtracts[index], parameter.ParameterType));
                 index++;
             }
 
             return typedValues.ToArray();
+        }
+
+        private static void ThrowIfExpectsTableButNoneProvided(IStep step, MethodInfo method, ParameterInfo[] parameters, bool methodHasTableArgument)
+        {
+            if (methodHasTableArgument && step.TableArgument.IsEmpty)
+            {
+                throw new StepBindingException(
+                    $"The step \"{step.Title}\" matches the method \"{method.Name}\" on class \"{method.DeclaringType.FullName}\". That method expects a table argument but the step does not provide one.");
+            }
+        }
+
+        private static void ThrowIfNotEnoughParametersProvided(IStep step, string[] stepTitleExtracts, MethodInfo method, ParameterInfo[] parameters, bool methodHasTableArgument)
+        {
+            if (parameters.Length > (stepTitleExtracts.Length + (methodHasTableArgument ? 1 : 0)))
+            {
+                throw new StepBindingException(
+                    $"The step \"{step.Title}\" matches the method \"{method.Name}\" on class \"{method.DeclaringType.FullName}\". That method expects {parameters.Length} parameters but the step only provides {stepTitleExtracts.Length}.");
+            }
+        }
+
+        private static void ThrowIfTableProvidedButNoneExpected(IStep step, MethodInfo method, bool methodHasTableArgument)
+        {
+            if (!step.TableArgument.IsEmpty && !methodHasTableArgument)
+            {
+                throw new StepBindingException(
+                    $"The step \"{step.Title}\" matches the method \"{method.Name}\" on class \"{method.DeclaringType.FullName}\". That method does not expect a table argument but the step provides one.");
+            }
         }
 
         private static object ConvertValue(string value, Type targetType)
