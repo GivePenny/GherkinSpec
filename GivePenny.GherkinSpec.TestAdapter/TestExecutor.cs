@@ -87,6 +87,12 @@ namespace GivePenny.GherkinSpec.TestAdapter
                         break;
                     }
 
+                    if (testCase.DiscoveredData().IsIgnored)
+                    {
+                        RecordTestSkipped(testCase, frameworkHandle);
+                        continue;
+                    }
+
                     tasks.Add(
                         RunMappedTest(testCase, testCase.DiscoveredData(), testRunContext, methodMapper, runContext, frameworkHandle));
                 }
@@ -116,6 +122,15 @@ namespace GivePenny.GherkinSpec.TestAdapter
                 new TestResult(testCase)
                 {
                     Outcome = TestOutcome.NotFound
+                });
+        }
+
+        private void RecordTestSkipped(TestCase testCase, IFrameworkHandle frameworkHandle)
+        {
+            frameworkHandle.RecordResult(
+                new TestResult(testCase)
+                {
+                    Outcome = TestOutcome.Skipped
                 });
         }
     }

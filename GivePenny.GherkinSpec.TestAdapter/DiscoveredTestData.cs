@@ -15,5 +15,8 @@ namespace GivePenny.GherkinSpec.TestAdapter
         public Assembly Assembly { get; }
         public Feature Feature { get; }
         public Scenario Scenario { get; }
+
+        public bool IsIgnored
+            => Scenario.IsIgnored;
     }
 }

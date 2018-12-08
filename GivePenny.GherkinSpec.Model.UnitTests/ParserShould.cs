@@ -211,5 +211,33 @@ So that I can have more fun", feature.Narrative);
             Assert.AreEqual("A2", exampleRows.Third().Cells.First().Value);
             Assert.AreEqual("B2", exampleRows.Third().Cells.Second().Value);
         }
+
+        [TestMethod]
+        public void ReadScenarioTagsAndPreserveCase()
+        {
+            var text = Resources.GetString("Tags.feature");
+            var parser = new Parser();
+            var feature = parser.Parse(text);
+            Assert.AreEqual(1, feature.Scenarios.Count());
+
+            var firstScenario = feature.Scenarios.First();
+            Assert.AreEqual(2, firstScenario.Tags.Count());
+            Assert.AreEqual("ignore", firstScenario.Tags.First().Label);
+            Assert.AreEqual("somethingElse", firstScenario.Tags.Second().Label);
+        }
+
+        [TestMethod]
+        public void ReadScenarioOutlineTagsAndPreserveCase()
+        {
+            var text = Resources.GetString("Tags.feature");
+            var parser = new Parser();
+            var feature = parser.Parse(text);
+            Assert.AreEqual(1, feature.ScenarioOutlines.Count());
+
+            var firstScenarioOutline = feature.ScenarioOutlines.First();
+            Assert.AreEqual(2, firstScenarioOutline.Tags.Count());
+            Assert.AreEqual("ignore", firstScenarioOutline.Tags.First().Label);
+            Assert.AreEqual("somethingOther", firstScenarioOutline.Tags.Second().Label);
+        }
     }
 }

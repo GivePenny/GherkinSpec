@@ -6,7 +6,7 @@ namespace GivePenny.GherkinSpec.Model.Parsing
 {
     static class ScenarioParser
     {
-        public static Scenario ParseScenario(LineReader reader)
+        public static Scenario ParseScenario(LineReader reader, IEnumerable<Tag> tags)
         {
             var scenarioTitle = reader.CurrentLineScenarioTitle;
             var scenarioStartingLineNumber = reader.CurrentLineNumber;
@@ -27,10 +27,10 @@ namespace GivePenny.GherkinSpec.Model.Parsing
                 }
             }
 
-            return new Scenario(scenarioTitle, steps, scenarioStartingLineNumber);
+            return new Scenario(scenarioTitle, steps, scenarioStartingLineNumber, tags);
         }
 
-        public static ScenarioOutline ParseScenarioOutline(LineReader reader)
+        public static ScenarioOutline ParseScenarioOutline(LineReader reader, IEnumerable<Tag> tags)
         {
             var scenarioOutlineTitle = reader.CurrentLineScenarioOutlineTitle;
             var scenarioOutlineStartingLineNumber = reader.CurrentLineNumber;
@@ -79,7 +79,8 @@ namespace GivePenny.GherkinSpec.Model.Parsing
                 scenarioOutlineTitle,
                 steps,
                 examples,
-                scenarioOutlineStartingLineNumber);
+                scenarioOutlineStartingLineNumber,
+                tags);
         }
 
         private static DataTable ParseExamples(LineReader reader)
