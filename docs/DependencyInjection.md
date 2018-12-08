@@ -33,3 +33,7 @@ Singleton instances are dedicated to the entire test run.  One instance is share
 Transient instances are created new every time they are requested.  A class marked with `[Steps]` that is registered with a transient lifetime will be instantiated every time a Given, When or Then defined in that class is encountered during a test.  Typically this is a little wasteful and the Scoped lifetime makes more sense.
 
 Steps that manipulate a database and require a refresh context may be defined in a steps class with a transient lifetime, taking a database context also with a transient lifetime as a constructor-argument dependency.
+
+### Gotchas
+
+* See [Database contexts with Scoped steps classes](DependencyInjection-DatabaseContexts.md)
