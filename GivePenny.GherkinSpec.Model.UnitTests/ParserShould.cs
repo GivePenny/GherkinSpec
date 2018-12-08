@@ -21,9 +21,7 @@ namespace GivePenny.GherkinSpec.Model.UnitTests
         [TestMethod]
         public void ReadFeatureMotivationAfterFeatureTitleUntilScenarioLine()
         {
-            var text = Resources.GetString("FeatureMotivationScenarioTitle.feature");
-            var parser = new Parser();
-            var feature = parser.Parse(text);
+            var feature = ParseResource("FeatureMotivationScenarioTitle.feature");
             Assert.AreEqual(@"As a developer
 I want things to work
 So that I can have more fun", feature.Narrative);
@@ -32,9 +30,7 @@ So that I can have more fun", feature.Narrative);
         [TestMethod]
         public void ReadScenarioTitle()
         {
-            var text = Resources.GetString("ScenarioTitle.feature");
-            var parser = new Parser();
-            var feature = parser.Parse(text);
+            var feature = ParseResource("ScenarioTitle.feature");
             Assert.AreEqual(1, feature.Scenarios.Count());
             Assert.AreEqual(@"This is a scenario", feature.Scenarios.First().Title);
         }
@@ -42,9 +38,7 @@ So that I can have more fun", feature.Narrative);
         [TestMethod]
         public void ReadExampleAsAScenario()
         {
-            var text = Resources.GetString("Example.feature");
-            var parser = new Parser();
-            var feature = parser.Parse(text);
+            var feature = ParseResource("Example.feature");
             Assert.AreEqual(1, feature.Scenarios.Count());
             Assert.AreEqual(@"This is a scenario", feature.Scenarios.First().Title);
         }
@@ -52,27 +46,22 @@ So that I can have more fun", feature.Narrative);
         [TestMethod]
         public void SkipCommentLines()
         {
-            var text = Resources.GetString("Comment.feature");
-            var parser = new Parser();
-            var feature = parser.Parse(text);
+            var feature = ParseResource("Comment.feature");
             Assert.IsTrue(string.IsNullOrEmpty(feature.Narrative));
         }
 
         [TestMethod]
         public void SkipWhitespaceLines()
         {
-            var text = Resources.GetString("Whitespace.feature");
-            var parser = new Parser();
-            var feature = parser.Parse(text);
+            var feature = ParseResource("Whitespace.feature");
             Assert.AreEqual("Motivation", feature.Narrative);
         }
 
         [TestMethod]
         public void ReadMultipleScenarioTitles()
         {
-            var text = Resources.GetString("ScenarioTitles.feature");
-            var parser = new Parser();
-            var feature = parser.Parse(text);
+            var feature = ParseResource("ScenarioTitles.feature");
+
             Assert.AreEqual(3, feature.Scenarios.Count());
             Assert.AreEqual(@"This is a scenario", feature.Scenarios.First().Title);
             Assert.AreEqual(@"This is a 2nd scenario", feature.Scenarios.Second().Title);
@@ -82,20 +71,17 @@ So that I can have more fun", feature.Narrative);
         [TestMethod]
         public void StoreScenarioStartingLineNumber()
         {
-            var text = Resources.GetString("ScenarioTitles.feature");
-            var parser = new Parser();
-            var feature = parser.Parse(text);
+            var feature = ParseResource("ScenarioTitles.feature");
+
             Assert.AreEqual(2, feature.Scenarios.First().StartingLineNumber);
         }
 
         [TestMethod]
         public void ReadScenarioSteps()
         {
-            var text = Resources.GetString("ScenarioSteps.feature");
-            var parser = new Parser();
-            var feature = parser.Parse(text);
+            var feature = ParseResource("ScenarioSteps.feature");
 
-            Assert.AreEqual(2, feature.Scenarios.Count());
+            Assert.AreEqual(3, feature.Scenarios.Count());
             Assert.AreEqual(4, feature.Scenarios.First().Steps.Count);
             Assert.AreEqual(4, feature.Scenarios.Second().Steps.Count);
         }
@@ -103,9 +89,7 @@ So that I can have more fun", feature.Narrative);
         [TestMethod]
         public void ReadScenarioStepDataTableArguments()
         {
-            var text = Resources.GetString("ScenarioSteps.feature");
-            var parser = new Parser();
-            var feature = parser.Parse(text);
+            var feature = ParseResource("ScenarioSteps.feature");
 
             var secondScenario = feature.Scenarios.Second();
             Assert.AreEqual(2, secondScenario.Steps.First().TableArgument.Rows.Count);
@@ -115,11 +99,36 @@ So that I can have more fun", feature.Narrative);
         }
 
         [TestMethod]
+        public void ReadScenarioStepMultiLineStringArguments()
+        {
+            var feature = ParseResource("ScenarioSteps.feature");
+
+            var thirdScenario = feature.Scenarios.Third();
+            Assert.AreEqual(2, thirdScenario.Steps.Count());
+            Assert.AreEqual(
+                "A very long document can go here, but\r\n  watch that the indentation is correct.",
+                thirdScenario.Steps.First().MultiLineStringArgument);
+        }
+
+        [TestMethod]
+        public void ReadScenarioStepMultiLineStringAndDataTableArguments()
+        {
+            var feature = ParseResource("ScenarioSteps.feature");
+
+            var secondStep = feature.Scenarios.Third().Steps.Second();
+            var secondRow = secondStep.TableArgument.Rows.Second();
+            Assert.AreEqual(
+                "Document here",
+                secondStep.MultiLineStringArgument);
+            Assert.AreEqual(
+                "value 2",
+                secondRow.Cells.Second().Value);
+        }
+
+        [TestMethod]
         public void TreatAndAsTheLastDefinedGivenWhenOrThen()
         {
-            var text = Resources.GetString("ScenarioSteps.feature");
-            var parser = new Parser();
-            var feature = parser.Parse(text);
+            var feature = ParseResource("ScenarioSteps.feature");
 
             Assert.IsInstanceOfType(
                 feature.Scenarios.First().Steps.Second(),
@@ -129,9 +138,7 @@ So that I can have more fun", feature.Narrative);
         [TestMethod]
         public void TreatButAsTheLastDefinedGivenWhenOrThen()
         {
-            var text = Resources.GetString("ScenarioSteps.feature");
-            var parser = new Parser();
-            var feature = parser.Parse(text);
+            var feature = ParseResource("ScenarioSteps.feature");
 
             Assert.IsInstanceOfType(
                 feature.Scenarios.Second().Steps.Third(),
@@ -141,9 +148,7 @@ So that I can have more fun", feature.Narrative);
         [TestMethod]
         public void ReadFeatureBackground()
         {
-            var text = Resources.GetString("Background.feature");
-            var parser = new Parser();
-            var feature = parser.Parse(text);
+            var feature = ParseResource("Background.feature");
 
             Assert.AreEqual(2, feature.Background.Steps.Count);
             Assert.AreEqual(@"Given a first step", feature.Background.Steps.First().Title);
@@ -153,9 +158,7 @@ So that I can have more fun", feature.Narrative);
         [TestMethod]
         public void ReadScenarioOutlineTitle()
         {
-            var text = Resources.GetString("ScenarioOutline.feature");
-            var parser = new Parser();
-            var feature = parser.Parse(text);
+            var feature = ParseResource("ScenarioOutline.feature");
 
             Assert.AreEqual(1, feature.ScenarioOutlines.Count());
             Assert.AreEqual("Example scenario outline", feature.ScenarioOutlines.First().Title);
@@ -164,9 +167,7 @@ So that I can have more fun", feature.Narrative);
         [TestMethod]
         public void ReadScenariosBeforeAndAfterOutlines()
         {
-            var text = Resources.GetString("ScenarioOutline.feature");
-            var parser = new Parser();
-            var feature = parser.Parse(text);
+            var feature = ParseResource("ScenarioOutline.feature");
 
             Assert.AreEqual(2, feature.Scenarios.Count);
         }
@@ -174,9 +175,7 @@ So that I can have more fun", feature.Narrative);
         [TestMethod]
         public void ReadScenarioOutlineSteps()
         {
-            var text = Resources.GetString("ScenarioOutline.feature");
-            var parser = new Parser();
-            var feature = parser.Parse(text);
+            var feature = ParseResource("ScenarioOutline.feature");
 
             var outlineSteps = feature.ScenarioOutlines.First().Steps;
             Assert.AreEqual(@"Given a first step <columnA>", outlineSteps.First().Title);
@@ -186,9 +185,7 @@ So that I can have more fun", feature.Narrative);
         [TestMethod]
         public void ReadScenarioOutlineExampleTable()
         {
-            var text = Resources.GetString("ScenarioOutline.feature");
-            var parser = new Parser();
-            var feature = parser.Parse(text);
+            var feature = ParseResource("ScenarioOutline.feature");
 
             var exampleRows = feature.ScenarioOutlines.First().Examples.Rows;
             Assert.AreEqual(3, exampleRows.Count());
@@ -199,9 +196,7 @@ So that I can have more fun", feature.Narrative);
         [TestMethod]
         public void ReadScenarioOutlineExampleTableValues()
         {
-            var text = Resources.GetString("ScenarioOutline.feature");
-            var parser = new Parser();
-            var feature = parser.Parse(text);
+            var feature = ParseResource("ScenarioOutline.feature");
 
             var exampleRows = feature.ScenarioOutlines.First().Examples.Rows;
             Assert.AreEqual("columnA", exampleRows.First().Cells.First().Value);
@@ -215,9 +210,8 @@ So that I can have more fun", feature.Narrative);
         [TestMethod]
         public void ReadScenarioTagsAndPreserveCase()
         {
-            var text = Resources.GetString("Tags.feature");
-            var parser = new Parser();
-            var feature = parser.Parse(text);
+            var feature = ParseResource("Tags.feature");
+
             Assert.AreEqual(1, feature.Scenarios.Count());
 
             var firstScenario = feature.Scenarios.First();
@@ -229,9 +223,7 @@ So that I can have more fun", feature.Narrative);
         [TestMethod]
         public void ReadScenarioOutlineTagsAndPreserveCase()
         {
-            var text = Resources.GetString("Tags.feature");
-            var parser = new Parser();
-            var feature = parser.Parse(text);
+            var feature = ParseResource("Tags.feature");
             Assert.AreEqual(1, feature.ScenarioOutlines.Count());
 
             var firstScenarioOutline = feature.ScenarioOutlines.First();
@@ -243,13 +235,14 @@ So that I can have more fun", feature.Narrative);
         [TestMethod]
         public void ReadFeatureTagsAndPreserveCase()
         {
-            var text = Resources.GetString("Tags.feature");
-            var parser = new Parser();
-            var feature = parser.Parse(text);
-
+            var feature = ParseResource("Tags.feature");
             Assert.AreEqual(2, feature.Tags.Count());
             Assert.AreEqual("ignore", feature.Tags.First().Label);
             Assert.AreEqual("featureTag", feature.Tags.Second().Label);
         }
+
+        private Feature ParseResource(string resourceName)
+            => new Parser().Parse(
+                Resources.GetString(resourceName));
     }
 }

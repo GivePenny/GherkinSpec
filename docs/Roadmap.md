@@ -5,7 +5,6 @@ The project's next steps are:
 ## Target 1.0 release
 
 * Further documentation (including contribution guidelines)
-* Support for the full Gherkin syntax.  Currently everything is supported except for multi-line strings, tags and data tables as single arguments.
 * Full example extended to include configuration and logging.
 * All TODO comments in the code to be resolved
 

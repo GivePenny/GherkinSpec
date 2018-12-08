@@ -20,7 +20,7 @@ namespace GivePenny.GherkinSpec.Model.Parsing
         private static DataTableRow ParseDataTableRow(LineReader reader)
         {
             var column = reader
-                .CurrentLine
+                .CurrentLineTrimmed
                 .RemoveFirstAndLastPipes(
                     reader.CurrentLineNumber)
                 .Split('|');

@@ -20,7 +20,7 @@ namespace GivePenny.GherkinSpec.TestAdapter.UnitTests
         {
             var mapper = new MethodMapper();
             var mapping = mapper.GetMappingFor(
-                new GivenStep("Given a plain text match", DataTable.Empty),
+                new GivenStep("Given a plain text match", DataTable.Empty, null),
                 Assembly.GetExecutingAssembly());
 
             Assert.AreEqual("GivenAPlainTextMatch", mapping.Name);
@@ -50,7 +50,7 @@ namespace GivePenny.GherkinSpec.TestAdapter.UnitTests
         {
             var mapper = new MethodMapper();
             var mapping = mapper.GetMappingFor(
-                new GivenStep($"Given a single {typeof(TArgumentType).Name} match of {stepValue}", DataTable.Empty),
+                new GivenStep($"Given a single {typeof(TArgumentType).Name} match of {stepValue}", DataTable.Empty, null),
                 Assembly.GetExecutingAssembly());
 
             Assert.AreEqual($"GivenASingle{typeof(TArgumentType).Name}Match", mapping.Name);
@@ -63,7 +63,7 @@ namespace GivePenny.GherkinSpec.TestAdapter.UnitTests
         {
             var mapper = new MethodMapper();
             var mapping = mapper.GetMappingFor(
-                new GivenStep("Given a single 'value-here' match and 'another here'", DataTable.Empty),
+                new GivenStep("Given a single 'value-here' match and 'another here'", DataTable.Empty, null),
                 Assembly.GetExecutingAssembly());
 
             Assert.AreEqual("GivenAMultipleStringMatch", mapping.Name);
@@ -77,7 +77,7 @@ namespace GivePenny.GherkinSpec.TestAdapter.UnitTests
         {
             var mapper = new MethodMapper();
             var mapping = mapper.GetMappingFor(
-                new GivenStep("Given a plain value in a non-static method", DataTable.Empty),
+                new GivenStep("Given a plain value in a non-static method", DataTable.Empty, null),
                 Assembly.GetExecutingAssembly());
 
             Assert.AreEqual("GivenANonStaticPlainTextMatch", mapping.Name);
@@ -92,7 +92,7 @@ namespace GivePenny.GherkinSpec.TestAdapter.UnitTests
             var exception = Assert.ThrowsException<StepBindingException>(
                 () =>
                     mapper.GetMappingFor(
-                        new GivenStep("Given not enough captures to satisfy method arguments", DataTable.Empty),
+                        new GivenStep("Given not enough captures to satisfy method arguments", DataTable.Empty, null),
                         Assembly.GetExecutingAssembly()));
 
             Assert.AreEqual(
@@ -108,7 +108,7 @@ namespace GivePenny.GherkinSpec.TestAdapter.UnitTests
             var exception = Assert.ThrowsException<StepBindingException>(
                 () =>
                     mapper.GetMappingFor(
-                        new GivenStep("Given a plain value in a non-static method", NonEmptyDataTable),
+                        new GivenStep("Given a plain value in a non-static method", NonEmptyDataTable, null),
                         Assembly.GetExecutingAssembly()));
 
             Assert.AreEqual(
@@ -124,7 +124,7 @@ namespace GivePenny.GherkinSpec.TestAdapter.UnitTests
             var exception = Assert.ThrowsException<StepBindingException>(
                 () =>
                     mapper.GetMappingFor(
-                        new GivenStep("Given a table", DataTable.Empty),
+                        new GivenStep("Given a table", DataTable.Empty, null),
                         Assembly.GetExecutingAssembly()));
 
             Assert.AreEqual(
@@ -137,12 +137,25 @@ namespace GivePenny.GherkinSpec.TestAdapter.UnitTests
         {
             var mapper = new MethodMapper();
             var mapping = mapper.GetMappingFor(
-                new GivenStep("Given a table", NonEmptyDataTable),
+                new GivenStep("Given a table", NonEmptyDataTable, null),
                 Assembly.GetExecutingAssembly());
 
             Assert.AreEqual("GivenATable", mapping.Name);
             Assert.AreEqual(1, mapping.Arguments.Length);
             Assert.IsInstanceOfType(mapping.Arguments[0], typeof(DataTable));
+        }
+
+        [TestMethod]
+        public void PassMultiLineStringParameterToMethodAsLastParameter()
+        {
+            var mapper = new MethodMapper();
+            var mapping = mapper.GetMappingFor(
+                new GivenStep("Given a multi-line string", DataTable.Empty, "some string"),
+                Assembly.GetExecutingAssembly());
+
+            Assert.AreEqual("GivenAMultiLineString", mapping.Name);
+            Assert.AreEqual(1, mapping.Arguments.Length);
+            Assert.AreEqual("some string", mapping.Arguments[0]);
         }
 
         private DataTable NonEmptyDataTable

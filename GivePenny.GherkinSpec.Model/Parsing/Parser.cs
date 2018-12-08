@@ -41,7 +41,7 @@ namespace GivePenny.GherkinSpec.Model.Parsing
                 && !reader.IsBackgroundStartLine
                 && !reader.IsTagLine)
             {
-                featureNarrative.AppendLine(reader.CurrentLine);
+                featureNarrative.AppendLine(reader.CurrentLineTrimmed);
                 reader.ReadNextLine();
             }
 
@@ -105,7 +105,7 @@ namespace GivePenny.GherkinSpec.Model.Parsing
 
             while (reader.IsTagLine)
             {
-                var tagsOnLine = reader.CurrentLine.Split(',');
+                var tagsOnLine = reader.CurrentLineTrimmed.Split(',');
                 foreach (var tag in tagsOnLine)
                 {
                     var cleanTag = tag.Trim();

@@ -33,6 +33,11 @@ namespace GivePenny.GherkinSpec.Model
 
         public string ReplacePlaceholdersWithValues(string text, DataTableRow rowProvidingValues)
         {
+            if (string.IsNullOrEmpty(text))
+            {
+                return text;
+            }
+
             var cellIndex = 0;
             foreach (var columnName in ColumnNames)
             {

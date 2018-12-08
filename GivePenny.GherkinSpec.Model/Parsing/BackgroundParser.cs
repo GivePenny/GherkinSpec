@@ -26,7 +26,7 @@ namespace GivePenny.GherkinSpec.Model.Parsing
                 if (!(reader.IsAndLine || reader.IsButLine || reader.IsGivenLine))
                 {
                     throw new InvalidGherkinSyntaxException(
-                        $"Backgrounds can only contain Given, And or But steps.  Found '{reader.CurrentLine}' instead on line {reader.CurrentLineNumber}.",
+                        $"Backgrounds can only contain Given, And or But steps.  Found '{reader.CurrentLineTrimmed}' instead on line {reader.CurrentLineNumber}.",
                         reader.CurrentLineNumber);
                 }
 
@@ -42,11 +42,13 @@ namespace GivePenny.GherkinSpec.Model.Parsing
             if (!reader.IsGivenLine && !reader.IsAndLine && !reader.IsButLine)
             {
                 throw new NotSupportedException(
-                    $"Unrecognised step type on line '{reader.CurrentLine}'. Only Given, And or But steps can be used in a Background.");
+                    $"Unrecognised step type on line '{reader.CurrentLineTrimmed}'. Only Given, And or But steps can be used in a Background.");
             }
 
-            var stepTitle = reader.CurrentLine;
+            var stepTitle = reader.CurrentLineTrimmed;
             reader.ReadNextLine();
+
+            var multiLineString = MultiLineStringParser.ParseMultiLineStringIfPresent(reader);
 
             var dataTable = DataTable.Empty;
             if (reader.IsTableLine)
@@ -56,7 +58,8 @@ namespace GivePenny.GherkinSpec.Model.Parsing
 
             return new GivenStep(
                 stepTitle,
-                dataTable);
+                dataTable,
+                multiLineString);
         }
     }
 }

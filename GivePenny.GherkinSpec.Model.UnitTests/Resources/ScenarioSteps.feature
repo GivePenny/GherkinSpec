@@ -16,3 +16,16 @@ Scenario: Add two numbers together when one of them is zero
 	When I do nothing
 	Then nothing happens
 	But this reads well
+
+Scenario: A scenario
+	Given I have some markdown
+		"""
+		A very long document can go here, but
+		  watch that the indentation is correct.
+		"""
+	And documents can be followed by tables
+		"""
+		Document here
+		"""
+		| column 1 | column 2 |
+		| value 1  | value 2  |

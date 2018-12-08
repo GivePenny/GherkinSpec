@@ -15,5 +15,10 @@ namespace GivePenny.GherkinSpec.TestAdapter.UnitTests.Samples
         public void GivenATable(DataTable table)
         {
         }
+
+        [Given("a multi-line string")]
+        public void GivenAMultiLineString(string multiLineString)
+        {
+        }
     }
 }

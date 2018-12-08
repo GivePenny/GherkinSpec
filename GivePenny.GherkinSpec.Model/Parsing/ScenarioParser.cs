@@ -15,7 +15,8 @@ namespace GivePenny.GherkinSpec.Model.Parsing
             reader.ReadNextLine();
             while (reader.IsStepLine)
             {
-                steps.Add(ParseStep(reader, steps.LastOrDefault()));
+                steps.Add(
+                    ParseStep(reader, steps.LastOrDefault()));
 
                 if (!reader.IsEndOfFile
                     && !reader.IsStepLine
@@ -23,7 +24,7 @@ namespace GivePenny.GherkinSpec.Model.Parsing
                     && !reader.IsScenarioOutlineStartLine)
                 {
                     throw new InvalidGherkinSyntaxException(
-                        $"Expected a step (Given, When, Then), a Scenario or a Scenario Outline, but found '{reader.CurrentLine}'.", reader.CurrentLineNumber);
+                        $"Expected a step (Given, When, Then, And, But), a Scenario or a Scenario Outline, but found '{reader.CurrentLineTrimmed}'.", reader.CurrentLineNumber);
                 }
             }
 
@@ -63,7 +64,7 @@ namespace GivePenny.GherkinSpec.Model.Parsing
                     && !reader.IsScenarioOutlineStartLine)
                 {
                     throw new InvalidGherkinSyntaxException(
-                        $"Expected a step (Given, When, Then), a Scenario or a Scenario Outline, but found '{reader.CurrentLine}'.",
+                        $"Expected a step (Given, When, Then, And, But), a Scenario or a Scenario Outline, but found '{reader.CurrentLineTrimmed}'.",
                         reader.CurrentLineNumber);
                 }
             }
@@ -91,27 +92,27 @@ namespace GivePenny.GherkinSpec.Model.Parsing
 
         private static IStep ParseStep(LineReader reader, IStep previousStep)
         {
-            var stepTitle = reader.CurrentLine;
+            var stepTitle = reader.CurrentLineTrimmed;
 
             if (reader.IsGivenLine)
             {
-                return ParseStep(reader, table => new GivenStep(stepTitle, table));
+                return ParseStep(reader, (table, multiLineString) => new GivenStep(stepTitle, table, multiLineString));
             }
 
             if (reader.IsWhenLine)
             {
-                return ParseStep(reader, table => new WhenStep(stepTitle, table));
+                return ParseStep(reader, (table, multiLineString) => new WhenStep(stepTitle, table, multiLineString));
             }
 
             if (reader.IsThenLine)
             {
-                return ParseStep(reader, table => new ThenStep(stepTitle, table));
+                return ParseStep(reader, (table, multiLineString) => new ThenStep(stepTitle, table, multiLineString));
             }
 
             if (!reader.IsAndLine && !reader.IsButLine)
             {
                 throw new NotSupportedException(
-                    $"Unrecognised step type in line '{reader.CurrentLine}'.");
+                    $"Unrecognised step type in line '{reader.CurrentLineTrimmed}'.");
             }
 
             if (previousStep == null)
@@ -120,12 +121,14 @@ namespace GivePenny.GherkinSpec.Model.Parsing
                     $"The first step in a scenario cannot start with 'And'. Expected Given, When or Then", reader.CurrentLineNumber);
             }
 
-            return ParseStep(reader, table => previousStep.CreateAnother(stepTitle, table));
+            return ParseStep(reader, (table, multiLineString) => previousStep.CreateAnother(stepTitle, table, multiLineString));
         }
 
-        private static IStep ParseStep(LineReader reader, Func<DataTable, IStep> stepFactory)
+        private static IStep ParseStep(LineReader reader, Func<DataTable, string, IStep> stepFactory)
         {
             reader.ReadNextLine();
+
+            var multiLineString = MultiLineStringParser.ParseMultiLineStringIfPresent(reader);
 
             var dataTable = DataTable.Empty;
             if (reader.IsTableLine)
@@ -133,7 +136,7 @@ namespace GivePenny.GherkinSpec.Model.Parsing
                 dataTable = DataTableParser.ParseDataTable(reader);
             }
 
-            return stepFactory(dataTable);
+            return stepFactory(dataTable, multiLineString);
         }
     }
 }
