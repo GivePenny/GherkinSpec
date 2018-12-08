@@ -47,7 +47,8 @@ namespace GivePenny.GherkinSpec.TestAdapter.UnitTests
                     new Scenario(
                         "Scenario",
                         new[] { scenarioStep },
-                        1)
+                        1,
+                        Enumerable.Empty<Tag>())
                 },
                 Enumerable.Empty<ScenarioOutline>());
 

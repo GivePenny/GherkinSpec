@@ -7,45 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\Background.feature" />
-    <None Remove="Resources\Comment.feature" />
-    <None Remove="Resources\Example.feature" />
-    <None Remove="Resources\FeatureMotivationScenarioTitle.feature" />
-    <None Remove="Resources\ScenarioOutline.feature" />
-    <None Remove="Resources\ScenarioSteps.feature" />
-    <None Remove="Resources\ScenarioTitle.feature" />
-    <None Remove="Resources\ScenarioTitles.feature" />
-    <None Remove="Resources\Whitespace.feature" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Background.feature">
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ScenarioOutline.feature">
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ScenarioSteps.feature">
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Example.feature">
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ScenarioTitles.feature">
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Whitespace.feature">
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Comment.feature">
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ScenarioTitle.feature">
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FeatureMotivationScenarioTitle.feature">
-      <Generator></Generator>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Resources/*.feature"/>
   </ItemGroup>
 
   <ItemGroup>

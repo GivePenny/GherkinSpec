@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -36,7 +37,8 @@ namespace GivePenny.GherkinSpec.Model.Parsing
                 !reader.IsEndOfFile
                 && !reader.IsScenarioStartLine
                 && !reader.IsScenarioOutlineStartLine
-                && !reader.IsBackgroundStartLine)
+                && !reader.IsBackgroundStartLine
+                && !reader.IsTagLine)
             {
                 featureNarrative.AppendLine(reader.CurrentLine);
                 reader.ReadNextLine();
@@ -56,17 +58,22 @@ namespace GivePenny.GherkinSpec.Model.Parsing
 
             var scenarios = new List<Scenario>();
             var scenarioOutlines = new List<ScenarioOutline>();
+
             do
             {
+                var tags = ParseTagsIfPresent(reader);
+
                 if (reader.IsScenarioStartLine)
                 {
-                    scenarios.Add(ScenarioParser.ParseScenario(reader));
+                    scenarios.Add(
+                        ScenarioParser.ParseScenario(reader, tags));
                     continue;
                 }
 
                 if (reader.IsScenarioOutlineStartLine)
                 {
-                    scenarioOutlines.Add(ScenarioParser.ParseScenarioOutline(reader));
+                    scenarioOutlines.Add(
+                        ScenarioParser.ParseScenarioOutline(reader, tags));
                     continue;
                 }
 
@@ -82,6 +89,41 @@ namespace GivePenny.GherkinSpec.Model.Parsing
                 featureBackground,
                 scenarios,
                 scenarioOutlines);
+        }
+
+        private IEnumerable<Tag> ParseTagsIfPresent(LineReader reader)
+        {
+            if (!reader.IsTagLine)
+            {
+                return Enumerable.Empty<Tag>();
+            }
+
+            var tags = new List<Tag>();
+
+            while (reader.IsTagLine)
+            {
+                var tagsOnLine = reader.CurrentLine.Split(',');
+                foreach (var tag in tagsOnLine)
+                {
+                    var cleanTag = tag.Trim();
+                    if (!cleanTag.StartsWith("@"))
+                    {
+                        throw new InvalidGherkinSyntaxException(
+                            "All tags must start with @.",
+                            reader.CurrentLineNumber);
+                    }
+
+                    cleanTag = cleanTag
+                        .Substring(1)
+                        .TrimStart();
+
+                    tags.Add(new Tag(cleanTag));
+                }
+
+                reader.ReadNextLine();
+            }
+
+            return tags;
         }
     }
 }

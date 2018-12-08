@@ -18,7 +18,8 @@ namespace GivePenny.GherkinSpec.Model.UnitTests
                     new Scenario(
                         "Scenario",
                         Enumerable.Empty<IStep>(),
-                        1)
+                        1,
+                        Enumerable.Empty<Tag>())
                 },
                 new[]
                 {
@@ -38,7 +39,8 @@ namespace GivePenny.GherkinSpec.Model.UnitTests
                                         new DataTableCell("Value")
                                     })
                             }),
-                        2)
+                        2,
+                        Enumerable.Empty<Tag>())
                 });
 
             var allScenarios = feature.AllScenarios.ToArray();

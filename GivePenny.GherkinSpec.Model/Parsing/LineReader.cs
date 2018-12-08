@@ -15,6 +15,7 @@ namespace GivePenny.GherkinSpec.Model.Parsing
         public const string ThenLineStart = "Then ";
         private const string AndLineStart = "And ";
         private const string ButLineStart = "But ";
+        private const string TagLineStart = "@";
 
         private readonly TextReader textReader;
 
@@ -50,6 +51,9 @@ namespace GivePenny.GherkinSpec.Model.Parsing
 
         public bool IsBackgroundStartLine
             => CurrentLineStartsWith(BackgroundLineStart);
+
+        public bool IsTagLine
+            => CurrentLineStartsWith(TagLineStart);
 
         public bool IsScenarioStartLine
             => CurrentLineStartsWith(ScenarioLineStart)

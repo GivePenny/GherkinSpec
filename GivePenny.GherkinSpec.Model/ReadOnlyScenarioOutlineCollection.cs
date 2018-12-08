@@ -44,7 +44,8 @@ namespace GivePenny.GherkinSpec.Model
             return new Scenario(
                 scenarioTitle,
                 scenarioSteps,
-                scenarioOutline.StartingLineNumber);
+                scenarioOutline.StartingLineNumber,
+                scenarioOutline.Tags);
         }
     }
 }
