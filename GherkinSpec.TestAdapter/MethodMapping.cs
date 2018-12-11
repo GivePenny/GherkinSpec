@@ -22,6 +22,8 @@ namespace GherkinSpec.TestAdapter
 
         public string Name => methodInfo.Name;
 
+        public string FullName => methodInfo.DeclaringType.FullName + "::" + methodInfo.Name;
+
         public object[] Arguments => arguments;
 
         public Task Execute(IServiceProvider serviceProvider, Collection<TestResultMessage> messages)

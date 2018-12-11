@@ -7,8 +7,6 @@ namespace GherkinSpec.Model.UnitTests
     [TestClass]
     public class ParserShould
     {
-        // TODO Ignore leading blank lines
-
         [TestMethod]
         public void ReadFeatureTitleAndIgnorePaddingWhitespace()
         {
@@ -22,7 +20,7 @@ namespace GherkinSpec.Model.UnitTests
         public void ReadFeatureMotivationAfterFeatureTitleUntilScenarioLine()
         {
             var feature = ParseResource("FeatureMotivationScenarioTitle.feature");
-            Assert.AreEqual(@"As a developer
+            Assert.AreEqual(@"As a developer expecting blank lines to be ignored
 I want things to work
 So that I can have more fun", feature.Narrative);
         }

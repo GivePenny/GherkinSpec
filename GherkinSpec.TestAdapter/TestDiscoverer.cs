@@ -88,9 +88,6 @@ namespace GherkinSpec.TestAdapter
                 var featureFileName = featureFileLocator.FindFeatureFileNameIfPossible(resourceName, logger);
 
                 var feature = gherkinParser.Parse(featureText);
-
-                // TODO Unicode?
-
                 var cleanedFeatureName = CleanDisallowedCharacters(feature.Title);
 
                 foreach (var scenario in feature.AllScenarios)

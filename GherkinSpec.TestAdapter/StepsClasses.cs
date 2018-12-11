@@ -14,6 +14,7 @@ namespace GherkinSpec.TestAdapter
         public static IEnumerable<Type> FindIn(Assembly assembly)
             => assembly.GetTypes().Where(
                 type => type.IsClass
+                    && type.IsPublic
                     && type.GetCustomAttributes(
                         typeof(StepsAttribute),
                         true).Any());
