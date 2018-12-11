@@ -40,7 +40,7 @@ phases:
         displayName: 'dotnet pack'
         inputs:
           command: pack
-          projects: '**/GivePenny.GherkinSpec.TestAdapter.csproj'
+          projects: '**/GherkinSpec.TestAdapter.csproj'
           configuration: Release
           nobuild: true
           versioningScheme: byBuildNumber
@@ -52,6 +52,6 @@ phases:
           command: push
           nuGetFeedType: external
           publishFeedCredentials: 'GivePenny Nuget'
-          packagesToPush: '$(Build.ArtifactStagingDirectory)/**/GivePenny.GherkinSpec.TestAdapter.*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+          packagesToPush: '$(Build.ArtifactStagingDirectory)/**/GherkinSpec.TestAdapter.*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
           versioningScheme: byBuildNumber
           
