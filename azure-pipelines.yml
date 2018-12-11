@@ -52,6 +52,6 @@ phases:
           command: push
           nuGetFeedType: external
           publishFeedCredentials: 'GivePenny Nuget'
-          packagesToPush: '$(Build.ArtifactStagingDirectory)/**/GherkinSpec.TestAdapter.*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+          packagesToPush: '$(Build.ArtifactStagingDirectory)/**/GivePenny.GherkinSpec.TestAdapter.*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
           versioningScheme: byBuildNumber
           
