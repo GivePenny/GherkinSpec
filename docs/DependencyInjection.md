@@ -2,9 +2,9 @@
 
 ## Default basic DI
 
-By default, GherkinSpec plugs in a basic Dependency Injection framework.  This currently will create an instance of any class that has a public constructor that takes no parameters.  The instance lifetime is scoped (see the Scoped section below for more information).
+By default, GherkinSpec plugs in a basic Dependency Injection framework.  This currently will create an instance of any class that has a public constructor that takes no parameters, or that takes other objects as parameters.  Simple types such as strings and integers are not supported.  The instance lifetime is scoped (see the Scoped section below for more information).
 
-If you need to use a class that itself has dependencies or other constructor arguments, or if you would like to use a different lifetime for instances then you need to plug in an external DI framework.  The next section describes how to do that.
+If you need to use a class that itself has dependencies or other constructor arguments such as strings or integers, or if you would like to use a different lifetime for instances then you need to plug in an external DI framework.  The next section describes how to do that.
 
 ## Optional complete DI
 
