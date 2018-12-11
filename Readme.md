@@ -4,7 +4,7 @@
 
 A lightweight, cross-platform .NET Standard test adapter that discovers Gherkin tests from feature files and executes them.  Inspired by the giants of Cucumber, SpecFlow and BDDfy, filling a niche between them for microservice tests that are both lightweight (e.g. BDDfy) yet self-documenting in a natural language (e.g. SpecFlow/Cucumber).
 
-Published package: https://www.nuget.org/packages/GherkinSpec.TestAdapter
+Published package: https://www.nuget.org/packages/GivePenny.GherkinSpec.TestAdapter
 
 ![Screenshot showing Test Explorer, a Gherkin Feature file and C# steps](docs/Preview.png)
 
@@ -17,12 +17,12 @@ Published package: https://www.nuget.org/packages/GherkinSpec.TestAdapter
 
 ## Getting started
 
-The best way to pick GherkinSpec up is to see [the simple example repository](https://github.com/GivePenny/GivePenny.GherkinSpec.SimpleExample), download the code and just try it out.
+The best way to pick GherkinSpec up is to see [the simple example repository](https://github.com/GivePenny/GherkinSpec.SimpleExample), download the code and just try it out.
 
 If you want to create a new test project from scratch ...
 
 1. Create a new .NET Core project for your tests.
-2. Add Nuget package references to [GherkinSpec.TestAdapter](https://www.nuget.org/packages/GherkinSpec.TestAdapter) and [Microsoft.NET.Test.Sdk](https://www.nuget.org/packages/Microsoft.NET.Test.Sdk).
+2. Add Nuget package references to [GherkinSpec.TestAdapter](https://www.nuget.org/packages/GivePenny.GherkinSpec.TestAdapter) and [Microsoft.NET.Test.Sdk](https://www.nuget.org/packages/Microsoft.NET.Test.Sdk).
 3. Add a plain-text file (ending in .feature) to your project, mark it as an Embedded Resource (either in the csproj file, or in Visual Studio's Properties pane)
 4. Write your C# steps, tagging the class with a `[Steps]` attribute and your methods with `[Given]` or `[When]` or `[Then]`
 5. Add a reference to a unit test framework of your choice if you would like to perform Assertions, for example [MSTest.TestFramework](https://www.nuget.org/packages/MSTest.TestFramework)
