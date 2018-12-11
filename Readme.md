@@ -17,7 +17,7 @@ Published package: https://www.nuget.org/packages/GherkinSpec.TestAdapter
 
 ## Getting started
 
-The best way to pick GherkinSpec up is to see [the simple example repository](https://github.com/GivePenny/GherkinSpec.SimpleExample), download the code and just try it out.
+The best way to pick GherkinSpec up is to see [the simple example repository](https://github.com/GivePenny/GivePenny.GherkinSpec.SimpleExample), download the code and just try it out.
 
 If you want to create a new test project from scratch ...
 
