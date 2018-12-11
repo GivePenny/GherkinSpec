@@ -11,7 +11,6 @@ namespace GherkinSpec.TestAdapter.UnitTests
     {
         private readonly Mock<IMessageLogger> mockLogger = new Mock<IMessageLogger>();
 
-        // TODO CASE Does not match private methods?  Currently needs public/private class but public method - inconsistent?
         // TODO CASE "And a plain text match" rather than "Given a plain text match"
         // TODO CASE Review MethodMapper for other test cases needed after POC
 

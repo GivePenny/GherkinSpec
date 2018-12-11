@@ -24,9 +24,8 @@ namespace GherkinSpec.TestAdapter
                 {
                     if (candidate != null)
                     {
-                        // TODO Record details
                         throw new StepBindingException(
-                            $"Found more than one step definitions matching the step '{step.Title}'.");
+                            $"Found more than one step definitions matching the step '{step.Title}'. One was '{candidate.FullName}' and another was '{method.FullName}'. There may be more but the search was stopped here.");
                     }
 
                     candidate = method;
@@ -67,11 +66,9 @@ namespace GherkinSpec.TestAdapter
             var attributes = method.GetCustomAttributes<TAttribute>(true);
             foreach (var attribute in attributes)
             {
-                // TODO Handle regex syntax exceptioms
-                var regex = new Regex(
-                    attribute.MatchExpression,
-                    RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Singleline);
-
+                var regex = GetRegex(
+                    method.DeclaringType.FullName + "::" + method.Name,
+                    attribute.MatchExpression);
                 var match = regex.Match(step.TitleAfterType);
                 if (match != null && match.Success)
                 {
@@ -88,6 +85,21 @@ namespace GherkinSpec.TestAdapter
                         method: method);
                     yield return new MethodMapping(step, method, arguments);
                 }
+            }
+        }
+
+        private static Regex GetRegex(string methodFullName, string expression)
+        {
+            try
+            {
+                return new Regex(
+                    expression,
+                    RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+            }
+            catch (ArgumentException exception)
+            {
+                throw new InvalidOperationException(
+                    $"Method \"{methodFullName}\" has an invalid regular expression in an attribute. The invalid expression is: {expression}", exception);
             }
         }
 

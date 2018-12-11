@@ -47,7 +47,7 @@ namespace GherkinSpec.TestAdapter
                         await ExecuteSteps(serviceScope.ServiceProvider, testResult, testData.Feature.Background.Steps, testData)
                             .ConfigureAwait(false);
 
-                        // TODO Cucumber docs say run BeforeHooks here.
+                        // Cucumber docs say run BeforeHooks here, which is odd as before the Background steps is probably more useful.  If we ever add support for [BeforeScenario] then we should consider making it configurable whether that means before or after the Background steps.
 
                         await ExecuteSteps(serviceScope.ServiceProvider, testResult, testData.Scenario.Steps, testData)
                             .ConfigureAwait(false);
