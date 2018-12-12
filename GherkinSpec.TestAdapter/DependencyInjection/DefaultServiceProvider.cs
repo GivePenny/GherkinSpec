@@ -92,7 +92,7 @@ namespace GherkinSpec.TestAdapter.DependencyInjection
             if (candidate == null)
             {
                 throw new MissingMethodException(
-                    $"No public parameterless constructor defined for the type \"{serviceType.FullName}\".");
+                    $"No public constructor defined for the type \"{serviceType.FullName}\".");
             }
 
             return candidate;
