@@ -1,5 +1,6 @@
 using GherkinSpec.Model.Parsing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Linq;
 
 namespace GherkinSpec.Model.UnitTests
@@ -104,7 +105,7 @@ So that I can have more fun", feature.Narrative);
             var thirdScenario = feature.Scenarios.Third();
             Assert.AreEqual(2, thirdScenario.Steps.Count());
             Assert.AreEqual(
-                "A very long document can go here, but\r\n  watch that the indentation is correct.",
+                $"A very long document can go here, but{Environment.NewLine}  watch that the indentation is correct.",
                 thirdScenario.Steps.First().MultiLineStringArgument);
         }
 
