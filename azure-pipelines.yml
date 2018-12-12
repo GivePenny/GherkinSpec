@@ -10,9 +10,9 @@ trigger:
 phases:
 
   - phase: Phase
-    displayName: Windows agent
+    displayName: Agent
     queue:
-      name: Private VS2017
+      name: Private Linux
 
     steps:
       - task: DotNetCoreInstaller@0
