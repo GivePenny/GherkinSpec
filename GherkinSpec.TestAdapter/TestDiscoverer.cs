@@ -29,8 +29,6 @@ namespace GherkinSpec.TestAdapter
 
         public static IEnumerable<TestCase> DiscoverTests(IEnumerable<string> sources, IMessageLogger logger)
         {
-            logger.SendMessage(TestMessageLevel.Informational, "Discovering tests");
-
             foreach (var source in sources)
             {
                 foreach (var testCase in DiscoverTests(source, logger))
@@ -44,13 +42,11 @@ namespace GherkinSpec.TestAdapter
         {
             var sourceAssemblyPath = Path.IsPathRooted(source) ? source : Path.Combine(Directory.GetCurrentDirectory(), source);
 
-            logger.SendMessage(TestMessageLevel.Informational, $"Scanning assembly: {sourceAssemblyPath}");
-
             try
             {
                 var assembly = Assembly.LoadFrom(sourceAssemblyPath);
 
-                // ToArray forces the enumeration to be avaluated so any exceptions are caught and logged fully here.
+                // ToArray forces the enumeration to be evaluated so any exceptions are caught and logged fully here.
                 return DiscoverTests(source, assembly, logger).ToArray();
             }
             catch (BadImageFormatException exception)
@@ -77,6 +73,8 @@ namespace GherkinSpec.TestAdapter
             var gherkinParser = new Parser();
             var featureFileLocator = new SourceFileLocator(source);
 
+            var results = new List<TestCase>();
+
             foreach (var resourceName in assembly.GetManifestResourceNames())
             {
                 if (!IsFeatureResourceName(resourceName))
@@ -85,32 +83,44 @@ namespace GherkinSpec.TestAdapter
                 }
 
                 var featureText = ReadResourceText(assembly, resourceName);
-                var featureFileName = featureFileLocator.FindFeatureFileNameIfPossible(resourceName, logger);
-
                 var feature = gherkinParser.Parse(featureText);
-                var cleanedFeatureName = CleanDisallowedCharacters(feature.Title);
+                var featureSourceFile = featureFileLocator.FindFeatureFileNameIfPossible(resourceName, logger);
+
+                var cleanedFeatureFolderAndName = CleanedDotSeparatedName(
+                    featureSourceFile,
+                    feature.Title);
 
                 foreach (var scenario in feature.AllScenarios)
                 {
                     var cleanedScenarioName = CleanDisallowedCharacters(scenario.Title);
-                    var testCase = new TestCase(cleanedFeatureName + "." + cleanedScenarioName, TestExecutor.ExecutorUriStronglyTyped, source)
+                    var testCase = new TestCase(cleanedFeatureFolderAndName + "." + cleanedScenarioName, TestExecutor.ExecutorUriStronglyTyped, source)
                     {
                         DisplayName = scenario.Title,
                         LocalExtensionData = new DiscoveredTestData(assembly, feature, scenario),
-                        CodeFilePath = featureFileName,
+                        CodeFilePath = featureSourceFile.SourceFileName,
                         LineNumber = scenario.StartingLineNumber
                     };
 
-                    logger.SendMessage(TestMessageLevel.Informational, $"Found case \"{testCase.DisplayName}\"");
-                    yield return testCase;
+                    results.Add(testCase);
                 }
             }
+
+            CommonPrefixStripper.StripNamePrefixesSharedByAllTestCases(results);
+
+            return results;
         }
 
         private static string CleanDisallowedCharacters(string text)
-        {
-            return text?.Replace('.', '-');
-        }
+            => text?.Replace('.', '-');
+
+        private static string CleanedDotSeparatedName(TestSourceFile featureSourceFile, string featureTitle)
+            => string.Join(
+                '.',
+                featureSourceFile
+                    .RelevantFolderNames
+                    .Append(featureTitle)
+                    .Select(CleanDisallowedCharacters)
+                    .ToArray());
 
         private static string ReadResourceText(Assembly assembly, string resourceName)
         {

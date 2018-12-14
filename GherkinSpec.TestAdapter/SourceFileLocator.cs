@@ -14,7 +14,7 @@ namespace GherkinSpec.TestAdapter
             this.assemblyDllPath = assemblyDllPath;
         }
 
-        public string FindFeatureFileNameIfPossible(string resourceName, IMessageLogger logger)
+        public TestSourceFile FindFeatureFileNameIfPossible(string resourceName, IMessageLogger logger)
         {
             var folderName = assemblyDllPath;
 
@@ -31,7 +31,9 @@ namespace GherkinSpec.TestAdapter
                 folderName = Path.GetDirectoryName(folderName);
                 if (string.IsNullOrEmpty(folderName))
                 {
-                    return null;
+                    return new TestSourceFile(
+                        null,
+                        Enumerable.Empty<string>());
                 }
 
                 var containsProject = Directory
@@ -46,14 +48,25 @@ namespace GherkinSpec.TestAdapter
                 foreach (var featureFile in
                     Directory.EnumerateFiles(folderName, filePatternToFind, SearchOption.AllDirectories))
                 {
-                    var possibleResourcifiedName = featureFile
-                        .Substring(folderName.Length)
-                        .Replace("/", ".")
-                        .Replace("\\", ".");
+                    var featureFileName = Path.GetFileName(featureFile);
+                    var featureFileFolder = Path.GetDirectoryName(featureFile)
+                        .Substring(folderName.Length);
+
+                    var possibleResourcifiedName = featureFileFolder
+                        .Replace(' ', '_')
+                        + '.' + featureFileName;
+
+                    possibleResourcifiedName = possibleResourcifiedName
+                        .Replace('/', '.')
+                        .Replace('\\', '.');
 
                     if (resourceName.EndsWith(possibleResourcifiedName))
                     {
-                        return featureFile;
+                        return new TestSourceFile(
+                            featureFile,
+                            featureFileFolder.Split(
+                                Path.DirectorySeparatorChar,
+                                StringSplitOptions.RemoveEmptyEntries));
                     }
                 }
 

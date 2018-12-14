@@ -13,13 +13,26 @@ namespace GherkinSpec.TestAdapter.UnitTests
 
         [TestMethod]
         public void FindFeatureFileWithFeatureExtension()
-            => FindFeatureFile("feature");
+            => FindFeatureFileWithExtension("feature");
 
         [TestMethod]
         public void FindFeatureFileWithGherkinExtension()
-            => FindFeatureFile("gherkin");
+            => FindFeatureFileWithExtension("gherkin");
 
-        private void FindFeatureFile(string extension)
+        private void FindFeatureFileWithExtension(string extension)
+        {
+            var foundFile = FindFeatureFile($"FindMe.{extension}");
+
+            var foundFileSourceName = foundFile.SourceFileName;
+            Assert.IsNotNull(foundFileSourceName);
+            foundFileSourceName = foundFileSourceName.Replace("\\", "/");
+
+            Assert.IsTrue(
+                foundFileSourceName.EndsWith(
+                    $"GherkinSpec.TestAdapter.UnitTests/FeaturesToFind/FindMe.{extension}"));
+        }
+
+        private TestSourceFile FindFeatureFile(string resourceNameEnding)
         {
             var locator = new SourceFileLocator(
                 assemblyDllPath: Assembly.GetExecutingAssembly().Location);
@@ -27,19 +40,36 @@ namespace GherkinSpec.TestAdapter.UnitTests
             var resourceNameToFind = Assembly
                 .GetExecutingAssembly()
                 .GetManifestResourceNames()
-                .Where(name => name.EndsWith($"FindMe.{extension}"))
+                .Where(name => name.EndsWith(resourceNameEnding))
                 .Single();
 
-            var foundFile = locator.FindFeatureFileNameIfPossible(
+            return locator.FindFeatureFileNameIfPossible(
                 resourceNameToFind,
                 mockLogger.Object);
+        }
 
-            Assert.IsNotNull(foundFile);
-            foundFile = foundFile.Replace("\\", "/");
+        [TestMethod]
+        public void FindFeatureFileInFolder()
+        {
+            var foundFile = FindFeatureFile("Find me too.feature");
+
+            var foundFileSourceName = foundFile.SourceFileName;
+            Assert.IsNotNull(foundFileSourceName);
+            foundFileSourceName = foundFileSourceName.Replace("\\", "/");
 
             Assert.IsTrue(
-                foundFile.EndsWith(
-                    $"GherkinSpec.TestAdapter.UnitTests/FeaturesToFind/FindMe.{extension}"));
+                foundFileSourceName.EndsWith(
+                    $"GherkinSpec.TestAdapter.UnitTests/FeaturesToFind/In a folder/Find me too.feature"));
+        }
+
+        [TestMethod]
+        public void IdentifyFolderNameComponents()
+        {
+            var foundFile = FindFeatureFile("Find me too.feature");
+            var folderNames = foundFile.RelevantFolderNames;
+            Assert.AreEqual(2, folderNames.Count);
+            Assert.AreEqual("FeaturesToFind", folderNames.First());
+            Assert.AreEqual("In a folder", folderNames.Skip(1).First());
         }
     }
 }
