@@ -62,10 +62,14 @@ Steps 1, 2 and 5 can be speeded up by creating your test project using one of th
   * After uninstalling the SpecFlow extension, feature/gherkin files can be created just by creating plain text files ending in .feature or .gherkin.  Remember to mark them as an Embedded Resource if you haven't set the catch-all in the csproj.
 * Steps classes and methods must be public. This is for two reasons: firstly, the classes are accessed from outside the steps assemblies by the Test Runner so it logically makes sense to advertise that.  Secondly, code analysis tools can flag up private classes and methods as being unused and recommend that they are removed.  Requiring them to be public avoids a requirement for these code analysis warnings to be suppressed.
 
-## Reference guide / concepts
+## Complete examples
 
 * [Simple example repository](https://github.com/GivePenny/GherkinSpec.SimpleExample)
 * [Feature-rich example repository](https://github.com/GivePenny/GherkinSpec.ComplexExample)
+
+## Reference guide / concepts
+* [Feature discovery](docs/Feature-Discovery.md)
+* [Steps classes](docs/Steps.md)
 * [Before/after hooks](docs/Hooks.md)
 * [Dependency injection](docs/DependencyInjection.md)
 * [Roadmap](docs/Roadmap.md)
