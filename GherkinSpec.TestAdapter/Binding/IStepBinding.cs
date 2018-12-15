@@ -3,9 +3,9 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
-namespace GherkinSpec.TestAdapter
+namespace GherkinSpec.TestAdapter.Binding
 {
-    public interface IMethodMapping
+    public interface IStepBinding
     {
         Task Execute(IServiceProvider serviceProvider, Collection<TestResultMessage> messages);
 

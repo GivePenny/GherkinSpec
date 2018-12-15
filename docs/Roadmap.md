@@ -2,12 +2,14 @@
 
 The project's next steps are:
 
-## Target 1.0 release
+## Target 1.0 release (remaining tasks)
 
-* Further documentation (including contribution guidelines)
-* Full example extended to include configuration and logging.
-* All TODO comments in the code to be resolved
+* Full example extended to include logging.
+
+## Target 1.1 release 
+
+* Clearer/simpler tests for eventually-consistent services, e.g. issue [#2](https://github.com/GivePenny/GherkinSpec/issues/2)
 
 ## Future
 
-* Issues and features from [the GitHub list](https://github.com/GivePenny/GherkinSpec/issues) will be chosen for the next release.
+* Issues and features from [the GitHub list](https://github.com/GivePenny/GherkinSpec/issues) will be chosen for the next release as and when they are raised

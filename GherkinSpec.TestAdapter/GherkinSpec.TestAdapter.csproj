@@ -37,8 +37,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GherkinSpec.Model\GherkinSpec.Model.csproj" PrivateAssets="All"/>
-    <ProjectReference Include="..\GherkinSpec.TestModel\GherkinSpec.TestModel.csproj" PrivateAssets="All"/>
+    <ProjectReference Include="..\GherkinSpec.Model\GherkinSpec.Model.csproj" PrivateAssets="All" />
+    <ProjectReference Include="..\GherkinSpec.TestModel\GherkinSpec.TestModel.csproj" PrivateAssets="All" />
     <_PackageFiles Include="$(OutputPath)\GherkinSpec.Model.dll">
       <BuildAction>None</BuildAction>
       <PackagePath>build/netcoreapp2.1</PackagePath>

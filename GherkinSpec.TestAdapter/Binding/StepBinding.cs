@@ -5,15 +5,15 @@ using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace GherkinSpec.TestAdapter
+namespace GherkinSpec.TestAdapter.Binding
 {
-    class MethodMapping : IMethodMapping
+    class StepBinding : IStepBinding
     {
         private readonly IStep step;
         private readonly MethodInfo methodInfo;
         private readonly object[] arguments;
 
-        public MethodMapping(IStep step, MethodInfo methodInfo, object[] arguments)
+        public StepBinding(IStep step, MethodInfo methodInfo, object[] arguments)
         {
             this.step = step;
             this.methodInfo = methodInfo;

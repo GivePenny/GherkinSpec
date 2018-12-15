@@ -1,4 +1,5 @@
 ﻿using GherkinSpec.Model;
+using GherkinSpec.TestAdapter.Binding;
 using GherkinSpec.TestModel;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
@@ -13,15 +14,17 @@ namespace GherkinSpec.TestAdapter
 {
     internal class StepsExecutor
     {
-        private readonly IMethodMapper methodMapper;
+        private readonly IStepBinder stepBinder;
 
-        public StepsExecutor(IMethodMapper methodMapper)
+        public StepsExecutor(IStepBinder stepBinder)
         {
-            this.methodMapper = methodMapper;
+            this.stepBinder = stepBinder;
         }
 
         public async Task<TestResult> Execute(TestCase testCase, DiscoveredTestData testData, TestRunContext testRunContext, IMessageLogger logger)
         {
+            const double SmallestTimeRecognisedByTestRunnerInSeconds = 0.0005;
+
             var testResult = new TestResult(testCase);
             var startTicks = Stopwatch.GetTimestamp();
 
@@ -63,7 +66,7 @@ namespace GherkinSpec.TestAdapter
 
             testResult.Duration = TimeSpan.FromSeconds(
                 Math.Max(
-                    0.001,
+                    SmallestTimeRecognisedByTestRunnerInSeconds,
                     (Stopwatch.GetTimestamp() - startTicks) / Stopwatch.Frequency));
 
             return testResult;
@@ -96,39 +99,39 @@ namespace GherkinSpec.TestAdapter
             IEnumerable<IStep> steps,
             DiscoveredTestData testData)
         {
-                foreach (var step in steps)
+            foreach (var step in steps)
+            {
+                testResult.Messages.Add(
+                    new TestResultMessage(
+                        TestResultMessage.StandardOutCategory,
+                        $"{step.Title}{Environment.NewLine}"));
+
+                try
+                {
+                    var method = stepBinder.GetBindingFor(step, testData.Assembly);
+                    await method
+                        .Execute(serviceProvider, testResult.Messages)
+                        .ConfigureAwait(false);
+                }
+                catch (Exception exception)
                 {
                     testResult.Messages.Add(
                         new TestResultMessage(
                             TestResultMessage.StandardOutCategory,
-                            $"{step.Title}{Environment.NewLine}"));
-
-                    try
-                    {
-                        var method = methodMapper.GetMappingFor(step, testData.Assembly);
-                        await method
-                            .Execute(serviceProvider, testResult.Messages)
-                            .ConfigureAwait(false);
-                    }
-                    catch (Exception exception)
-                    {
-                        testResult.Messages.Add(
-                            new TestResultMessage(
-                                TestResultMessage.StandardOutCategory,
-                                $"Failed{Environment.NewLine}"));
-
-                        testResult.Messages.Add(
-                                new TestResultMessage(
-                                    TestResultMessage.StandardErrorCategory,
-                                    $"{exception}{Environment.NewLine}"));
-                        throw;
-                    }
+                            $"Failed{Environment.NewLine}"));
 
                     testResult.Messages.Add(
-                        new TestResultMessage(
-                            TestResultMessage.StandardOutCategory,
-                            $"  Completed{Environment.NewLine}"));
+                            new TestResultMessage(
+                                TestResultMessage.StandardErrorCategory,
+                                $"{exception}{Environment.NewLine}"));
+                    throw;
                 }
+
+                testResult.Messages.Add(
+                    new TestResultMessage(
+                        TestResultMessage.StandardOutCategory,
+                        $"  Completed{Environment.NewLine}"));
+            }
         }
     }
 }

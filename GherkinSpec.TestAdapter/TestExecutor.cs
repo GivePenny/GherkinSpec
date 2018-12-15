@@ -1,4 +1,5 @@
-﻿using GherkinSpec.TestAdapter.DependencyInjection;
+﻿using GherkinSpec.TestAdapter.Binding;
+using GherkinSpec.TestAdapter.DependencyInjection;
 using GherkinSpec.TestModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
@@ -75,7 +76,7 @@ namespace GherkinSpec.TestAdapter
 
                 runHooks.ExecuteBeforeRun().Wait();
 
-                var methodMapper = new MethodMapper();
+                var stepBinder = new StepBinder();
 
                 var tasks = new List<Task>();
                 
@@ -94,7 +95,7 @@ namespace GherkinSpec.TestAdapter
                     }
 
                     tasks.Add(
-                        RunMappedTest(testCase, testCase.DiscoveredData(), testRunContext, methodMapper, runContext, frameworkHandle));
+                        RunMappedTest(testCase, testCase.DiscoveredData(), testRunContext, stepBinder, runContext, frameworkHandle));
                 }
 
                 Task.WhenAll(tasks).Wait();
@@ -102,21 +103,23 @@ namespace GherkinSpec.TestAdapter
             }
         }
 
-        private async Task RunMappedTest(TestCase testCase, DiscoveredTestData testData, TestRunContext testRunContext, MethodMapper methodMapper, IRunContext runContext, IFrameworkHandle frameworkHandle)
+        private async Task RunMappedTest(TestCase testCase, DiscoveredTestData testData, TestRunContext testRunContext, StepBinder stepBinder, IRunContext runContext, IFrameworkHandle frameworkHandle)
         {
             frameworkHandle.SendMessage(TestMessageLevel.Informational, $"Starting test \"{testCase.DisplayName}\"");
 
             frameworkHandle.RecordStart(testCase);
 
-            var executor = new StepsExecutor(methodMapper);
+            var executor = new StepsExecutor(stepBinder);
             var testResult = await executor
                 .Execute(testCase, testData, testRunContext, frameworkHandle)
                 .ConfigureAwait(false);
 
             frameworkHandle.RecordResult(testResult);
+
+            frameworkHandle.SendMessage(TestMessageLevel.Informational, $"Finished test \"{testCase.DisplayName}\"");
         }
 
-        private void RecordTestNotFound(TestCase testCase, IFrameworkHandle frameworkHandle)
+        private static void RecordTestNotFound(TestCase testCase, IFrameworkHandle frameworkHandle)
         {
             frameworkHandle.RecordResult(
                 new TestResult(testCase)
@@ -125,7 +128,7 @@ namespace GherkinSpec.TestAdapter
                 });
         }
 
-        private void RecordTestSkipped(TestCase testCase, IFrameworkHandle frameworkHandle)
+        private static void RecordTestSkipped(TestCase testCase, IFrameworkHandle frameworkHandle)
         {
             frameworkHandle.RecordResult(
                 new TestResult(testCase)
