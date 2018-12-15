@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace GherkinSpec.TestAdapter.DependencyInjection
@@ -13,10 +14,9 @@ namespace GherkinSpec.TestAdapter.DependencyInjection
         {
             lock (instances)
             {
-                foreach (var instance in instances)
+                foreach (var instance in instances.OfType<IDisposable>())
                 {
-                    var disposable = instance as IDisposable;
-                    disposable?.Dispose();
+                    instance.Dispose();
                 }
             }
         }

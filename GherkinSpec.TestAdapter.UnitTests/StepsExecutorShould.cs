@@ -1,4 +1,5 @@
 ﻿using GherkinSpec.Model;
+using GherkinSpec.TestAdapter.Binding;
 using GherkinSpec.TestAdapter.DependencyInjection;
 using GherkinSpec.TestModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
@@ -16,7 +17,7 @@ namespace GherkinSpec.TestAdapter.UnitTests
     [TestClass]
     public class StepsExecutorShould
     {
-        private readonly Mock<IMethodMapper> mockMethodMapper = new Mock<IMethodMapper>();
+        private readonly Mock<IStepBinder> mockStepBinder = new Mock<IStepBinder>();
         private readonly Mock<IMessageLogger> mockLogger = new Mock<IMessageLogger>();
         private Assembly testAssembly;
         private TestCase testCase;
@@ -29,7 +30,7 @@ namespace GherkinSpec.TestAdapter.UnitTests
             testAssembly = Assembly.GetExecutingAssembly();
             testCase = new TestCase("Feature.Scenario", TestExecutor.ExecutorUriStronglyTyped, "SourceAssembly");
             testRunContext = new TestRunContext(new DefaultServiceProvider());
-            stepsExecutor = new StepsExecutor(mockMethodMapper.Object);
+            stepsExecutor = new StepsExecutor(mockStepBinder.Object);
         }
 
         [TestMethod]
@@ -56,15 +57,15 @@ namespace GherkinSpec.TestAdapter.UnitTests
             var testData = new DiscoveredTestData(testAssembly, testFeature, testFeature.Scenarios.First());
 
             var invocationOrder = 0;
-            var mockBackgroundStepMapping = new Mock<IMethodMapping>();
-            mockMethodMapper
-                .Setup(m => m.GetMappingFor(backgroundStep, testAssembly))
+            var mockBackgroundStepMapping = new Mock<IStepBinding>();
+            mockStepBinder
+                .Setup(m => m.GetBindingFor(backgroundStep, testAssembly))
                 .Returns(mockBackgroundStepMapping.Object)
                 .Callback(() => Assert.AreEqual(0, invocationOrder++));
 
-            var mockScenarioStepMapping = new Mock<IMethodMapping>();
-            mockMethodMapper
-                .Setup(m => m.GetMappingFor(scenarioStep, testAssembly))
+            var mockScenarioStepMapping = new Mock<IStepBinding>();
+            mockStepBinder
+                .Setup(m => m.GetBindingFor(scenarioStep, testAssembly))
                 .Returns(mockScenarioStepMapping.Object)
                 .Callback(() => Assert.AreEqual(1, invocationOrder++));
 

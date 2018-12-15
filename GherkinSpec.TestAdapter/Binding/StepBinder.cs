@@ -1,35 +1,83 @@
 ﻿using GherkinSpec.Model;
-using GherkinSpec.TestModel;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace GherkinSpec.TestAdapter
+namespace GherkinSpec.TestAdapter.Binding
 {
-    class MethodMapper : IMethodMapper
+    class StepBinder : IStepBinder
     {
-        public IMethodMapping GetMappingFor(IStep step, Assembly testAssembly)
+        private readonly List<Assembly> scannedAssemblies = new List<Assembly>();
+        private readonly Dictionary<Regex, MethodInfo> regularExpressionsToGivenMethods = new Dictionary<Regex, MethodInfo>();
+        private readonly Dictionary<Regex, MethodInfo> regularExpressionsToWhenMethods = new Dictionary<Regex, MethodInfo>();
+        private readonly Dictionary<Regex, MethodInfo> regularExpressionsToThenMethods = new Dictionary<Regex, MethodInfo>();
+        private readonly ConcurrentDictionary<IStep, IStepBinding> cachedStepBindings = new ConcurrentDictionary<IStep, IStepBinding>();
+
+        public IStepBinding GetBindingFor(IStep step, Assembly testAssembly)
+            => cachedStepBindings.GetOrAdd(
+                step,
+                keyStep => GetBindingForStepWithoutCache(keyStep, testAssembly));
+
+        private IStepBinding GetBindingForStepWithoutCache(IStep step, Assembly testAssembly)
         {
-            // TODO Cache list of methods and regexs, and separate list of steps to methods
-            // TODO Referenced assemblies
+            EnsureHasBeenScanned(testAssembly);
 
-            MethodMapping candidate = null;
-
-            foreach(var type in StepsClasses.FindIn(testAssembly))
+            if (step is GivenStep)
             {
-                foreach (var method in FindMatchingStepMethodsIn(type, step))
-                {
-                    if (candidate != null)
-                    {
-                        throw new StepBindingException(
-                            $"Found more than one step definitions matching the step '{step.Title}'. One was '{candidate.FullName}' and another was '{method.FullName}'. There may be more but the search was stopped here.");
-                    }
+                return GetBindingFor(step, regularExpressionsToGivenMethods);
+            }
 
-                    candidate = method;
+            if (step is WhenStep)
+            {
+                return GetBindingFor(step, regularExpressionsToWhenMethods);
+            }
+
+            if (step is ThenStep)
+            {
+                return GetBindingFor(step, regularExpressionsToThenMethods);
+            }
+
+            throw new NotSupportedException(
+                $"Unsupported attribute type \"{step.GetType().FullName}\".");
+        }
+
+        private void EnsureHasBeenScanned(Assembly stepsAssembly)
+        {
+            if (scannedAssemblies.Contains(stepsAssembly))
+            {
+                return;
+            }
+
+            lock (scannedAssemblies)
+            {
+                if (scannedAssemblies.Contains(stepsAssembly))
+                {
+                    return;
                 }
+
+                var scanner = new MethodScanner(regularExpressionsToGivenMethods, regularExpressionsToWhenMethods, regularExpressionsToThenMethods);
+                scanner.Scan(stepsAssembly);
+                scannedAssemblies.Add(stepsAssembly);
+            }
+        }
+
+        private IStepBinding GetBindingFor(IStep step, Dictionary<Regex, MethodInfo> regularExpressionsToMethods)
+        {
+            StepBinding candidate = null;
+
+            foreach (var mapping in FindMatchingStepMethodsIn(step, regularExpressionsToMethods))
+            {
+                if (candidate != null)
+                {
+                    throw new StepBindingException(
+                        $"Found more than one step definitions matching the step '{step.Title}'. One was '{candidate.FullName}' and another was '{mapping.FullName}'. There may be more but the search was stopped here.");
+                }
+
+                candidate = mapping;
             }
 
             if (candidate == null)
@@ -41,40 +89,16 @@ namespace GherkinSpec.TestAdapter
             return candidate;
         }
 
-        private static IEnumerable<MethodMapping> FindMatchingStepMethodsIn(Type type, IStep step)
+        private static IEnumerable<StepBinding> FindMatchingStepMethodsIn(IStep step, Dictionary<Regex, MethodInfo> regularExpressionsToMethods)
         {
-            foreach(var method in type.GetMethods(BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance))
+            foreach (var regexMethodPair in regularExpressionsToMethods)
             {
-                foreach (var match in GetMatches<GivenStep, GivenAttribute>(method, step)
-                    .Concat(GetMatches<WhenStep, WhenAttribute>(method, step))
-                    .Concat(GetMatches<ThenStep, ThenAttribute>(method, step)))
-                {
-                    yield return match;
-                }
-            }
-        }
-
-        private static IEnumerable<MethodMapping> GetMatches<TStep, TAttribute>(MethodInfo method, IStep step)
-            where TStep : IStep
-            where TAttribute : Attribute, IStepAttribute
-        {
-            if (!(step is TStep))
-            {
-                yield break;
-            }
-
-            var attributes = method.GetCustomAttributes<TAttribute>(true);
-            foreach (var attribute in attributes)
-            {
-                var regex = GetRegex(
-                    method.DeclaringType.FullName + "::" + method.Name,
-                    attribute.MatchExpression);
-                var match = regex.Match(step.TitleAfterType);
+                var match = regexMethodPair.Key.Match(step.TitleAfterType);
                 if (match != null && match.Success)
                 {
                     var stepArguments = match.Groups.Skip(1).Select(group => group.Value);
 
-                    if(step.MultiLineStringArgument!=null)
+                    if (step.MultiLineStringArgument != null)
                     {
                         stepArguments = stepArguments.Append(step.MultiLineStringArgument);
                     }
@@ -82,24 +106,9 @@ namespace GherkinSpec.TestAdapter
                     var arguments = ParseArgumentValues(
                         step: step,
                         stepArguments: stepArguments.ToArray(),
-                        method: method);
-                    yield return new MethodMapping(step, method, arguments);
+                        method: regexMethodPair.Value);
+                    yield return new StepBinding(step, regexMethodPair.Value, arguments);
                 }
-            }
-        }
-
-        private static Regex GetRegex(string methodFullName, string expression)
-        {
-            try
-            {
-                return new Regex(
-                    expression,
-                    RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Singleline);
-            }
-            catch (ArgumentException exception)
-            {
-                throw new InvalidOperationException(
-                    $"Method \"{methodFullName}\" has an invalid regular expression in an attribute. The invalid expression is: {expression}", exception);
             }
         }
 

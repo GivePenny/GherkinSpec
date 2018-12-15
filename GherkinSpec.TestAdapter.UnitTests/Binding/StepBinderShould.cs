@@ -1,24 +1,22 @@
 using GherkinSpec.Model;
+using GherkinSpec.TestAdapter.Binding;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Reflection;
 
-namespace GherkinSpec.TestAdapter.UnitTests
+namespace GherkinSpec.TestAdapter.UnitTests.Binding
 {
     [TestClass]
-    public class MethodMapperShould
+    public class StepBinderShould
     {
         private readonly Mock<IMessageLogger> mockLogger = new Mock<IMessageLogger>();
-
-        // TODO CASE "And a plain text match" rather than "Given a plain text match"
-        // TODO CASE Review MethodMapper for other test cases needed after POC
 
         [TestMethod]
         public void FindMethodWithPlainTextGiven()
         {
-            var mapper = new MethodMapper();
-            var mapping = mapper.GetMappingFor(
+            var mapper = new StepBinder();
+            var mapping = mapper.GetBindingFor(
                 new GivenStep("Given a plain text match", DataTable.Empty, null),
                 Assembly.GetExecutingAssembly());
 
@@ -47,8 +45,8 @@ namespace GherkinSpec.TestAdapter.UnitTests
 
         private void FindMethodWithSingleArgument<TArgumentType>(string stepValue, TArgumentType expectedArgumentValue)
         {
-            var mapper = new MethodMapper();
-            var mapping = mapper.GetMappingFor(
+            var mapper = new StepBinder();
+            var mapping = mapper.GetBindingFor(
                 new GivenStep($"Given a single {typeof(TArgumentType).Name} match of {stepValue}", DataTable.Empty, null),
                 Assembly.GetExecutingAssembly());
 
@@ -60,8 +58,8 @@ namespace GherkinSpec.TestAdapter.UnitTests
         [TestMethod]
         public void FindMethodWithMultipleArguments()
         {
-            var mapper = new MethodMapper();
-            var mapping = mapper.GetMappingFor(
+            var mapper = new StepBinder();
+            var mapping = mapper.GetBindingFor(
                 new GivenStep("Given a single 'value-here' match and 'another here'", DataTable.Empty, null),
                 Assembly.GetExecutingAssembly());
 
@@ -74,8 +72,8 @@ namespace GherkinSpec.TestAdapter.UnitTests
         [TestMethod]
         public void FindNonStaticMethods()
         {
-            var mapper = new MethodMapper();
-            var mapping = mapper.GetMappingFor(
+            var mapper = new StepBinder();
+            var mapping = mapper.GetBindingFor(
                 new GivenStep("Given a plain value in a non-static method", DataTable.Empty, null),
                 Assembly.GetExecutingAssembly());
 
@@ -86,11 +84,11 @@ namespace GherkinSpec.TestAdapter.UnitTests
         [TestMethod]
         public void ThrowExceptionIfMethodRequiresMoreArgumentsThanTheStepAttributeProvides()
         {
-            var mapper = new MethodMapper();
+            var mapper = new StepBinder();
 
             var exception = Assert.ThrowsException<StepBindingException>(
                 () =>
-                    mapper.GetMappingFor(
+                    mapper.GetBindingFor(
                         new GivenStep("Given not enough captures to satisfy method arguments", DataTable.Empty, null),
                         Assembly.GetExecutingAssembly()));
 
@@ -102,11 +100,11 @@ namespace GherkinSpec.TestAdapter.UnitTests
         [TestMethod]
         public void ThrowExceptionIfTableProvidedButMethodDoesNotTakeTableParameter()
         {
-            var mapper = new MethodMapper();
+            var mapper = new StepBinder();
 
             var exception = Assert.ThrowsException<StepBindingException>(
                 () =>
-                    mapper.GetMappingFor(
+                    mapper.GetBindingFor(
                         new GivenStep("Given a plain value in a non-static method", NonEmptyDataTable, null),
                         Assembly.GetExecutingAssembly()));
 
@@ -118,11 +116,11 @@ namespace GherkinSpec.TestAdapter.UnitTests
         [TestMethod]
         public void ThrowExceptionIfMethodTakesTableParameterButNoneProvided()
         {
-            var mapper = new MethodMapper();
+            var mapper = new StepBinder();
 
             var exception = Assert.ThrowsException<StepBindingException>(
                 () =>
-                    mapper.GetMappingFor(
+                    mapper.GetBindingFor(
                         new GivenStep("Given a table", DataTable.Empty, null),
                         Assembly.GetExecutingAssembly()));
 
@@ -134,8 +132,8 @@ namespace GherkinSpec.TestAdapter.UnitTests
         [TestMethod]
         public void PassTableParameterToMethod()
         {
-            var mapper = new MethodMapper();
-            var mapping = mapper.GetMappingFor(
+            var mapper = new StepBinder();
+            var mapping = mapper.GetBindingFor(
                 new GivenStep("Given a table", NonEmptyDataTable, null),
                 Assembly.GetExecutingAssembly());
 
@@ -147,8 +145,8 @@ namespace GherkinSpec.TestAdapter.UnitTests
         [TestMethod]
         public void PassMultiLineStringParameterToMethodAsLastParameter()
         {
-            var mapper = new MethodMapper();
-            var mapping = mapper.GetMappingFor(
+            var mapper = new StepBinder();
+            var mapping = mapper.GetBindingFor(
                 new GivenStep("Given a multi-line string", DataTable.Empty, "some string"),
                 Assembly.GetExecutingAssembly());
 

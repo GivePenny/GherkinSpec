@@ -1,4 +1,5 @@
-﻿using GherkinSpec.TestModel;
+﻿using GherkinSpec.TestAdapter.Binding;
+using GherkinSpec.TestModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
