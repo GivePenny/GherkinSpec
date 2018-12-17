@@ -2,6 +2,7 @@
 using GherkinSpec.TestAdapter.UnitTests.Samples;
 using GherkinSpec.TestModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -16,7 +17,9 @@ namespace GherkinSpec.TestAdapter.UnitTests
         [TestInitialize]
         public void Setup()
         {
-            context = new TestRunContext(new DefaultServiceProvider());
+            context = new TestRunContext(
+                new DefaultServiceProvider(),
+                new Mock<ITestLogAccessor>().Object);
             runHooks = new RunHooks(context, new[] { Assembly.GetExecutingAssembly() });
         }
 

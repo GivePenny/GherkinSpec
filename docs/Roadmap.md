@@ -2,10 +2,6 @@
 
 The project's next steps are:
 
-## Target 1.0 release (remaining tasks)
-
-* Full example extended to include logging.
-
 ## Target 1.1 release 
 
 * Clearer/simpler tests for eventually-consistent services, e.g. issue [#2](https://github.com/GivePenny/GherkinSpec/issues/2)

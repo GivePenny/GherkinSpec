@@ -14,6 +14,8 @@ namespace GherkinSpec.TestAdapter
 {
     internal class StepsExecutor
     {
+        public const string StepLogIndent = "  ";
+
         private readonly IStepBinder stepBinder;
 
         public StepsExecutor(IStepBinder stepBinder)
@@ -30,6 +32,8 @@ namespace GherkinSpec.TestAdapter
 
             try
             {
+                (testRunContext.Logger as TestLogAccessor)?.SetCurrentTestResult(testResult);
+
                 if (testData == null)
                 {
                     throw new ArgumentNullException(nameof(testData));
@@ -58,16 +62,16 @@ namespace GherkinSpec.TestAdapter
 
                     testResult.Outcome = TestOutcome.Passed;
                 }
+
+                testResult.Duration = TimeSpan.FromSeconds(
+                    Math.Max(
+                        SmallestTimeRecognisedByTestRunnerInSeconds,
+                        (Stopwatch.GetTimestamp() - startTicks) / Stopwatch.Frequency));
             }
             catch (Exception exception)
             {
                 MarkAsFailed(testCase, testResult, exception, logger);
             }
-
-            testResult.Duration = TimeSpan.FromSeconds(
-                Math.Max(
-                    SmallestTimeRecognisedByTestRunnerInSeconds,
-                    (Stopwatch.GetTimestamp() - startTicks) / Stopwatch.Frequency));
 
             return testResult;
         }
@@ -118,7 +122,7 @@ namespace GherkinSpec.TestAdapter
                     testResult.Messages.Add(
                         new TestResultMessage(
                             TestResultMessage.StandardOutCategory,
-                            $"Failed{Environment.NewLine}"));
+                            $"{StepLogIndent}Failed{Environment.NewLine}{Environment.NewLine}"));
 
                     testResult.Messages.Add(
                             new TestResultMessage(
@@ -130,7 +134,7 @@ namespace GherkinSpec.TestAdapter
                 testResult.Messages.Add(
                     new TestResultMessage(
                         TestResultMessage.StandardOutCategory,
-                        $"  Completed{Environment.NewLine}"));
+                        $"{StepLogIndent}Completed{Environment.NewLine}{Environment.NewLine}"));
             }
         }
     }

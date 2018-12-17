@@ -63,7 +63,8 @@ namespace GherkinSpec.TestAdapter
 
             using (var defaultServiceProvider = new DefaultServiceProvider())
             {
-                var testRunContext = new TestRunContext(defaultServiceProvider);
+                var testRunContext = (TestRunContext)defaultServiceProvider.GetService(
+                    typeof(TestRunContext));
 
                 var runHooks = new RunHooks(
                     testRunContext,
