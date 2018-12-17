@@ -37,7 +37,7 @@ To view the messages that were logged for a test, view the output of the test.  
 
 ## Logging with custom dependency injection
 
-The above example works with the default, built-in dependency injection of GherkinSpec.  If a more complex dependency-injection framework is used then the `ITestLogAccessor` instance available on the `Logger` property of the `TestRunContext` must be registered as a singleton.  Don't create a new instance of the `ITestLogAccessor` as it will not receive the context of the currently executing test so will fail to log.  The [feature-rich example](https://github.com/GivePenny/GherkinSpec.ComplexExample) does that.  An example using .NET Core's Dependency Injection extenion is:
+The above example works with the default, built-in dependency injection of GherkinSpec.  If a more complex dependency-injection framework is used then the `ITestLogAccessor` instance available on the `Logger` property of the `TestRunContext` must be registered as a singleton.  Don't create a new instance of the `ITestLogAccessor` as it will not receive the context of the currently executing test so will fail to log.  The [feature-rich example](https://github.com/GivePenny/GherkinSpec.ComplexExample) shows a working implementation.  An example using .NET Core's Dependency Injection extension is:
 
 ```csharp
 [Steps]
