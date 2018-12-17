@@ -29,8 +29,11 @@ namespace GherkinSpec.TestAdapter.UnitTests
         {
             testAssembly = Assembly.GetExecutingAssembly();
             testCase = new TestCase("Feature.Scenario", TestExecutor.ExecutorUriStronglyTyped, "SourceAssembly");
-            testRunContext = new TestRunContext(new DefaultServiceProvider());
             stepsExecutor = new StepsExecutor(mockStepBinder.Object);
+
+            testRunContext = new TestRunContext(
+                new DefaultServiceProvider(),
+                new Mock<ITestLogAccessor>().Object);
         }
 
         [TestMethod]

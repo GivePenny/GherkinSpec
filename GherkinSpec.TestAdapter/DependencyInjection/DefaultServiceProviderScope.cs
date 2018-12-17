@@ -5,9 +5,9 @@ namespace GherkinSpec.TestAdapter.DependencyInjection
 {
     class DefaultServiceProviderScope : IServiceScope
     {
-        public DefaultServiceProviderScope()
+        public DefaultServiceProviderScope(DefaultServiceProvider outerScopeProvider)
         {
-            ServiceProvider = new DefaultServiceProvider();
+            ServiceProvider = new DefaultServiceProvider(outerScopeProvider);
         }
 
         public IServiceProvider ServiceProvider { get; }

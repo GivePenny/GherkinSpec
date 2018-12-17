@@ -45,6 +45,7 @@ Steps 1, 2 and 5 can be speeded up by creating your test project using one of th
 * Use with any unit test framework or assertions library (MS Test, NUnit, xUnit)
 * Supports dependency injection
 * Support for the full Gherkin syntax, including tables and doc-strings
+* Easy logging from within steps.
 
 ## Gotchas
 
@@ -72,6 +73,7 @@ Steps 1, 2 and 5 can be speeded up by creating your test project using one of th
 * [Steps classes](docs/Steps.md)
 * [Before/after hooks](docs/Hooks.md)
 * [Dependency injection](docs/DependencyInjection.md)
+* [Logging](docs/Logging.md)
 * [Roadmap](docs/Roadmap.md)
 
 ## Third-party references and useful links

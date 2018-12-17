@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <PackageId>GivePenny.GherkinSpec.TestAdapter</PackageId>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>0.0.79-alpha</Version>
+    <Version>0.0.86-alpha</Version>
     <Authors>GivePenny</Authors>
     <Company>GivePenny</Company>
     <Product>GherkinSpec</Product>
