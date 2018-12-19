@@ -240,6 +240,26 @@ So that I can have more fun", feature.Narrative);
             Assert.AreEqual("featureTag", feature.Tags.Second().Label);
         }
 
+        [TestMethod]
+        public void ReadAFeatureContainingAScenarioFollowedByATaggedScenario()
+        {
+            var feature = ParseResource("TaggedScenarioFollowsAScenario.feature");
+            Assert.AreEqual(1, feature.Scenarios.Count());
+            Assert.AreEqual(0, feature.Scenarios.Single().Tags.Count());
+            Assert.AreEqual(1, feature.ScenarioOutlines.Count());
+            Assert.AreEqual("ignore", feature.ScenarioOutlines.Single().Tags.First().Label);
+        }
+
+        [TestMethod]
+        public void ReadAFeatureContainingAScenarioOutlineFollowedByATaggedScenario()
+        {
+            var feature = ParseResource("TaggedScenarioFollowsAScenarioOutline.feature");
+            Assert.AreEqual(1, feature.ScenarioOutlines.Count());
+            Assert.AreEqual(0, feature.ScenarioOutlines.Single().Tags.Count());
+            Assert.AreEqual(1, feature.Scenarios.Count());
+            Assert.AreEqual("ignore", feature.Scenarios.Single().Tags.First().Label);
+        }
+
         private Feature ParseResource(string resourceName)
             => new Parser().Parse(
                 Resources.GetString(resourceName));
