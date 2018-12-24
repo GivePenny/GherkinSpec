@@ -115,7 +115,7 @@ namespace GherkinSpec.TestAdapter
 
         private static string CleanedDotSeparatedName(TestSourceFile featureSourceFile, string featureTitle)
             => string.Join(
-                '.',
+                ".",
                 featureSourceFile
                     .RelevantFolderNames
                     .Append(featureTitle)

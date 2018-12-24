@@ -65,7 +65,7 @@ namespace GherkinSpec.TestAdapter
                         return new TestSourceFile(
                             featureFile,
                             featureFileFolder.Split(
-                                Path.DirectorySeparatorChar,
+                                new[] { Path.DirectorySeparatorChar },
                                 StringSplitOptions.RemoveEmptyEntries));
                     }
                 }

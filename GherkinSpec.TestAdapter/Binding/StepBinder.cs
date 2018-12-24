@@ -96,7 +96,11 @@ namespace GherkinSpec.TestAdapter.Binding
                 var match = regexMethodPair.Key.Match(step.TitleAfterType);
                 if (match != null && match.Success)
                 {
-                    var stepArguments = match.Groups.Skip(1).Select(group => group.Value);
+                    var stepArguments = match
+                        .Groups
+                        .Cast<Group>()
+                        .Skip(1)
+                        .Select(group => group.Value);
 
                     if (step.MultiLineStringArgument != null)
                     {

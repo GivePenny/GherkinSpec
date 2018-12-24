@@ -1,16 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>GivePenny.GherkinSpec.TestAdapter</PackageId>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>0.0.86-alpha</Version>
+    <Version>0.0.91-alpha</Version>
     <Authors>GivePenny</Authors>
     <Company>GivePenny</Company>
     <Product>GherkinSpec</Product>
     <Copyright>Copyright 2018 Raising Technology Ltd</Copyright>
     <BuildOutputTargetFolder>build</BuildOutputTargetFolder>
-    <ContentTargetFolders>build/netcoreapp2.1</ContentTargetFolders>
+    <ContentTargetFolders>build/netstandard2.0</ContentTargetFolders>
     <Description>Cross-platform Gherkin test adapter for .NET Core (true .NET Standard).  Write tests in Gherkin and steps in a .NET language.  Supports dependency injection in steps classes, async/await and running tests in parallel.  Use any assertions library or unit test framework.  Needs no Visual Studio Extension or generated designer files.  See https://github.com/GivePenny/GherkinSpec.SimpleExample for an example test project.</Description>
     <PackageLicenseUrl>https://raw.githubusercontent.com/GivePenny/GherkinSpec/master/Licence.md</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/GivePenny/GherkinSpec</PackageProjectUrl>
@@ -27,7 +27,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.1.1" />
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="15.9.0" PrivateAssets="All" />
-    <PackageReference Include="NETStandard.Library" Version="2.0.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,11 +40,11 @@
     <ProjectReference Include="..\GherkinSpec.TestModel\GherkinSpec.TestModel.csproj" PrivateAssets="All" />
     <_PackageFiles Include="$(OutputPath)\GherkinSpec.Model.dll">
       <BuildAction>None</BuildAction>
-      <PackagePath>build/netcoreapp2.1</PackagePath>
+      <PackagePath>build/netstandard2.0</PackagePath>
     </_PackageFiles>
     <_PackageFiles Include="$(OutputPath)\GherkinSpec.TestModel.dll">
       <BuildAction>None</BuildAction>
-      <PackagePath>lib/netcoreapp2.1</PackagePath>
+      <PackagePath>lib/netstandard2.0</PackagePath>
     </_PackageFiles>
   </ItemGroup>
 
