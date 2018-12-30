@@ -24,6 +24,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{288CE073-1
 	ProjectSection(SolutionItems) = preProject
 		docs\DependencyInjection-DatabaseContexts.md = docs\DependencyInjection-DatabaseContexts.md
 		docs\DependencyInjection.md = docs\DependencyInjection.md
+		docs\EventuallyConsistentServices.md = docs\EventuallyConsistentServices.md
 		docs\Feature-Discovery.md = docs\Feature-Discovery.md
 		docs\Hooks.md = docs\Hooks.md
 		docs\Logging.md = docs\Logging.md

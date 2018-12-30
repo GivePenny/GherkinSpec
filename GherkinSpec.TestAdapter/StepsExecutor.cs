@@ -45,18 +45,18 @@ namespace GherkinSpec.TestAdapter
 
                 if (!hasAnySteps)
                 {
-                    MarkAsSkipped(testResult);
+                    MarkTestAsSkipped(testResult);
                 }
                 else
                 {
                     using (var serviceScope = testRunContext.ServiceProvider.CreateScope())
                     {
-                        await ExecuteSteps(serviceScope.ServiceProvider, testResult, testData.Feature.Background.Steps, testData)
+                        await ExecuteSteps(serviceScope.ServiceProvider, testResult, testData.Feature.Background.Steps, testData, testRunContext)
                             .ConfigureAwait(false);
 
                         // Cucumber docs say run BeforeHooks here, which is odd as before the Background steps is probably more useful.  If we ever add support for [BeforeScenario] then we should consider making it configurable whether that means before or after the Background steps.
 
-                        await ExecuteSteps(serviceScope.ServiceProvider, testResult, testData.Scenario.Steps, testData)
+                        await ExecuteSteps(serviceScope.ServiceProvider, testResult, testData.Scenario.Steps, testData, testRunContext)
                             .ConfigureAwait(false);
                     }
 
@@ -70,13 +70,13 @@ namespace GherkinSpec.TestAdapter
             }
             catch (Exception exception)
             {
-                MarkAsFailed(testCase, testResult, exception, logger);
+                MarkTestAsFailed(testCase, testResult, exception, logger);
             }
 
             return testResult;
         }
 
-        private static void MarkAsFailed(TestCase testCase, TestResult testResult, Exception exception, IMessageLogger logger)
+        private static void MarkTestAsFailed(TestCase testCase, TestResult testResult, Exception exception, IMessageLogger logger)
         {
             logger.SendMessage(
                 TestMessageLevel.Error,
@@ -87,7 +87,7 @@ namespace GherkinSpec.TestAdapter
             testResult.ErrorStackTrace = exception.StackTrace;
         }
 
-        private static void MarkAsSkipped(TestResult testResult)
+        private static void MarkTestAsSkipped(TestResult testResult)
         {
             testResult.Messages.Add(
                         new TestResultMessage(
@@ -101,7 +101,8 @@ namespace GherkinSpec.TestAdapter
             IServiceProvider serviceProvider,
             TestResult testResult,
             IEnumerable<IStep> steps,
-            DiscoveredTestData testData)
+            DiscoveredTestData testData,
+            TestRunContext testRunContext)
         {
             foreach (var step in steps)
             {
@@ -110,26 +111,50 @@ namespace GherkinSpec.TestAdapter
                         TestResultMessage.StandardOutCategory,
                         $"{step.Title}{Environment.NewLine}"));
 
-                try
+                IStepBinding stepBinding = null;
+                var attempts = 0;
+                do
                 {
-                    var method = stepBinder.GetBindingFor(step, testData.Assembly);
-                    await method
-                        .Execute(serviceProvider, testResult.Messages)
-                        .ConfigureAwait(false);
-                }
-                catch (Exception exception)
-                {
+                    attempts++;
+
+                    try
+                    {
+                        stepBinding = stepBinder.GetBindingFor(step, testData.Assembly);
+
+                        await stepBinding
+                            .Execute(serviceProvider, testResult.Messages)
+                            .ConfigureAwait(false);
+
+                        break;
+                    }
+                    catch (Exception exception)
+                    {
+                        if (IsTerminal(exception, stepBinding, attempts, testRunContext))
+                        {
+                            testResult.Messages.Add(
+                                new TestResultMessage(
+                                    TestResultMessage.StandardOutCategory,
+                                    $"{StepLogIndent}Failed{Environment.NewLine}{Environment.NewLine}"));
+
+                            testResult.Messages.Add(
+                                    new TestResultMessage(
+                                        TestResultMessage.StandardErrorCategory,
+                                        $"{exception}{Environment.NewLine}"));
+
+                            throw;
+                        }
+                    }
+
                     testResult.Messages.Add(
                         new TestResultMessage(
                             TestResultMessage.StandardOutCategory,
-                            $"{StepLogIndent}Failed{Environment.NewLine}{Environment.NewLine}"));
+                            $"{StepLogIndent}Failed, waiting and trying again{Environment.NewLine}"));
 
-                    testResult.Messages.Add(
-                            new TestResultMessage(
-                                TestResultMessage.StandardErrorCategory,
-                                $"{exception}{Environment.NewLine}"));
-                    throw;
-                }
+                    await Task
+                        .Delay(testRunContext.EventualSuccess.DelayBetweenAttempts)
+                        .ConfigureAwait(false);
+
+                } while (true);
 
                 testResult.Messages.Add(
                     new TestResultMessage(
@@ -137,5 +162,11 @@ namespace GherkinSpec.TestAdapter
                         $"{StepLogIndent}Completed{Environment.NewLine}{Environment.NewLine}"));
             }
         }
+
+        private bool IsTerminal(Exception exception, IStepBinding stepBinding, int attempts, TestRunContext testRunContext)
+            => exception is StepBindingException
+                || stepBinding == null
+                || !stepBinding.IsSuccessEventual
+                || attempts >= testRunContext.EventualSuccess.MaximumAttempts;
     }
 }

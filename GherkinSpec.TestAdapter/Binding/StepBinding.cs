@@ -1,30 +1,35 @@
 ﻿using GherkinSpec.Model;
+using GherkinSpec.TestModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 
 namespace GherkinSpec.TestAdapter.Binding
 {
-    class StepBinding : IStepBinding
+    internal class StepBinding : IStepBinding
     {
         private readonly IStep step;
         private readonly MethodInfo methodInfo;
-        private readonly object[] arguments;
 
         public StepBinding(IStep step, MethodInfo methodInfo, object[] arguments)
         {
             this.step = step;
             this.methodInfo = methodInfo;
-            this.arguments = arguments;
+            Arguments = arguments;
         }
 
         public string Name => methodInfo.Name;
 
         public string FullName => methodInfo.DeclaringType.FullName + "::" + methodInfo.Name;
 
-        public object[] Arguments => arguments;
+        public object[] Arguments { get; }
+
+        public bool IsSuccessEventual
+            => methodInfo.GetCustomAttributes<EventuallySucceedsAttribute>().Any();
 
         public Task Execute(IServiceProvider serviceProvider, Collection<TestResultMessage> messages)
         {
@@ -44,11 +49,20 @@ namespace GherkinSpec.TestAdapter.Binding
                 }
             }
 
-            var result = methodInfo.Invoke(stepsClassInstance, arguments);
-
-            if (methodInfo.ReturnType.IsSubclassOf(typeof(Task)) || methodInfo.ReturnType == typeof(Task))
+            try
             {
-                return (Task)result;
+                var result = methodInfo.Invoke(stepsClassInstance, Arguments);
+
+                if (methodInfo.ReturnType.IsSubclassOf(typeof(Task)) || methodInfo.ReturnType == typeof(Task))
+                {
+                    return (Task)result;
+                }
+            }
+            catch (TargetInvocationException exception)
+            {
+                ExceptionDispatchInfo
+                    .Capture(exception.InnerException)
+                    .Throw();
             }
 
             return Task.CompletedTask;

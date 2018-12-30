@@ -1,6 +1,7 @@
 ﻿using GherkinSpec.Model;
 using GherkinSpec.TestAdapter.Binding;
 using GherkinSpec.TestAdapter.DependencyInjection;
+using GherkinSpec.TestAdapter.UnitTests.Samples;
 using GherkinSpec.TestModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
@@ -34,6 +35,8 @@ namespace GherkinSpec.TestAdapter.UnitTests
             testRunContext = new TestRunContext(
                 new DefaultServiceProvider(),
                 new Mock<ITestLogAccessor>().Object);
+
+            testRunContext.EventualSuccess.DelayBetweenAttempts = TimeSpan.FromMilliseconds(250);
         }
 
         [TestMethod]
@@ -76,6 +79,65 @@ namespace GherkinSpec.TestAdapter.UnitTests
             
             mockBackgroundStepMapping.Verify(m => m.Execute(It.IsAny<IServiceProvider>(), It.IsAny<Collection<TestResultMessage>>()), Times.Once);
             mockScenarioStepMapping.Verify(m => m.Execute(It.IsAny<IServiceProvider>(), It.IsAny<Collection<TestResultMessage>>()), Times.Once);
+        }
+
+        [TestMethod]
+        public async Task RetryStepsMarkedAsEventuallySuccessfulUntilFailure()
+        {
+            var standardMessages = await PerformEventuallySuccessfulTest(
+                typeof(StepBindingStaticSamples).GetMethod("WhenAnExceptionIsThrownMarkedEventuallySuccessful"));
+
+            Assert.AreEqual(4, standardMessages.Length);
+            Assert.AreEqual($"When an exception is thrown{Environment.NewLine}", standardMessages[0].Text);
+            Assert.AreEqual($"  Failed, waiting and trying again{Environment.NewLine}", standardMessages[1].Text);
+            Assert.AreEqual($"  Failed, waiting and trying again{Environment.NewLine}", standardMessages[2].Text);
+            Assert.AreEqual($"  Failed{Environment.NewLine}{Environment.NewLine}", standardMessages[3].Text);
+        }
+
+        [TestMethod]
+        public async Task RetryStepsMarkedAsEventuallySuccessfulUntilSuccess()
+        {
+            var standardMessages = await PerformEventuallySuccessfulTest(
+                typeof(StepBindingInstanceSamples).GetMethod("SucceedsOnSecondCall"));
+
+            Assert.AreEqual(3, standardMessages.Length);
+            Assert.AreEqual($"When an exception is thrown{Environment.NewLine}", standardMessages[0].Text);
+            Assert.AreEqual($"  Failed, waiting and trying again{Environment.NewLine}", standardMessages[1].Text);
+            Assert.AreEqual($"  Completed{Environment.NewLine}{Environment.NewLine}", standardMessages[2].Text);
+        }
+
+        private async Task<TestResultMessage[]> PerformEventuallySuccessfulTest(MethodInfo method)
+        {
+            var scenarioStep = new WhenStep("When an exception is thrown", DataTable.Empty, null);
+            var testFeature = new Feature(
+                "Feature",
+                null,
+                Background.Empty,
+                new[]
+                {
+                    new Scenario(
+                        "Scenario",
+                        new[] { scenarioStep },
+                        1,
+                        Enumerable.Empty<Tag>())
+                },
+                Enumerable.Empty<ScenarioOutline>(),
+                Enumerable.Empty<Tag>());
+
+            var testData = new DiscoveredTestData(testAssembly, testFeature, testFeature.Scenarios.First());
+            var binding = new StepBinding(scenarioStep, method, Array.Empty<object>());
+
+            mockStepBinder
+                .Setup(m => m.GetBindingFor(scenarioStep, testAssembly))
+                .Returns(binding);
+
+            var testResult = await stepsExecutor.Execute(testCase, testData, testRunContext, mockLogger.Object);
+
+            return testResult
+                .Messages
+                .Where(
+                    message => message.Category == TestResultMessage.StandardOutCategory)
+                .ToArray();
         }
     }
 }
