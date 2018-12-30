@@ -50,5 +50,18 @@ namespace GherkinSpec.TestAdapter.UnitTests.Samples
         public static void GivenNotEnoughCaptures(string argument1, string argument2)
         {
         }
+
+        [When("an exception is thrown")]
+        public static void WhenAnExceptionIsThrown()
+        {
+            throw new InvalidOperationException("Hello");
+        }
+
+        [When("an exception is thrown")]
+        [EventuallySucceeds]
+        public static void WhenAnExceptionIsThrownMarkedEventuallySuccessful()
+        {
+            throw new InvalidOperationException("Hello");
+        }
     }
 }

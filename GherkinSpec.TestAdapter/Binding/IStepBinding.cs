@@ -11,5 +11,6 @@ namespace GherkinSpec.TestAdapter.Binding
 
         string Name { get; }
         object[] Arguments { get; }
+        bool IsSuccessEventual { get; }
     }
 }

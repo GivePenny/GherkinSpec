@@ -46,6 +46,7 @@ Steps 1, 2 and 5 can be speeded up by creating your test project using one of th
 * Supports dependency injection
 * Support for the full Gherkin syntax, including tables and doc-strings
 * Easy logging from within steps.
+* Support for clear tests of eventually consistent services via `[EventuallySucceeds]` attribute
 
 ## Gotchas
 
@@ -74,6 +75,7 @@ Steps 1, 2 and 5 can be speeded up by creating your test project using one of th
 * [Before/after hooks](docs/Hooks.md)
 * [Dependency injection](docs/DependencyInjection.md)
 * [Logging](docs/Logging.md)
+* [Eventually-consistent service support](docs/EventuallyConsistentServices.md)
 * [Roadmap](docs/Roadmap.md)
 
 ## Third-party references and useful links
