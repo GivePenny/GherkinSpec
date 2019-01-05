@@ -24,6 +24,8 @@ This is probably the most useful lifetime mode for steps classes and shared data
 
 One test run containing several tests will create several instances of scoped classes, each one isolated and available only to one test.
 
+All classes marked with `[Steps]` within the current test project can be automatically detected and registered with a Scoped lifetime using the `.AddAllStepsClassesAsScoped()` extension method.
+
 #### Singleton
 
 Singleton instances are dedicated to the entire test run.  One instance is shared between all tests.

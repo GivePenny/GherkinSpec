@@ -1,13 +1,12 @@
-﻿using GherkinSpec.TestModel;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace GherkinSpec.TestAdapter.Binding
+namespace GherkinSpec.TestModel
 {
-    static class StepsClasses
+    public static class StepsClasses
     {
         // Test runners use an isolated appdomain so the cache can be static as it will be discarded after each test run or when the assembly
         // is changed and re-built.
