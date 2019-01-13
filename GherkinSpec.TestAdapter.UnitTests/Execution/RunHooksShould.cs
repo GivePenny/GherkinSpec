@@ -1,4 +1,5 @@
 ﻿using GherkinSpec.TestAdapter.DependencyInjection;
+using GherkinSpec.TestAdapter.Execution;
 using GherkinSpec.TestAdapter.UnitTests.Samples;
 using GherkinSpec.TestModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -6,7 +7,7 @@ using Moq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace GherkinSpec.TestAdapter.UnitTests
+namespace GherkinSpec.TestAdapter.UnitTests.Execution
 {
     [TestClass]
     public class RunHooksShould

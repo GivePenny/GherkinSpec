@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace GherkinSpec.TestAdapter
+namespace GherkinSpec.TestAdapter.Execution
 {
     internal class RunHooks
     {

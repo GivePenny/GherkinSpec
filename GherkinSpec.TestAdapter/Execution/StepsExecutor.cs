@@ -10,7 +10,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GherkinSpec.TestAdapter
+namespace GherkinSpec.TestAdapter.Execution
 {
     internal class StepsExecutor
     {
@@ -111,50 +111,29 @@ namespace GherkinSpec.TestAdapter
                         TestResultMessage.StandardOutCategory,
                         $"{step.Title}{Environment.NewLine}"));
 
-                IStepBinding stepBinding = null;
-                var attempts = 0;
-                do
+                var stepBinding = stepBinder.GetBindingFor(step, testData.Assembly);
+                var executionStrategy = StepExecutionStrategyFactory.GetFor(stepBinding);
+
+                try
                 {
-                    attempts++;
-
-                    try
-                    {
-                        stepBinding = stepBinder.GetBindingFor(step, testData.Assembly);
-
-                        await stepBinding
-                            .Execute(serviceProvider, testResult.Messages)
-                            .ConfigureAwait(false);
-
-                        break;
-                    }
-                    catch (Exception exception)
-                    {
-                        if (IsTerminal(exception, stepBinding, attempts, testRunContext))
-                        {
-                            testResult.Messages.Add(
+                    await executionStrategy
+                        .Execute(stepBinding, serviceProvider, testResult.Messages, testRunContext)
+                        .ConfigureAwait(false);
+                }
+                catch (Exception exception)
+                {
+                    testResult.Messages.Add(
                                 new TestResultMessage(
                                     TestResultMessage.StandardOutCategory,
                                     $"{StepLogIndent}Failed{Environment.NewLine}{Environment.NewLine}"));
 
-                            testResult.Messages.Add(
-                                    new TestResultMessage(
-                                        TestResultMessage.StandardErrorCategory,
-                                        $"{exception}{Environment.NewLine}"));
-
-                            throw;
-                        }
-                    }
-
                     testResult.Messages.Add(
-                        new TestResultMessage(
-                            TestResultMessage.StandardOutCategory,
-                            $"{StepLogIndent}Failed, waiting and trying again{Environment.NewLine}"));
+                            new TestResultMessage(
+                                TestResultMessage.StandardErrorCategory,
+                                $"{exception}{Environment.NewLine}"));
 
-                    await Task
-                        .Delay(testRunContext.EventualSuccess.DelayBetweenAttempts)
-                        .ConfigureAwait(false);
-
-                } while (true);
+                    throw;
+                }
 
                 testResult.Messages.Add(
                     new TestResultMessage(
@@ -162,11 +141,5 @@ namespace GherkinSpec.TestAdapter
                         $"{StepLogIndent}Completed{Environment.NewLine}{Environment.NewLine}"));
             }
         }
-
-        private bool IsTerminal(Exception exception, IStepBinding stepBinding, int attempts, TestRunContext testRunContext)
-            => exception is StepBindingException
-                || stepBinding == null
-                || !stepBinding.IsSuccessEventual
-                || attempts >= testRunContext.EventualSuccess.MaximumAttempts;
     }
 }

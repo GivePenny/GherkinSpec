@@ -1,5 +1,6 @@
 ﻿using GherkinSpec.TestAdapter.Binding;
 using GherkinSpec.TestAdapter.DependencyInjection;
+using GherkinSpec.TestAdapter.Execution;
 using GherkinSpec.TestModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
