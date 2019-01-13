@@ -26,7 +26,7 @@ namespace GherkinSpec.TestAdapter.Execution
                 }
                 catch (Exception exception)
                 {
-                    if (IsTerminal(exception, stepBinding, attempts, testRunContext))
+                    if (IsTerminal(exception, attempts, testRunContext))
                     {
                         throw;
                     }
@@ -44,10 +44,8 @@ namespace GherkinSpec.TestAdapter.Execution
             } while (true);
         }
 
-        private static bool IsTerminal(Exception exception, IStepBinding stepBinding, int attempts, TestRunContext testRunContext)
+        private static bool IsTerminal(Exception exception, int attempts, TestRunContext testRunContext)
             => exception is StepBindingException
-                || stepBinding == null
-                || !stepBinding.IsSuccessEventual
                 || attempts >= testRunContext.EventualSuccess.MaximumAttempts;
     }
 }
