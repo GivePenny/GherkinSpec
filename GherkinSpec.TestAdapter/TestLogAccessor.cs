@@ -1,4 +1,5 @@
-﻿using GherkinSpec.TestModel;
+﻿using GherkinSpec.TestAdapter.Execution;
+using GherkinSpec.TestModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using System;
 using System.Threading;

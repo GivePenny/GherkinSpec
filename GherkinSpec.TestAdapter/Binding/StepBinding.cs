@@ -17,9 +17,20 @@ namespace GherkinSpec.TestAdapter.Binding
 
         public StepBinding(IStep step, MethodInfo methodInfo, object[] arguments)
         {
+            if (methodInfo == null)
+            {
+                throw new ArgumentNullException(nameof(methodInfo));
+            }
+
             this.step = step;
             this.methodInfo = methodInfo;
             Arguments = arguments;
+
+            if (IsSuccessEventual && IsMarkedMustNotEventuallyFail)
+            {
+                throw new StepBindingException(
+                    $"Step \"{step.Title}\" uses method \"{methodInfo.Name}\" on class \"{methodInfo.DeclaringType.FullName}\" but that method has been marked with both the [{nameof(EventuallySucceedsAttribute)}] and the [{nameof(MustNotEventuallyFailAttribute)}]. These attributes are mutually exclusive - only one can be specified on a method at a time.");
+            }
         }
 
         public string Name => methodInfo.Name;
@@ -30,6 +41,9 @@ namespace GherkinSpec.TestAdapter.Binding
 
         public bool IsSuccessEventual
             => methodInfo.GetCustomAttributes<EventuallySucceedsAttribute>().Any();
+
+        public bool IsMarkedMustNotEventuallyFail
+            => methodInfo.GetCustomAttributes<MustNotEventuallyFailAttribute>().Any();
 
         public Task Execute(IServiceProvider serviceProvider, Collection<TestResultMessage> messages)
         {

@@ -56,12 +56,5 @@ namespace GherkinSpec.TestAdapter.UnitTests.Samples
         {
             throw new InvalidOperationException("Hello");
         }
-
-        [When("an exception is thrown")]
-        [EventuallySucceeds]
-        public static void WhenAnExceptionIsThrownMarkedEventuallySuccessful()
-        {
-            throw new InvalidOperationException("Hello");
-        }
     }
 }
