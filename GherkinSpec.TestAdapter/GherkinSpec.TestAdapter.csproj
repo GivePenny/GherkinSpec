@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>GivePenny.GherkinSpec.TestAdapter</PackageId>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>0.0.93-alpha</Version>
+    <Version>0.0.94-alpha</Version>
     <Authors>GivePenny</Authors>
     <Company>GivePenny</Company>
     <Product>GherkinSpec</Product>
@@ -40,7 +40,7 @@
     <ProjectReference Include="..\GherkinSpec.TestModel\GherkinSpec.TestModel.csproj" PrivateAssets="All" />
     <_PackageFiles Include="$(OutputPath)\GherkinSpec.Model.dll">
       <BuildAction>None</BuildAction>
-      <PackagePath>build/netstandard2.0</PackagePath>
+      <PackagePath>lib/netstandard2.0</PackagePath>
     </_PackageFiles>
     <_PackageFiles Include="$(OutputPath)\GherkinSpec.TestModel.dll">
       <BuildAction>None</BuildAction>
