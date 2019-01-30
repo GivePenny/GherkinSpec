@@ -43,8 +43,6 @@ This allows testing of eventually-consistent services that must never perform a 
 
 Typically test and subject design should seek to avoid using this attribute as it will slow down test runs (although GherkinSpec tests using async/await are highly parallelised so the impact may not be as high as is first thought).  As an example of how to avoid using this attribute: perhaps the test subject can perform a different positive action (e.g. as well as *not* publishing some form of ProcessingCompleted event, it could also publish a ProcessingSkipped event that the test can check for instead).  This is a lengthy design discussion involving questions such as "is it safe" (e.g. might the subject accidentally publish both events?) and "should the subject contain code purely there to support testing"?
 
-The idea is that a service can be queried for the expected results and if the success criteria are not yet met then the query can be performed again automatically after a delay.  This repeats until the service's state is consistent with the expected outcome.  The number of retries and the delay between each attempt can be configured in the `TestRunContext`.
-
 Multiple attempts are logged in the test output.  As previously mentioned, see the "Viewing the log messages" section of the [logging documentation](Logging.md) for help finding the test output.
 
 ### Example
