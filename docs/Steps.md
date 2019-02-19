@@ -27,3 +27,27 @@ Attribute | Applied to | Purpose
 `[Then(...)]` | Method | Identifies a method that may match a Then step, including And and But as per the last comment.
 
 Other attributes may be added to methods in a `[Steps]` class, such as those that support [Hooks](Hooks.md).
+
+## Regular Expression matching
+
+The argument to the Given, When and Then attributes is a .NET regular expression and can match parameters.  See the [simple example repository](https://github.com/GivePenny/GherkinSpec.SimpleExample) for an example showing steps that capture numeric arguments.  When capturing text (string) arguments, it may be a good idea to use delimiter characters to avoid matching more than is expected (see the example below).  Multi-argument steps can be a sign that a step is acting or asserting too much and therefore should be split into two smaller steps in order to improve re-usability.  The example below also demonstrates that.  In other cases, steps might legitimately require multiple arguments.
+
+Example:
+```gherkin
+Feature: Error messages
+
+Scenario: Make it break
+	Given I have not entered a number
+	When I press the add button
+	Then the screen should show "Error" in the colour "red"
+```
+
+```csharp
+[Then(@"the screen should show ""([^""]+)"" in the colour ""([^""]+)""")]
+public void ThenTheScreenShouldShow(string text, string colourName)
+{
+	// TODO: Better code might split this into two separate steps, one to assert the text and one to assert the colour.
+	// On the other hand, this step as it is demonstrates the need to wrap text parameters in delimiters and more strict regular expressions.
+	// ...
+}
+```
