@@ -8,10 +8,10 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Resources/*.feature" />
+    <None Remove="Resources/*.feature" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Resources\FeatureWithRules.feature" />
   </ItemGroup>
 
   <ItemGroup>
