@@ -5,6 +5,7 @@ namespace GherkinSpec.Model.Parsing
     class LineReader
     {
         private const string FeatureLineStart = "Feature:";
+        private const string RuleLineStart = "Rule:";
         private const string BackgroundLineStart = "Background:";
         private const string ScenarioLineStart = "Scenario:";
         private const string ScenarioOutlineLineStart = "Scenario Outline:";
@@ -69,6 +70,12 @@ namespace GherkinSpec.Model.Parsing
 
         public string CurrentLineFeatureTitle
             => CurrentLineTrimmed.Substring(FeatureLineStart.Length).Trim();
+
+        public bool IsRuleStartLine
+            => CurrentLineStartsWith(RuleLineStart);
+
+        public string CurrentLineRuleTitle
+            => CurrentLineTrimmed.Substring(RuleLineStart.Length).Trim();
 
         public bool IsBackgroundStartLine
             => CurrentLineStartsWith(BackgroundLineStart);

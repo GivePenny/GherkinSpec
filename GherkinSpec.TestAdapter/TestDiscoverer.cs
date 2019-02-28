@@ -96,12 +96,31 @@ namespace GherkinSpec.TestAdapter
                     var testCase = new TestCase(cleanedFeatureFolderAndName + "." + cleanedScenarioName, TestExecutor.ExecutorUriStronglyTyped, source)
                     {
                         DisplayName = scenario.Title,
-                        LocalExtensionData = new DiscoveredTestData(assembly, feature, scenario),
+                        LocalExtensionData = new DiscoveredTestData(assembly, feature, null, scenario),
                         CodeFilePath = featureSourceFile.SourceFileName,
                         LineNumber = scenario.StartingLineNumber
                     };
 
                     results.Add(testCase);
+                }
+
+                foreach (var rule in feature.Rules)
+                {
+                    var cleanedRuleFolderAndName = cleanedFeatureFolderAndName + "." + CleanDisallowedCharacters(rule.Title);
+
+                    foreach (var scenario in rule.AllScenarios)
+                    {
+                        var cleanedScenarioName = CleanDisallowedCharacters(scenario.Title);
+                        var testCase = new TestCase(cleanedRuleFolderAndName + "." + cleanedScenarioName, TestExecutor.ExecutorUriStronglyTyped, source)
+                        {
+                            DisplayName = scenario.Title,
+                            LocalExtensionData = new DiscoveredTestData(assembly, feature, rule, scenario),
+                            CodeFilePath = featureSourceFile.SourceFileName,
+                            LineNumber = scenario.StartingLineNumber
+                        };
+
+                        results.Add(testCase);
+                    }
                 }
             }
 

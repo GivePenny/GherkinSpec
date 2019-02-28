@@ -41,6 +41,7 @@ namespace GherkinSpec.TestAdapter.Execution
 
                 var hasAnySteps = testData.Feature.Background.Steps
                     .Concat(testData.Scenario.Steps)
+                    .Concat(testData.Rule?.Background?.Steps ?? Enumerable.Empty<IStep>())
                     .Any();
 
                 if (!hasAnySteps)
@@ -55,6 +56,12 @@ namespace GherkinSpec.TestAdapter.Execution
                             .ConfigureAwait(false);
 
                         // Cucumber docs say run BeforeHooks here, which is odd as before the Background steps is probably more useful.  If we ever add support for [BeforeScenario] then we should consider making it configurable whether that means before or after the Background steps.
+
+                        if (testData.Rule != null)
+                        {
+                            await ExecuteSteps(serviceScope.ServiceProvider, testResult, testData.Rule.Background.Steps, testData, testRunContext)
+                            .ConfigureAwait(false);
+                        }
 
                         await ExecuteSteps(serviceScope.ServiceProvider, testResult, testData.Scenario.Steps, testData, testRunContext)
                             .ConfigureAwait(false);

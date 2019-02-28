@@ -22,7 +22,7 @@ namespace GherkinSpec.Model.Parsing
         {
             reader.ReadNextLine();
 
-            var featureTags = ParseTagsIfPresent(reader);
+            var featureTags = TagParser.ParseTagsIfPresent(reader);
 
             if (!reader.IsFeatureStartLine)
             {
@@ -36,6 +36,7 @@ namespace GherkinSpec.Model.Parsing
             reader.ReadNextLine();
             while (
                 !reader.IsEndOfFile
+                && !reader.IsRuleStartLine
                 && !reader.IsScenarioStartLine
                 && !reader.IsScenarioOutlineStartLine
                 && !reader.IsBackgroundStartLine
@@ -53,6 +54,7 @@ namespace GherkinSpec.Model.Parsing
                     Background.Empty,
                     Enumerable.Empty<Scenario>(),
                     Enumerable.Empty<ScenarioOutline>(),
+                    Enumerable.Empty<Rule>(),
                     featureTags);
             }
 
@@ -60,27 +62,35 @@ namespace GherkinSpec.Model.Parsing
 
             var scenarios = new List<Scenario>();
             var scenarioOutlines = new List<ScenarioOutline>();
+            var rules = new List<Rule>();
 
             do
             {
-                var tags = ParseTagsIfPresent(reader);
+                var tags = TagParser.ParseTagsIfPresent(reader);
 
-                if (reader.IsScenarioStartLine)
+                if (reader.IsScenarioStartLine && !rules.Any())
                 {
                     scenarios.Add(
                         ScenarioParser.ParseScenario(reader, tags));
                     continue;
                 }
 
-                if (reader.IsScenarioOutlineStartLine)
+                if (reader.IsScenarioOutlineStartLine && !rules.Any())
                 {
                     scenarioOutlines.Add(
                         ScenarioParser.ParseScenarioOutline(reader, tags));
                     continue;
                 }
 
+                if (reader.IsRuleStartLine)
+                {
+                    rules.Add(
+                        RuleParser.ParseRule(reader, tags));
+                    continue;
+                }
+
                 throw new InvalidGherkinSyntaxException(
-                    $"Expected a Scenario or a Scenario Outline.",
+                    $"Expected a Scenario, a Scenario Outline or a Rule.",
                     reader.CurrentLineNumber);
 
             } while (!reader.IsEndOfFile);
@@ -91,42 +101,8 @@ namespace GherkinSpec.Model.Parsing
                 featureBackground,
                 scenarios,
                 scenarioOutlines,
+                rules,
                 featureTags);
-        }
-
-        private IEnumerable<Tag> ParseTagsIfPresent(LineReader reader)
-        {
-            if (!reader.IsTagLine)
-            {
-                return Enumerable.Empty<Tag>();
-            }
-
-            var tags = new List<Tag>();
-
-            while (reader.IsTagLine)
-            {
-                var tagsOnLine = reader.CurrentLineTrimmed.Split(',');
-                foreach (var tag in tagsOnLine)
-                {
-                    var cleanTag = tag.Trim();
-                    if (!cleanTag.StartsWith("@"))
-                    {
-                        throw new InvalidGherkinSyntaxException(
-                            "All tags must start with @.",
-                            reader.CurrentLineNumber);
-                    }
-
-                    cleanTag = cleanTag
-                        .Substring(1)
-                        .TrimStart();
-
-                    tags.Add(new Tag(cleanTag));
-                }
-
-                reader.ReadNextLine();
-            }
-
-            return tags;
         }
     }
 }

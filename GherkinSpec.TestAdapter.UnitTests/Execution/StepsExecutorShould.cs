@@ -43,7 +43,7 @@ namespace GherkinSpec.TestAdapter.UnitTests.Execution
         [TestMethod]
         public async Task ExecuteFeatureBackgroundStepsThenScenarioSteps()
         {
-            var backgroundStep = new GivenStep("Background step", DataTable.Empty, null);
+            var backgroundStep = new GivenStep("Feature background step", DataTable.Empty, null);
             var scenarioStep = new GivenStep("Scenario step", DataTable.Empty, null);
 
             var testFeature = new Feature("Feature", null,
@@ -59,9 +59,10 @@ namespace GherkinSpec.TestAdapter.UnitTests.Execution
                         Enumerable.Empty<Tag>())
                 },
                 Enumerable.Empty<ScenarioOutline>(),
+                Enumerable.Empty<Rule>(),
                 Enumerable.Empty<Tag>());
 
-            var testData = new DiscoveredTestData(testAssembly, testFeature, testFeature.Scenarios.First());
+            var testData = new DiscoveredTestData(testAssembly, testFeature, null, testFeature.Scenarios.First());
 
             var invocationOrder = 0;
             var mockBackgroundStepMapping = new Mock<IStepBinding>();
@@ -80,6 +81,67 @@ namespace GherkinSpec.TestAdapter.UnitTests.Execution
             
             mockBackgroundStepMapping.Verify(m => m.Execute(It.IsAny<IServiceProvider>(), It.IsAny<Collection<TestResultMessage>>()), Times.Once);
             mockScenarioStepMapping.Verify(m => m.Execute(It.IsAny<IServiceProvider>(), It.IsAny<Collection<TestResultMessage>>()), Times.Once);
+        }
+
+        [TestMethod]
+        public async Task ExecuteFeatureBackgroundStepsThenRuleBackgroundStepsThenRuleScenarioSteps()
+        {
+            var featureBackgroundStep = new GivenStep("Feature background step", DataTable.Empty, null);
+            var ruleBackgroundStep = new GivenStep("Rule background step", DataTable.Empty, null);
+            var ruleScenarioStep = new GivenStep("Scenario step", DataTable.Empty, null);
+
+            var testFeature = new Feature("Feature", null,
+                new Background(
+                    new[] { featureBackgroundStep },
+                    0),
+                Enumerable.Empty<Scenario>(),
+                Enumerable.Empty<ScenarioOutline>(),
+                new[]
+                {
+                    new Rule(
+                        "Rule",
+                        new Background(
+                            new[] { ruleBackgroundStep },
+                            0),
+                        new[]
+                        {
+                            new Scenario(
+                                "Scenario",
+                                new[] { ruleScenarioStep },
+                                1,
+                                Enumerable.Empty<Tag>())
+                        },
+                        Enumerable.Empty<ScenarioOutline>(),
+                        Enumerable.Empty<Tag>())
+                },
+                Enumerable.Empty<Tag>());
+
+            var testData = new DiscoveredTestData(testAssembly, testFeature, testFeature.Rules.First(), testFeature.Rules.First().Scenarios.First());
+
+            var invocationOrder = 0;
+            var mockFeatureBackgroundStepMapping = new Mock<IStepBinding>();
+            mockStepBinder
+                .Setup(m => m.GetBindingFor(featureBackgroundStep, testAssembly))
+                .Returns(mockFeatureBackgroundStepMapping.Object)
+                .Callback(() => Assert.AreEqual(0, invocationOrder++));
+
+            var mockRuleBackgroundStepMapping = new Mock<IStepBinding>();
+            mockStepBinder
+                .Setup(m => m.GetBindingFor(ruleBackgroundStep, testAssembly))
+                .Returns(mockRuleBackgroundStepMapping.Object)
+                .Callback(() => Assert.AreEqual(1, invocationOrder++));
+
+            var mockRuleScenarioStepMapping = new Mock<IStepBinding>();
+            mockStepBinder
+                .Setup(m => m.GetBindingFor(ruleScenarioStep, testAssembly))
+                .Returns(mockRuleScenarioStepMapping.Object)
+                .Callback(() => Assert.AreEqual(2, invocationOrder++));
+
+            var testResult = await stepsExecutor.Execute(testCase, testData, testRunContext, mockLogger.Object);
+
+            mockFeatureBackgroundStepMapping.Verify(m => m.Execute(It.IsAny<IServiceProvider>(), It.IsAny<Collection<TestResultMessage>>()), Times.Once);
+            mockRuleBackgroundStepMapping.Verify(m => m.Execute(It.IsAny<IServiceProvider>(), It.IsAny<Collection<TestResultMessage>>()), Times.Once);
+            mockRuleScenarioStepMapping.Verify(m => m.Execute(It.IsAny<IServiceProvider>(), It.IsAny<Collection<TestResultMessage>>()), Times.Once);
         }
 
         [TestMethod]
@@ -148,9 +210,10 @@ namespace GherkinSpec.TestAdapter.UnitTests.Execution
                         Enumerable.Empty<Tag>())
                 },
                 Enumerable.Empty<ScenarioOutline>(),
+                Enumerable.Empty<Rule>(),
                 Enumerable.Empty<Tag>());
 
-            var testData = new DiscoveredTestData(testAssembly, testFeature, testFeature.Scenarios.First());
+            var testData = new DiscoveredTestData(testAssembly, testFeature, null, testFeature.Scenarios.First());
             var binding = new StepBinding(scenarioStep, method, Array.Empty<object>());
 
             mockStepBinder
