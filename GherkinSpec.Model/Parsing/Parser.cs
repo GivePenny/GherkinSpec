@@ -60,48 +60,20 @@ namespace GherkinSpec.Model.Parsing
 
             var featureBackground = BackgroundParser.ParseBackgroundIfPresent(reader);
 
-            var scenarios = new List<Scenario>();
-            var scenarioOutlines = new List<ScenarioOutline>();
-            var rules = new List<Rule>();
+            var featureScenarios = new List<Scenario>();
+            var featureScenarioOutlines = new List<ScenarioOutline>();
+            var featureRules = new List<Rule>();
 
-            do
-            {
-                var tags = TagParser.ParseTagsIfPresent(reader);
-
-                if (reader.IsScenarioStartLine && !rules.Any())
-                {
-                    scenarios.Add(
-                        ScenarioParser.ParseScenario(reader, tags));
-                    continue;
-                }
-
-                if (reader.IsScenarioOutlineStartLine && !rules.Any())
-                {
-                    scenarioOutlines.Add(
-                        ScenarioParser.ParseScenarioOutline(reader, tags));
-                    continue;
-                }
-
-                if (reader.IsRuleStartLine)
-                {
-                    rules.Add(
-                        RuleParser.ParseRule(reader, tags));
-                    continue;
-                }
-
-                throw new InvalidGherkinSyntaxException(
-                    $"Expected a Scenario, a Scenario Outline or a Rule.",
-                    reader.CurrentLineNumber);
-
-            } while (!reader.IsEndOfFile);
+            var featureContentParser = new FeatureContentParser(featureScenarios, featureScenarioOutlines, featureRules, reader);
+            featureContentParser.ParseFeatureContent();
 
             return new Feature(
                 featureTitle,
                 featureNarrative.ToString()?.Trim(),
                 featureBackground,
-                scenarios,
-                scenarioOutlines,
-                rules,
+                featureScenarios,
+                featureScenarioOutlines,
+                featureRules,
                 featureTags);
         }
     }
