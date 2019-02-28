@@ -14,6 +14,7 @@
 	  When X
 	  Then Y
 
+  @ignore
   Rule: Rule title 3
 
 	Scenario Outline: Scenario title 3

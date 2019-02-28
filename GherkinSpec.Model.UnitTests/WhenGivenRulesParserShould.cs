@@ -52,6 +52,13 @@ namespace GherkinSpec.Model.UnitTests
             Assert.AreEqual(@"Scenario title 3", feature.Rules.Third().ScenarioOutlines.First().Title);
         }
 
+        [TestMethod]
+        public void ReadRuleTags()
+        {
+            var feature = ParseResource("FeatureWithRules.feature");
+            Assert.AreEqual("ignore", feature.Rules.Third().Tags.First().Label);
+        }
+
         private Feature ParseResource(string resourceName)
             => new Parser().Parse(
                 Resources.GetString(resourceName));
