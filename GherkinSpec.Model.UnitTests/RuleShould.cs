@@ -4,14 +4,13 @@ using System.Linq;
 namespace GherkinSpec.Model.UnitTests
 {
     [TestClass]
-    public class FeatureShould
+    public class RuleShould
     {
         [TestMethod]
         public void MergeSourceScenariosAndScenariosExpandedFromOutlines()
         {
-            var feature = new Feature(
+            var rule = new Rule(
                 "Title",
-                "Narrative",
                 Background.Empty,
                 new[]
                 {
@@ -42,10 +41,9 @@ namespace GherkinSpec.Model.UnitTests
                         2,
                         Enumerable.Empty<Tag>())
                 },
-                Enumerable.Empty<Rule>(),
                 Enumerable.Empty<Tag>());
 
-            var allScenarios = feature.AllScenarios.ToArray();
+            var allScenarios = rule.AllScenarios.ToArray();
 
             Assert.AreEqual(2, allScenarios.Length);
         }

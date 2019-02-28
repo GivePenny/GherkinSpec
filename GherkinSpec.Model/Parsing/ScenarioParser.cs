@@ -22,10 +22,11 @@ namespace GherkinSpec.Model.Parsing
                     && !reader.IsStepLine
                     && !reader.IsScenarioStartLine
                     && !reader.IsScenarioOutlineStartLine
-                    && !reader.IsTagLine)
+                    && !reader.IsTagLine
+                    && !reader.IsRuleStartLine)
                 {
                     throw new InvalidGherkinSyntaxException(
-                        $"Expected a step (Given, When, Then, And, But), a Scenario, a Scenario Outline or a tag, but found '{reader.CurrentLineTrimmed}'.",
+                        $"Expected a step (Given, When, Then, And, But), a Scenario, a Scenario Outline, a Rule or a tag, but found '{reader.CurrentLineTrimmed}'.",
                         reader.CurrentLineNumber);
                 }
             }
@@ -64,10 +65,11 @@ namespace GherkinSpec.Model.Parsing
                     && !reader.IsStepLine
                     && !reader.IsScenarioStartLine
                     && !reader.IsScenarioOutlineStartLine
-                    && !reader.IsTagLine)
+                    && !reader.IsTagLine
+                    && !reader.IsRuleStartLine)
                 {
                     throw new InvalidGherkinSyntaxException(
-                        $"Expected a step (Given, When, Then, And, But), a Scenario, a Scenario Outline or a tag, but found '{reader.CurrentLineTrimmed}'.",
+                        $"Expected a step (Given, When, Then, And, But), a Scenario, a Scenario Outline, a Rule or a tag, but found '{reader.CurrentLineTrimmed}'.",
                         reader.CurrentLineNumber);
                 }
             }
