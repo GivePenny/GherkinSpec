@@ -4,7 +4,7 @@ using System;
 namespace GherkinSpec.TestAdapter.UnitTests.Samples
 {
     [Steps]
-    public class StepBindingEventuallyConsistentSamples
+    public class StepBindingEventuallyConsistentStepSamples
     {
         int calls = 0;
 

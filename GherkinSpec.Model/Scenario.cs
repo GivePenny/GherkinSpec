@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GherkinSpec.Model.Parsing;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,6 +7,8 @@ namespace GherkinSpec.Model
 {
     public class Scenario
     {
+        private EventuallyConsistentScenarioConfiguration eventuallyConsistentConfiguration;
+
         public Scenario(
             string title,
             IEnumerable<IStep> steps,
@@ -23,6 +26,8 @@ namespace GherkinSpec.Model
         public IReadOnlyCollection<IStep> Steps { get; }
         public IReadOnlyCollection<Tag> Tags { get; }
 
+        public EventuallyConsistentScenarioConfiguration EventuallyConsistentConfiguration => eventuallyConsistentConfiguration;
+
         public bool IsIgnored
             => Tags.Any(
                 tag =>
@@ -34,5 +39,13 @@ namespace GherkinSpec.Model
                         tag.Label,
                         "ignore",
                         StringComparison.OrdinalIgnoreCase));
+
+        public bool IsEventuallyConsistent
+            => Tags.Any(
+                tag =>
+                    EventuallyConsistentTagParser
+                        .TryParse(
+                            tag.Label,
+                            out eventuallyConsistentConfiguration));
     }
 }
