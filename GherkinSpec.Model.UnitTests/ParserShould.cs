@@ -260,6 +260,18 @@ So that I can have more fun", feature.Narrative);
             Assert.AreEqual("ignore", feature.Scenarios.Single().Tags.First().Label);
         }
 
+        [TestMethod]
+        public void ReadAFeatureContainingAnEventuallyConsistentScenario()
+        {
+            var feature = ParseResource("EventuallyConsistentScenario.feature");
+            Assert.AreEqual(1, feature.Scenarios.Count());
+            Assert.IsTrue(feature.Scenarios.Single().IsEventuallyConsistent);
+            var eventuallyConsistentConfiguration = feature.Scenarios.Single().EventuallyConsistentConfiguration;
+            Assert.IsNotNull(eventuallyConsistentConfiguration);
+            Assert.AreEqual(TimeSpan.FromSeconds(20), eventuallyConsistentConfiguration.Within);
+            Assert.AreEqual(TimeSpan.FromSeconds(5), eventuallyConsistentConfiguration.RetryInterval);
+        }
+
         private Feature ParseResource(string resourceName)
             => new Parser().Parse(
                 Resources.GetString(resourceName));

@@ -28,7 +28,7 @@ namespace GherkinSpec.TestAdapter.Execution
                 messages.Add(
                     new TestResultMessage(
                         TestResultMessage.StandardOutCategory,
-                        $"{StepsExecutor.StepLogIndent}Passed, waiting and checking again{Environment.NewLine}"));
+                        $"{StepsExecutor.StepLogIndent}Passed at {DateTime.UtcNow}, waiting and checking again{Environment.NewLine}"));
 
                 await Task
                     .Delay(testRunContext.EventualSuccess.DelayBetweenAttempts)

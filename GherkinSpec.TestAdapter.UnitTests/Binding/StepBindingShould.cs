@@ -19,7 +19,7 @@ namespace GherkinSpec.TestAdapter.UnitTests.Binding
         public void IdentifyStepsMarkedAsEventuallySuccessfull()
         {
             var step = new ThenStep("this eventually succeeds", null, null);
-            var method = typeof(StepBindingEventuallyConsistentSamples).GetMethod("ThenThisEventuallySucceeds");
+            var method = typeof(StepBindingEventuallyConsistentStepSamples).GetMethod("ThenThisEventuallySucceeds");
             var binding = new StepBinding(step, method, Array.Empty<object>());
 
             Assert.IsTrue(binding.IsSuccessEventual);
@@ -39,7 +39,7 @@ namespace GherkinSpec.TestAdapter.UnitTests.Binding
         public void IdentifyStepsMarkedAsMustNotEventuallyFail()
         {
             var step = new ThenStep("this eventually succeeds", null, null);
-            var method = typeof(StepBindingEventuallyConsistentSamples).GetMethod("FailsOnSecondCallMarkedAsMustNotEventuallyFail");
+            var method = typeof(StepBindingEventuallyConsistentStepSamples).GetMethod("FailsOnSecondCallMarkedAsMustNotEventuallyFail");
             var binding = new StepBinding(step, method, Array.Empty<object>());
 
             Assert.IsTrue(binding.IsMarkedMustNotEventuallyFail);

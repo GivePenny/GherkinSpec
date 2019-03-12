@@ -52,18 +52,19 @@ namespace GherkinSpec.TestAdapter.Execution
                 {
                     using (var serviceScope = testRunContext.ServiceProvider.CreateScope())
                     {
-                        await ExecuteSteps(serviceScope.ServiceProvider, testResult, testData.Feature.Background.Steps, testData, testRunContext)
-                            .ConfigureAwait(false);
+                        // Before Scenario hooks should run here (see https://docs.cucumber.io/gherkin/reference/#background)
+                        // > A Background is run before each scenario, but after any Before hooks. In your feature file, put the Background before the first Scenario.
 
-                        // Cucumber docs say run BeforeHooks here, which is odd as before the Background steps is probably more useful.  If we ever add support for [BeforeScenario] then we should consider making it configurable whether that means before or after the Background steps.
+                        IEnumerable<IStep> allScenarioSteps = testData.Feature.Background.Steps;
 
                         if (testData.Rule != null)
                         {
-                            await ExecuteSteps(serviceScope.ServiceProvider, testResult, testData.Rule.Background.Steps, testData, testRunContext)
-                            .ConfigureAwait(false);
+                            allScenarioSteps = allScenarioSteps.Concat(testData.Rule.Background.Steps);
                         }
 
-                        await ExecuteSteps(serviceScope.ServiceProvider, testResult, testData.Scenario.Steps, testData, testRunContext)
+                        allScenarioSteps = allScenarioSteps.Concat(testData.Scenario.Steps);
+
+                        await ExecuteSteps(serviceScope.ServiceProvider, testResult, allScenarioSteps, testData, testRunContext)
                             .ConfigureAwait(false);
                     }
 
@@ -105,13 +106,16 @@ namespace GherkinSpec.TestAdapter.Execution
         }
 
         private async Task ExecuteSteps(
-            IServiceProvider serviceProvider,
-            TestResult testResult,
-            IEnumerable<IStep> steps,
-            DiscoveredTestData testData,
-            TestRunContext testRunContext)
+           IServiceProvider serviceProvider,
+           TestResult testResult,
+           IEnumerable<IStep> steps,
+           DiscoveredTestData testData,
+           TestRunContext testRunContext)
         {
-            foreach (var step in steps)
+            var scenarioExecutionStartTime = DateTime.UtcNow;
+            var stepsIterator = new StepsIterator(steps);
+
+            foreach (var step in stepsIterator.Iterate())
             {
                 testResult.Messages.Add(
                     new TestResultMessage(
@@ -126,27 +130,67 @@ namespace GherkinSpec.TestAdapter.Execution
                     await executionStrategy
                         .Execute(stepBinding, serviceProvider, testResult.Messages, testRunContext)
                         .ConfigureAwait(false);
+
+                    testResult.Messages.Add(
+                        new TestResultMessage(
+                            TestResultMessage.StandardOutCategory,
+                            $"{StepLogIndent}Completed at {DateTime.UtcNow}{Environment.NewLine}{Environment.NewLine}"));
                 }
                 catch (Exception exception)
                 {
-                    testResult.Messages.Add(
-                                new TestResultMessage(
-                                    TestResultMessage.StandardOutCategory,
-                                    $"{StepLogIndent}Failed{Environment.NewLine}{Environment.NewLine}"));
+                    if (ScenarioFailureIsTerminal(
+                        testData.Scenario,
+                        scenarioExecutionStartTime,
+                        stepsIterator))
+                    {
+                        testResult.Messages.Add(
+                            new TestResultMessage(
+                                TestResultMessage.StandardOutCategory,
+                                $"{StepLogIndent}Failed at {DateTime.UtcNow}{Environment.NewLine}{Environment.NewLine}"));
 
-                    testResult.Messages.Add(
+                        testResult.Messages.Add(
                             new TestResultMessage(
                                 TestResultMessage.StandardErrorCategory,
                                 $"{exception}{Environment.NewLine}"));
 
-                    throw;
-                }
+                        throw;
+                    }
 
-                testResult.Messages.Add(
-                    new TestResultMessage(
-                        TestResultMessage.StandardOutCategory,
-                        $"{StepLogIndent}Completed{Environment.NewLine}{Environment.NewLine}"));
+                    testResult.Messages.Add(
+                        new TestResultMessage(
+                                TestResultMessage.StandardOutCategory,
+                                $"{StepLogIndent}Failed at {DateTime.UtcNow}, waiting and retrying scenario from last When step{Environment.NewLine}"));
+
+                    await Task.Delay(testData.Scenario.EventuallyConsistentConfiguration.RetryInterval).ConfigureAwait(false);
+                }
             }
+        }
+
+        private bool TryGoToMostRecentWhenStep(StepsIterator stepsIterator)
+        {
+            try
+            {
+                stepsIterator.GoToMostRecentWhenStep();
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool ScenarioFailureIsTerminal(Scenario scenario, DateTime scenarioExecutionStartTime, StepsIterator stepsIterator)
+        {
+            if (!scenario.IsEventuallyConsistent
+                || scenario.EventuallyConsistentConfiguration == null
+                || DateTime.UtcNow >= scenarioExecutionStartTime.Add(scenario.EventuallyConsistentConfiguration.Within)
+                || !TryGoToMostRecentWhenStep(stepsIterator))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
