@@ -134,7 +134,7 @@ namespace GherkinSpec.TestAdapter.Execution
                     testResult.Messages.Add(
                         new TestResultMessage(
                             TestResultMessage.StandardOutCategory,
-                            $"{StepLogIndent}Completed at {DateTime.UtcNow}{Environment.NewLine}{Environment.NewLine}"));
+                            $"{StepLogIndent}Completed at {DateTime.UtcNow:o}{Environment.NewLine}{Environment.NewLine}"));
                 }
                 catch (Exception exception)
                 {
@@ -146,7 +146,7 @@ namespace GherkinSpec.TestAdapter.Execution
                         testResult.Messages.Add(
                             new TestResultMessage(
                                 TestResultMessage.StandardOutCategory,
-                                $"{StepLogIndent}Failed at {DateTime.UtcNow}{Environment.NewLine}{Environment.NewLine}"));
+                                $"{StepLogIndent}Failed at {DateTime.UtcNow:o}{Environment.NewLine}{Environment.NewLine}"));
 
                         testResult.Messages.Add(
                             new TestResultMessage(
@@ -159,7 +159,7 @@ namespace GherkinSpec.TestAdapter.Execution
                     testResult.Messages.Add(
                         new TestResultMessage(
                                 TestResultMessage.StandardOutCategory,
-                                $"{StepLogIndent}Failed at {DateTime.UtcNow}, waiting and retrying scenario from last When step{Environment.NewLine}"));
+                                $"{StepLogIndent}Failed at {DateTime.UtcNow:o}, waiting and retrying scenario from last When step{Environment.NewLine}"));
 
                     await Task.Delay(testData.Scenario.EventuallyConsistentConfiguration.RetryInterval).ConfigureAwait(false);
                 }

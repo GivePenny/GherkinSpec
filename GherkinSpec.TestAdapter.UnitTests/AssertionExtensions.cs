@@ -5,7 +5,7 @@ namespace GherkinSpec.TestAdapter.UnitTests
 {
     static class AssertionExtensions
     {
-        private const string _timestampRegexPattern = @"\d\d/\d\d/\d\d\d\d \d\d:\d\d:\d\d";
+        private const string _timestampRegexPattern = @"\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.?\d*Z?";
 
         public static void MessagesAreEqualIgnoringTimestamp(
             this Assert _,
