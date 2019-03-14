@@ -25,5 +25,23 @@ namespace GherkinSpec.TestModel.UnitTests
 
             Assert.AreEqual(0, services.Count(descriptor => descriptor.ServiceType == typeof(StepBindingStaticSamples)));
         }
+
+        [TestMethod]
+        public void RegisterAllNonStaticStepsClassesInSpecifiedAssembly()
+        {
+            var services = new ServiceCollection();
+            services.AddAllStepsClassesAsScoped(typeof(ReferencedAssembly.StaticStepsClass).Assembly);
+
+            Assert.AreEqual(typeof(ReferencedAssembly.NonStaticStepsClass), services.Single().ServiceType);
+        }
+
+        [TestMethod]
+        public void DoesNotRegisterStaticStepsClassesInSpecifiedAssembly()
+        {
+            var services = new ServiceCollection();
+            services.AddAllStepsClassesAsScoped(typeof(ReferencedAssembly.StaticStepsClass).Assembly);
+
+            Assert.IsFalse(services.Any(descriptor => descriptor.ServiceType == typeof(ReferencedAssembly.StaticStepsClass)));
+        }
     }
 }

@@ -12,6 +12,18 @@ namespace GherkinSpec.TestModel
         // is changed and re-built.
         private static readonly ConcurrentDictionary<Assembly, Type[]> cachedTypesByAssembly = new ConcurrentDictionary<Assembly, Type[]>();
 
+        public static IEnumerable<Type> FindInAssemblyAndReferencedAssemblies(Assembly assembly)
+            => assembly
+                .GetReferencedAssemblies()
+                .Select(
+                    a => 
+                        Assembly.Load(a.FullName))
+                .SelectMany(FindIn)
+                .Concat(FindIn(assembly));
+
+        public static IEnumerable<Type> FindInAssemblyAndReferencedAssemblies(IEnumerable<Assembly> assemblies)
+            => assemblies.SelectMany(FindInAssemblyAndReferencedAssemblies);
+
         public static IEnumerable<Type> FindIn(IEnumerable<Assembly> assemblies)
             => assemblies.SelectMany(FindIn);
 

@@ -33,11 +33,27 @@ namespace GherkinSpec.TestAdapter.UnitTests.Execution
         }
 
         [TestMethod]
+        public async Task ExecuteMethodsMarkedForBeforeRunInReferencedAssemblies()
+        {
+            var initialCount = ReferencedAssembly.ReferencedAssemblyHookSamples.BeforeRunCallCount;
+            await runHooks.ExecuteBeforeRun();
+            Assert.AreEqual(initialCount + 1, ReferencedAssembly.ReferencedAssemblyHookSamples.BeforeRunCallCount);
+        }
+
+        [TestMethod]
         public async Task ExecuteMethodsMarkedForAfterRun()
         {
             var initialCount = HookSamples.AfterRunCallCount;
             await runHooks.ExecuteAfterRun();
             Assert.AreEqual(initialCount + 1, HookSamples.AfterRunCallCount);
+        }
+
+        [TestMethod]
+        public async Task ExecuteMethodsMarkedForAfterRunInReferencedAssemblies()
+        {
+            var initialCount = ReferencedAssembly.ReferencedAssemblyHookSamples.AfterRunCallCount;
+            await runHooks.ExecuteAfterRun();
+            Assert.AreEqual(initialCount + 1, ReferencedAssembly.ReferencedAssemblyHookSamples.AfterRunCallCount);
         }
     }
 }
