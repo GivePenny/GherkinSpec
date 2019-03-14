@@ -21,7 +21,7 @@ namespace GherkinSpec.TestAdapter.Execution
 
         public async Task ExecuteBeforeRun()
         {
-            foreach (var stepsClass in StepsClasses.FindIn(assembliesToScan))
+            foreach (var stepsClass in StepsClasses.FindInAssemblyAndReferencedAssemblies(assembliesToScan))
             {
                 foreach (var method in FindMethodsWithAttribute<BeforeRunAttribute>(stepsClass))
                 {
@@ -39,7 +39,7 @@ namespace GherkinSpec.TestAdapter.Execution
 
         public async Task ExecuteAfterRun()
         {
-            foreach (var stepsClass in StepsClasses.FindIn(assembliesToScan))
+            foreach (var stepsClass in StepsClasses.FindInAssemblyAndReferencedAssemblies(assembliesToScan))
             {
                 foreach (var method in FindMethodsWithAttribute<AfterRunAttribute>(stepsClass))
                 {

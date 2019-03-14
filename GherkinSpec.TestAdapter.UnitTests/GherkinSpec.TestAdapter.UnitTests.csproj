@@ -34,6 +34,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GherkinSpec.Model\GherkinSpec.Model.csproj" />
+    <ProjectReference Include="..\GherkinSpec.TestAdapter.UnitTests.ReferencedAssembly\GherkinSpec.TestAdapter.UnitTests.ReferencedAssembly.csproj" />
     <ProjectReference Include="..\GherkinSpec.TestAdapter\GherkinSpec.TestAdapter.csproj" />
     <ProjectReference Include="..\GherkinSpec.TestModel\GherkinSpec.TestModel.csproj" />
   </ItemGroup>

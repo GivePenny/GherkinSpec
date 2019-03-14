@@ -24,7 +24,7 @@ namespace GherkinSpec.TestAdapter.Binding
 
         public void Scan(Assembly stepsAssembly)
         {
-            foreach (var type in StepsClasses.FindIn(stepsAssembly))
+            foreach (var type in StepsClasses.FindInAssemblyAndReferencedAssemblies(stepsAssembly))
             {
                 Scan(type);
             }

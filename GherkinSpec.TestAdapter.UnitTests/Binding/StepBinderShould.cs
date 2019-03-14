@@ -155,6 +155,20 @@ namespace GherkinSpec.TestAdapter.UnitTests.Binding
             Assert.AreEqual("some string", mapping.Arguments[0]);
         }
 
+        [TestMethod]
+        public void FindMethodInAReferencedAssembly()
+        {
+            // Load the referenced assembly
+            var _ = typeof(ReferencedAssembly.ReferencedAssemblyStepBindingSamples);
+
+            var mapper = new StepBinder();
+            var mapping = mapper.GetBindingFor(
+                new GivenStep("Given a referenced assembly match", DataTable.Empty, null),
+                Assembly.GetExecutingAssembly());
+
+            Assert.AreEqual("GivenAReferencedAssemblyMatch", mapping.Name);
+        }
+
         private DataTable NonEmptyDataTable
             => new DataTable(
                 new[]

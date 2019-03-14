@@ -26,6 +26,8 @@ One test run containing several tests will create several instances of scoped cl
 
 All classes marked with `[Steps]` within the current test project can be automatically detected and registered with a Scoped lifetime using the `.AddAllStepsClassesAsScoped()` extension method.
 
+Steps in referenced assemblies are also supported. An overload of `AddAllStepsClassesAsScoped` taking an assembly can be used to add these, for example `.AddAllStepsClassesAsScoped(typeof(ReferencedAssembly.StepsClass).Assembly)`.
+
 #### Singleton
 
 Singleton instances are dedicated to the entire test run.  One instance is shared between all tests.
