@@ -35,7 +35,7 @@ namespace GherkinSpec.TestAdapter.Execution
                 messages.Add(
                     new TestResultMessage(
                         TestResultMessage.StandardOutCategory,
-                        $"{StepsExecutor.StepLogIndent}Failed at {DateTime.UtcNow}, waiting and trying again{Environment.NewLine}"));
+                        $"{StepsExecutor.StepLogIndent}Failed at {DateTime.UtcNow:o}, waiting and trying again{Environment.NewLine}"));
 
                 await Task
                     .Delay(testRunContext.EventualSuccess.DelayBetweenAttempts)
