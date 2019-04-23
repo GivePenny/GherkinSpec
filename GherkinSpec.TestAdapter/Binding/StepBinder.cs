@@ -124,7 +124,7 @@ namespace GherkinSpec.TestAdapter.Binding
             var methodHasTableArgument = parameters.Length > 0
                 && parameters.Last().ParameterType == typeof(DataTable);
 
-            ThrowIfExpectsTableButNoneProvided(step, method, parameters, methodHasTableArgument);
+            ThrowIfExpectsTableButNoneProvided(step, method, methodHasTableArgument);
             ThrowIfTableProvidedButNoneExpected(step, method, methodHasTableArgument);
             ThrowIfNotEnoughParametersProvided(step, stepArguments, method, parameters, methodHasTableArgument);
 
@@ -145,7 +145,7 @@ namespace GherkinSpec.TestAdapter.Binding
             return typedValues.ToArray();
         }
 
-        private static void ThrowIfExpectsTableButNoneProvided(IStep step, MethodInfo method, ParameterInfo[] parameters, bool methodHasTableArgument)
+        private static void ThrowIfExpectsTableButNoneProvided(IStep step, MethodInfo method, bool methodHasTableArgument)
         {
             if (methodHasTableArgument && step.TableArgument.IsEmpty)
             {

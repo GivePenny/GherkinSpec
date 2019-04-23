@@ -47,7 +47,7 @@ namespace GherkinSpec.TestAdapter
                 var assembly = Assembly.LoadFrom(sourceAssemblyPath);
 
                 // ToArray forces the enumeration to be evaluated so any exceptions are caught and logged fully here.
-                return DiscoverTests(source, assembly, logger).ToArray();
+                return DiscoverTests(source, assembly).ToArray();
             }
             catch (BadImageFormatException exception)
             {
@@ -68,7 +68,7 @@ namespace GherkinSpec.TestAdapter
             return Enumerable.Empty<TestCase>();
         }
 
-        private static IEnumerable<TestCase> DiscoverTests(string source, Assembly assembly, IMessageLogger logger)
+        private static IEnumerable<TestCase> DiscoverTests(string source, Assembly assembly)
         {
             var gherkinParser = new Parser();
             var featureFileLocator = new SourceFileLocator(source);
@@ -84,7 +84,7 @@ namespace GherkinSpec.TestAdapter
 
                 var featureText = ReadResourceText(assembly, resourceName);
                 var feature = gherkinParser.Parse(featureText);
-                var featureSourceFile = featureFileLocator.FindFeatureFileNameIfPossible(resourceName, logger);
+                var featureSourceFile = featureFileLocator.FindFeatureFileNameIfPossible(resourceName);
 
                 var cleanedFeatureFolderAndName = CleanedDotSeparatedName(
                     featureSourceFile,

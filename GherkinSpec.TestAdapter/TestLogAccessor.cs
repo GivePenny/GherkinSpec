@@ -8,7 +8,7 @@ namespace GherkinSpec.TestAdapter
 {
     class TestLogAccessor : ITestLogAccessor
     {
-        private AsyncLocal<TestResult> asyncLocalTestResult = new AsyncLocal<TestResult>();
+        private readonly AsyncLocal<TestResult> asyncLocalTestResult = new AsyncLocal<TestResult>();
 
         internal void SetCurrentTestResult(TestResult result)
         {

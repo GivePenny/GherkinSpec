@@ -25,40 +25,61 @@ namespace GherkinSpec.TestAdapter
 
         public void RunTests(IEnumerable<TestCase> tests, IRunContext runContext, IFrameworkHandle frameworkHandle)
         {
-            frameworkHandle.SendMessage(TestMessageLevel.Informational, "Running tests");
-
-            var sources = tests
-                .Select(test => test.Source)
-                .Distinct();
-
-            var testsMappedToScenarios = TestDiscoverer
-                .DiscoverTests(sources, frameworkHandle)
-                .ToArray();
-
-            var unmappedTests = tests
-                .Where(test => !testsMappedToScenarios.Any(mappedTest => mappedTest.Id == test.Id));
-
-            foreach (var unmappedTest in unmappedTests)
+            try
             {
-                RecordTestNotFound(unmappedTest, frameworkHandle);
+                var sources = tests
+                    .Select(test => test.Source)
+                    .Distinct();
+
+                var testsMappedToScenarios = TestDiscoverer
+                    .DiscoverTests(sources, frameworkHandle)
+                    .ToArray();
+
+                var unmappedTests = tests
+                    .Where(test => !testsMappedToScenarios.Any(mappedTest => mappedTest.Id == test.Id));
+
+                unmappedTests.MarkAsNotFound(frameworkHandle);
+
+                var mappedTests = tests
+                    .Select(
+                        test => testsMappedToScenarios
+                            .FirstOrDefault(
+                                mappedTest => mappedTest.Id == test.Id))
+                    .Where(test => test != null);
+
+                RunMappedTests(mappedTests, frameworkHandle);
             }
+            catch (Exception exception)
+            {
+                frameworkHandle.SendMessage(
+                    TestMessageLevel.Error,
+                    $"Skipping test run because of an early exception: {exception}");
 
-            var mappedTests = tests
-                .Select(
-                    test => testsMappedToScenarios
-                        .FirstOrDefault(
-                            mappedTest => mappedTest.Id == test.Id))
-                .Where(test => test != null);
-
-            RunMappedTests(mappedTests, runContext, frameworkHandle);
+                tests.TryMarkAsFailed(frameworkHandle, exception.Message, exception.StackTrace);
+            }
         }
 
         public void RunTests(IEnumerable<string> sources, IRunContext runContext, IFrameworkHandle frameworkHandle)
         {
-            RunMappedTests(TestDiscoverer.DiscoverTests(sources, frameworkHandle), runContext, frameworkHandle);
+            var tests = Enumerable.Empty<TestCase>();
+
+            try
+            {
+                tests = TestDiscoverer.DiscoverTests(sources, frameworkHandle);
+
+                RunMappedTests(tests, frameworkHandle);
+            }
+            catch (Exception exception)
+            {
+                frameworkHandle.SendMessage(
+                    TestMessageLevel.Error,
+                    $"Skipping test run because of an early exception: {exception}");
+
+                tests.TryMarkAsFailed(frameworkHandle, exception.Message, exception.StackTrace);
+            }
         }
 
-        private void RunMappedTests(IEnumerable<TestCase> mappedTests, IRunContext runContext, IFrameworkHandle frameworkHandle)
+        private void RunMappedTests(IEnumerable<TestCase> mappedTests, IFrameworkHandle frameworkHandle)
         {
             frameworkHandle.SendMessage(TestMessageLevel.Informational, "Running tests");
 
@@ -92,12 +113,12 @@ namespace GherkinSpec.TestAdapter
 
                     if (testCase.DiscoveredData().IsIgnored)
                     {
-                        RecordTestSkipped(testCase, frameworkHandle);
+                        testCase.MarkAsSkipped(frameworkHandle);
                         continue;
                     }
 
                     tasks.Add(
-                        RunMappedTest(testCase, testCase.DiscoveredData(), testRunContext, stepBinder, runContext, frameworkHandle));
+                        RunMappedTest(testCase, testCase.DiscoveredData(), testRunContext, stepBinder, frameworkHandle));
                 }
 
                 Task.WhenAll(tasks).Wait();
@@ -105,38 +126,22 @@ namespace GherkinSpec.TestAdapter
             }
         }
 
-        private async Task RunMappedTest(TestCase testCase, DiscoveredTestData testData, TestRunContext testRunContext, StepBinder stepBinder, IRunContext runContext, IFrameworkHandle frameworkHandle)
+        private async Task RunMappedTest(TestCase testCase, DiscoveredTestData testData, TestRunContext testRunContext, StepBinder stepBinder, IFrameworkHandle frameworkHandle)
         {
             frameworkHandle.SendMessage(TestMessageLevel.Informational, $"Starting test \"{testCase.DisplayName}\"");
 
             frameworkHandle.RecordStart(testCase);
 
             var executor = new StepsExecutor(stepBinder);
+
+            // Continuing on captured context in order to (try to) work-around a bug in Visual Studio's Test Explorer that causes the test run UI to not always detect when all test cases have finished and switch the "Cancel" link to become "Run All" again. Trying to record start and finish on the same entry-thread
             var testResult = await executor
                 .Execute(testCase, testData, testRunContext, frameworkHandle)
-                .ConfigureAwait(false);
+                .ConfigureAwait(true);
 
             frameworkHandle.RecordResult(testResult);
 
             frameworkHandle.SendMessage(TestMessageLevel.Informational, $"Finished test \"{testCase.DisplayName}\"");
-        }
-
-        private static void RecordTestNotFound(TestCase testCase, IFrameworkHandle frameworkHandle)
-        {
-            frameworkHandle.RecordResult(
-                new TestResult(testCase)
-                {
-                    Outcome = TestOutcome.NotFound
-                });
-        }
-
-        private static void RecordTestSkipped(TestCase testCase, IFrameworkHandle frameworkHandle)
-        {
-            frameworkHandle.RecordResult(
-                new TestResult(testCase)
-                {
-                    Outcome = TestOutcome.Skipped
-                });
         }
     }
 }

@@ -25,7 +25,7 @@ namespace GherkinSpec.TestAdapter.Execution
             {
                 foreach (var method in FindMethodsWithAttribute<BeforeRunAttribute>(stepsClass))
                 {
-                    await ExecuteMethod(stepsClass, method, nameof(BeforeRunAttribute))
+                    await ExecuteMethod(stepsClass, method)
                         .ConfigureAwait(false);
                 }
             }
@@ -43,7 +43,7 @@ namespace GherkinSpec.TestAdapter.Execution
             {
                 foreach (var method in FindMethodsWithAttribute<AfterRunAttribute>(stepsClass))
                 {
-                    await ExecuteMethod(stepsClass, method, nameof(AfterRunAttribute))
+                    await ExecuteMethod(stepsClass, method)
                         .ConfigureAwait(false);
                 }
             }
@@ -55,7 +55,7 @@ namespace GherkinSpec.TestAdapter.Execution
                 .GetMethods(BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance)
                 .Where(method => method.GetCustomAttributes<TAttribute>(true).Any());
 
-        private async Task ExecuteMethod(Type type, MethodInfo method, string attributeName)
+        private async Task ExecuteMethod(Type type, MethodInfo method)
         {
             var parameters = method.GetParameters();
 
