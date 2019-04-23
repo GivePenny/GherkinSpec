@@ -10,8 +10,6 @@ namespace GherkinSpec.TestAdapter.UnitTests.Binding
     [TestClass]
     public class StepBinderShould
     {
-        private readonly Mock<IMessageLogger> mockLogger = new Mock<IMessageLogger>();
-
         [TestMethod]
         public void FindMethodWithPlainTextGiven()
         {

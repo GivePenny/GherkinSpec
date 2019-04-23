@@ -9,8 +9,6 @@ namespace GherkinSpec.TestAdapter.UnitTests
     [TestClass]
     public class SourceFileLocatorShould
     {
-        private readonly Mock<IMessageLogger> mockLogger = new Mock<IMessageLogger>();
-
         [TestMethod]
         public void FindFeatureFileWithFeatureExtension()
             => FindFeatureFileWithExtension("feature");
@@ -44,8 +42,7 @@ namespace GherkinSpec.TestAdapter.UnitTests
                 .Single();
 
             return locator.FindFeatureFileNameIfPossible(
-                resourceNameToFind,
-                mockLogger.Object);
+                resourceNameToFind);
         }
 
         [TestMethod]

@@ -14,7 +14,7 @@ namespace GherkinSpec.TestAdapter
             this.assemblyDllPath = assemblyDllPath;
         }
 
-        public TestSourceFile FindFeatureFileNameIfPossible(string resourceName, IMessageLogger logger)
+        public TestSourceFile FindFeatureFileNameIfPossible(string resourceName)
         {
             var folderName = assemblyDllPath;
 
