@@ -134,11 +134,14 @@ namespace GherkinSpec.TestAdapter
 
             var executor = new StepsExecutor(stepBinder);
 
-            // Continuing on captured context in order to (try to) work-around a bug in Visual Studio's Test Explorer that causes the test run UI to not always detect when all test cases have finished and switch the "Cancel" link to become "Run All" again. Trying to record start and finish on the same entry-thread
+            // Deliberately resume on same context to try to avoid Visual Studio Test Explorer "bug" (?) that doesn't
+            // always detect the end of the test run when multiple tests are run in parallel.
             var testResult = await executor
                 .Execute(testCase, testData, testRunContext, frameworkHandle)
                 .ConfigureAwait(true);
 
+            // https://github.com/Microsoft/vstest/blob/master/src/Microsoft.TestPlatform.CrossPlatEngine/Adapter/TestExecutionRecorder.cs <- comments here seem to suggest that we need to call RecordEnd just before RecordResult  
+            frameworkHandle.RecordEnd(testCase, testResult.Outcome);
             frameworkHandle.RecordResult(testResult);
 
             frameworkHandle.SendMessage(TestMessageLevel.Informational, $"Finished test \"{testCase.DisplayName}\"");
