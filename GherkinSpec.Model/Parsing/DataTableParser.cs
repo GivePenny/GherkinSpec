@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace GherkinSpec.Model.Parsing
 {
@@ -7,17 +8,18 @@ namespace GherkinSpec.Model.Parsing
         public static DataTable ParseDataTable(LineReader reader)
         {
             var rows = new List<DataTableRow>();
+            string[] columnNames = null;
 
             while (reader.IsTableLine)
             {
-                rows.Add(ParseDataTableRow(reader));
+                rows.Add(ParseDataTableRow(reader, ref columnNames));
                 reader.ReadNextLine();
             };
 
             return new DataTable(rows);
         }
 
-        private static DataTableRow ParseDataTableRow(LineReader reader)
+        private static DataTableRow ParseDataTableRow(LineReader reader, ref string[] columnNames)
         {
             var column = reader
                 .CurrentLineTrimmed
@@ -34,7 +36,14 @@ namespace GherkinSpec.Model.Parsing
                         value.Trim()));
             }
 
-            return new DataTableRow(cells);
+            if (columnNames == null)
+            {
+                columnNames = cells
+                    .Select(cell => cell.Value)
+                    .ToArray();
+            }
+
+            return new DataTableRow(cells, columnNames);
         }
     }
 }

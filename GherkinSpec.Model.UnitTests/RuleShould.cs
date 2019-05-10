@@ -31,12 +31,14 @@ namespace GherkinSpec.Model.UnitTests
                                     new[]
                                     {
                                         new DataTableCell("Header")
-                                    }),
+                                    },
+                                    new[] { "Header" }),
                                 new DataTableRow(
                                     new[]
                                     {
                                         new DataTableCell("Value")
-                                    })
+                                    },
+                                    new[] { "Header" })
                             }),
                         2,
                         Enumerable.Empty<Tag>())

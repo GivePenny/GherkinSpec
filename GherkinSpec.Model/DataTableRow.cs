@@ -6,10 +6,11 @@ namespace GherkinSpec.Model
 {
     public class DataTableRow : IEnumerable<DataTableCell>
     {
-        public DataTableRow(IEnumerable<DataTableCell> cells)
+        public DataTableRow(IEnumerable<DataTableCell> cells, string[] columnNames)
         {
             Cells = new ReadOnlyDataTableCellCollection(
-                cells.ToList());
+                cells.ToList(),
+                columnNames);
         }
 
         public ReadOnlyDataTableCellCollection Cells { get; }
@@ -19,5 +20,11 @@ namespace GherkinSpec.Model
 
         IEnumerator IEnumerable.GetEnumerator()
             => Cells.GetEnumerator();
+
+        public DataTableCell this[int index]
+            => Cells[index];
+
+        public DataTableCell this[string columnName]
+            => Cells[columnName];
     }
 }

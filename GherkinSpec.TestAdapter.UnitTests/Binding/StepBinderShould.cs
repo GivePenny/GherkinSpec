@@ -175,7 +175,8 @@ namespace GherkinSpec.TestAdapter.UnitTests.Binding
                         new[]
                         {
                             new DataTableCell("cell")
-                        })
+                        },
+                        new[] { "Cell" })
                 });
     }
 }

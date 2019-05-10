@@ -62,7 +62,7 @@ namespace GherkinSpec.Model
                             rowProvidingValues));
                     targetCells.Add(targetCell);
                 }
-                targetRows.Add(new DataTableRow(targetCells));
+                targetRows.Add(new DataTableRow(targetCells, ColumnNames.ToArray()));
             }
             return new DataTable(targetRows);
         }
