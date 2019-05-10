@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -6,9 +7,12 @@ namespace GherkinSpec.Model
 {
     public class ReadOnlyDataTableCellCollection : ReadOnlyCollection<DataTableCell>
     {
-        public ReadOnlyDataTableCellCollection(IList<DataTableCell> cells)
+        private readonly string[] columnNames;
+
+        public ReadOnlyDataTableCellCollection(IList<DataTableCell> cells, string[] columnNames)
             : base(cells)
         {
+            this.columnNames = columnNames;
         }
 
         public string CommaDelimitedValues
@@ -16,5 +20,14 @@ namespace GherkinSpec.Model
                 ", ",
                 this.Select(
                     cell => cell.Value));
+
+        public DataTableCell this[string columnName]
+        {
+            get
+            {
+                var index = Array.FindIndex(columnNames, test => test == columnName);
+                return this[index];
+            }
+        }
     }
 }

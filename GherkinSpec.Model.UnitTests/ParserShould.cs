@@ -98,6 +98,19 @@ So that I can have more fun", feature.Narrative);
         }
 
         [TestMethod]
+        public void ReadScenarioStepDataTableArgumentColumnNames()
+        {
+            var feature = ParseResource("ScenarioSteps.feature");
+
+            var secondScenario = feature.Scenarios.Second();
+            var table = secondScenario.Steps.First().TableArgument;
+
+            Assert.AreEqual(
+                "value 2",
+                table.Rows.Second()["column 2"].Value);
+        }
+
+        [TestMethod]
         public void ReadScenarioStepMultiLineStringArguments()
         {
             var feature = ParseResource("ScenarioSteps.feature");
