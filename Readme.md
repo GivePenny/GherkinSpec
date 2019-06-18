@@ -56,6 +56,7 @@ Steps 1, 2 and 5 can be speeded up by creating your test project using one of th
 
 ```xml
   <ItemGroup>
+  	<None Remove="Features/**/*.feature" />
     <EmbeddedResource Include="Features/**/*.feature"/>
   </ItemGroup>
 ```
@@ -77,7 +78,6 @@ Steps 1, 2 and 5 can be speeded up by creating your test project using one of th
 * [Dependency injection](docs/DependencyInjection.md)
 * [Logging](docs/Logging.md)
 * [Eventually-consistent service support](docs/EventuallyConsistentServices.md)
-* [Roadmap](docs/Roadmap.md)
 
 ## Third-party references and useful links
 
