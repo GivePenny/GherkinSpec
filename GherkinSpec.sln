@@ -30,15 +30,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{288CE073-1
 		docs\Logging.md = docs\Logging.md
 		docs\MSTestProject.png = docs\MSTestProject.png
 		docs\Preview.png = docs\Preview.png
-		docs\Roadmap.md = docs\Roadmap.md
 		docs\Steps.md = docs\Steps.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GherkinSpec.TestModel.UnitTests", "GherkinSpec.TestModel.UnitTests\GherkinSpec.TestModel.UnitTests.csproj", "{B4DFA6C9-4DED-4E76-8FFE-27AD4EA9D5F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GherkinSpec.TestAdapter.UnitTests.ReferencedAssembly", "GherkinSpec.TestAdapter.UnitTests.ReferencedAssembly\GherkinSpec.TestAdapter.UnitTests.ReferencedAssembly.csproj", "{883B7EFB-6B78-4AB6-BF4F-D0273BA6F8EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GherkinSpec.TestAdapter.UnitTests.ReferencedAssembly", "GherkinSpec.TestAdapter.UnitTests.ReferencedAssembly\GherkinSpec.TestAdapter.UnitTests.ReferencedAssembly.csproj", "{883B7EFB-6B78-4AB6-BF4F-D0273BA6F8EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GherkinSpec.TestModel.UnitTests.ReferencedAssembly", "GherkinSpec.TestModel.UnitTests.ReferencedAssembly\GherkinSpec.TestModel.UnitTests.ReferencedAssembly.csproj", "{572B8689-C0CC-4FBE-ADAE-6258A51C3F1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GherkinSpec.TestModel.UnitTests.ReferencedAssembly", "GherkinSpec.TestModel.UnitTests.ReferencedAssembly\GherkinSpec.TestModel.UnitTests.ReferencedAssembly.csproj", "{572B8689-C0CC-4FBE-ADAE-6258A51C3F1A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

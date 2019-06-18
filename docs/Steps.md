@@ -28,6 +28,22 @@ Attribute | Applied to | Purpose
 
 Other attributes may be added to methods in a `[Steps]` class, such as those that support [Hooks](Hooks.md).
 
+## And and But steps
+
+Sometimes the Gherkin feature file will contain And and But steps:
+
+```gherkin
+Feature: Addition
+
+Scenario: Add two numbers together
+    Given I have 5 apples
+    And I have added 3 more
+    When I add 6 more
+    Then the result should be 14
+```
+
+When writing the C# step definitions for this test, there are no corresponding `[And]` and `[But]` attributes to decorate the methods with.  Instead, use the `[Given]`, `[When]` or `[Then]` attributes. The aim is to encourage each method, where possible, to be single-purpose and concentrate on either the test pre-requisites setup (Given, or "arrange"), the operation to test (When, or "act"), or the check and verification (Then, or "assert"). This helps step methods to be smaller and therefore reusable between scenarios more easily.  The purpose of the method is made more clear by the presence of attributes such as `[Given]` but would be confusing with an attribute such as `[And]`.  For a slightly deeper discussion on this point, see [issue #38](https://github.com/GivePenny/GherkinSpec/issues/38).
+
 ## Regular Expression matching
 
 The argument to the Given, When and Then attributes is a .NET regular expression and can match parameters.  See the [simple example repository](https://github.com/GivePenny/GherkinSpec.SimpleExample) for an example showing steps that capture numeric arguments.  When capturing text (string) arguments, it may be a good idea to use delimiter characters to avoid matching more than is expected (see the example below).  Multi-argument steps can be a sign that a step is acting or asserting too much and therefore should be split into two smaller steps in order to improve re-usability.  The example below also demonstrates that.  In other cases, steps might legitimately require multiple arguments.
