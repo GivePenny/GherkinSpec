@@ -22,16 +22,22 @@ namespace GherkinSpec.Model
             ScenarioOutlines = new ReadOnlyScenarioOutlineCollection(
                 scenarioOutlines.ToList());
             Rules = rules.ToList().AsReadOnly();
-            Tags = tags.ToList().AsReadOnly();
+            Tags = new ReadOnlyTagCollection(tags.ToList());
         }
 
         public string Title { get; }
+
         public string Narrative { get; }
+
         public Background Background { get; }
+
         public IReadOnlyCollection<Scenario> Scenarios { get; }
+
         public ReadOnlyScenarioOutlineCollection ScenarioOutlines { get; }
+
         public IReadOnlyCollection<Rule> Rules { get; }
-        public IReadOnlyCollection<Tag> Tags { get; }
+
+        public ReadOnlyTagCollection Tags { get; }
 
         public IEnumerable<Scenario> AllScenarios
             => Scenarios.Concat(ScenarioOutlines.ResultingScenarios());

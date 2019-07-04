@@ -18,13 +18,13 @@ namespace GherkinSpec.Model
             Title = title;
             StartingLineNumber = startingLineNumber;
             Steps = steps.ToList().AsReadOnly();
-            Tags = tags.ToList().AsReadOnly();
+            Tags = new ReadOnlyTagCollection(tags.ToList());
         }
 
         public string Title { get; }
         public int StartingLineNumber { get; }
         public IReadOnlyCollection<IStep> Steps { get; }
-        public IReadOnlyCollection<Tag> Tags { get; }
+        public ReadOnlyTagCollection Tags { get; }
 
         public EventuallyConsistentScenarioConfiguration EventuallyConsistentConfiguration => eventuallyConsistentConfiguration;
 

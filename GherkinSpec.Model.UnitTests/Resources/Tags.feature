@@ -1,7 +1,7 @@
 ﻿@ignore, @featureTag
 Feature: Adding things up
 
-@ignore, @somethingElse
+@ignore, @somethingElse, @category(Smoke Test)
 Scenario: This is a scenario 
 
 @ignore, @somethingOther
