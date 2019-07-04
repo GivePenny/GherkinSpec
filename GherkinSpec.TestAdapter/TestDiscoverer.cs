@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using GherkinSpec.Model;
 using GherkinSpec.Model.Parsing;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
@@ -101,6 +102,8 @@ namespace GherkinSpec.TestAdapter
                         LineNumber = scenario.StartingLineNumber
                     };
 
+                    AddCategoryTraits(feature, rule: null, scenario, testCase);
+
                     results.Add(testCase);
                 }
 
@@ -119,6 +122,8 @@ namespace GherkinSpec.TestAdapter
                             LineNumber = scenario.StartingLineNumber
                         };
 
+                        AddCategoryTraits(feature, rule, scenario, testCase);
+
                         results.Add(testCase);
                     }
                 }
@@ -127,6 +132,21 @@ namespace GherkinSpec.TestAdapter
             CommonPrefixStripper.StripNamePrefixesSharedByAllTestCases(results);
 
             return results;
+        }
+
+        private static void AddCategoryTraits(Feature feature, Rule rule, Scenario scenario, TestCase testCase)
+        {
+            var categories = feature.Tags.CategoryNames
+                .Concat(scenario.Tags.CategoryNames);
+
+            if (rule != null)
+            {
+                categories = categories.Concat(rule.Tags.CategoryNames);
+            }
+
+            testCase.Traits.AddRange(
+                categories.Distinct().Select(
+                    category => new Trait("Category", category)));
         }
 
         private static string CleanDisallowedCharacters(string text)

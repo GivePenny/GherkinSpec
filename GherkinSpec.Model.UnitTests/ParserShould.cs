@@ -227,9 +227,10 @@ So that I can have more fun", feature.Narrative);
             Assert.AreEqual(1, feature.Scenarios.Count());
 
             var firstScenario = feature.Scenarios.First();
-            Assert.AreEqual(2, firstScenario.Tags.Count());
+            Assert.AreEqual(3, firstScenario.Tags.Count());
             Assert.AreEqual("ignore", firstScenario.Tags.First().Label);
             Assert.AreEqual("somethingElse", firstScenario.Tags.Second().Label);
+            Assert.AreEqual("category(Smoke Test)", firstScenario.Tags.Third().Label);
         }
 
         [TestMethod]
@@ -251,6 +252,15 @@ So that I can have more fun", feature.Narrative);
             Assert.AreEqual(2, feature.Tags.Count());
             Assert.AreEqual("ignore", feature.Tags.First().Label);
             Assert.AreEqual("featureTag", feature.Tags.Second().Label);
+        }
+
+        [TestMethod]
+        public void ParseCategoriesFromCategoryTags()
+        {
+            var feature = ParseResource("Tags.feature");
+            var firstScenario = feature.Scenarios.First();
+            Assert.AreEqual(1, firstScenario.Tags.CategoryNames.Count());
+            Assert.AreEqual("Smoke Test", firstScenario.Tags.CategoryNames.First());
         }
 
         [TestMethod]
