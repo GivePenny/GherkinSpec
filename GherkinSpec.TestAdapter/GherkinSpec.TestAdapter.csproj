@@ -9,7 +9,7 @@
     <Authors>GivePenny</Authors>
     <Company>GivePenny</Company>
     <Product>GherkinSpec</Product>
-    <Copyright>Copyright 2018 Raising Technology Ltd</Copyright>
+    <Copyright>Copyright 2018-2019 Raising Technology Ltd</Copyright>
     <BuildOutputTargetFolder>build</BuildOutputTargetFolder>
     <ContentTargetFolders>build/netstandard2.0</ContentTargetFolders>
     <Description>Cross-platform Gherkin test adapter for .NET Core (true .NET Standard).  Write tests in Gherkin and steps in a .NET language.  Supports dependency injection in steps classes, async/await and running tests in parallel.  Use any assertions library or unit test framework.  Needs no Visual Studio Extension or generated designer files.  See https://github.com/GivePenny/GherkinSpec.SimpleExample for an example test project.</Description>

@@ -29,6 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{288CE073-1
 		docs\Hooks.md = docs\Hooks.md
 		docs\Logging.md = docs\Logging.md
 		docs\MSTestProject.png = docs\MSTestProject.png
+		docs\Nuget-introduction.md = docs\Nuget-introduction.md
 		docs\Preview.png = docs\Preview.png
 		docs\Steps.md = docs\Steps.md
 	EndProjectSection
