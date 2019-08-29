@@ -37,7 +37,7 @@ For a complete example, see the [feature-rich example](https://github.com/GivePe
 
 This second approach can be better as it allows any messages that your test subject logs to `Microsoft.Extensions.Logging.Abstractions.ILogger` to also be captured and to be routed to the correct test case results.  This is more powerful but requires a dependency on Microsoft's logging framework (which is probably a good thing, so we created this adapter).  It also requires you to use custom dependency injection setup (see below).
 
-See the steps in the [GivePenny GherkinSpec Logging adapter](https://github.com/GivePenny/GherkinSpec.Logging/Readme.md) project.
+See the steps in the [GivePenny GherkinSpec Logging adapter](https://github.com/GivePenny/GherkinSpec.Logging/blob/master/Readme.md) project.
 
 ## Viewing the log messages from either approach
 
