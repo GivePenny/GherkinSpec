@@ -52,7 +52,6 @@ Steps 1, 2 and 5 can be speeded up by creating your test project using one of th
 
 * Make sure you add the Test SDK package to your test project, again see the csproj for the simple example (e.g. `<PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />`).  If you don't then tests won't get detected.
 * When creating a new .feature file, make sure that it is added as an Embedded Resource (see the [csproj of the simple example](https://github.com/GivePenny/GherkinSpec.SimpleExample/blob/master/GherkinSpec.SimpleExample.Tests/GherkinSpec.SimpleExample.Tests.csproj) - in Visual Studio this can also be set in the Properties pane when the file is selected).
-* When using steps from referenced assemblies, make sure that the assembly has been loaded (for example by referencing a type in that assembly: `.AddAllStepsClassesAsScoped(typeof(ReferencedAssembly.StepsClass).Assembly)`).
 
 ```xml
   <ItemGroup>
@@ -61,6 +60,7 @@ Steps 1, 2 and 5 can be speeded up by creating your test project using one of th
   </ItemGroup>
 ```
 
+* When using steps from referenced assemblies, make sure that the assembly has been loaded (for example by referencing a type in that assembly: `.AddAllStepsClassesAsScoped(typeof(ReferencedAssembly.StepsClass).Assembly)`).
 * If you keep getting .designer.cs files appear, uninstall (or disable) the SpecFlow Extension for Visual Studio or name your files .gherkin instead of .feature.
   * See the "useful links" section below for a replacement syntax highlighting extension (although the files must end in .feature )
   * After uninstalling the SpecFlow extension, feature/gherkin files can be created just by creating plain text files ending in .feature or .gherkin.  Remember to mark them as an Embedded Resource if you haven't set the catch-all in the csproj.
