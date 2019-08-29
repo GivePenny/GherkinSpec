@@ -47,7 +47,7 @@ namespace GherkinSpec.TestAdapter
                                 mappedTest => mappedTest.Id == test.Id))
                     .Where(test => test != null);
 
-                RunMappedTests(mappedTests, frameworkHandle);
+                RunMappedTests(mappedTests, frameworkHandle).Wait();
             }
             catch (Exception exception)
             {
@@ -67,7 +67,7 @@ namespace GherkinSpec.TestAdapter
             {
                 tests = TestDiscoverer.DiscoverTests(sources, frameworkHandle);
 
-                RunMappedTests(tests, frameworkHandle);
+                RunMappedTests(tests, frameworkHandle).Wait();
             }
             catch (Exception exception)
             {
@@ -79,7 +79,7 @@ namespace GherkinSpec.TestAdapter
             }
         }
 
-        private void RunMappedTests(IEnumerable<TestCase> mappedTests, IFrameworkHandle frameworkHandle)
+        private async Task RunMappedTests(IEnumerable<TestCase> mappedTests, IFrameworkHandle frameworkHandle)
         {
             frameworkHandle.SendMessage(TestMessageLevel.Informational, "Running tests");
 
@@ -97,7 +97,9 @@ namespace GherkinSpec.TestAdapter
                                 .Assembly)
                         .Distinct());
 
-                runHooks.ExecuteBeforeRun().Wait();
+                await runHooks
+                    .ExecuteBeforeRun()
+                    .ConfigureAwait(false);
 
                 var stepBinder = new StepBinder();
 
@@ -121,8 +123,13 @@ namespace GherkinSpec.TestAdapter
                         RunMappedTest(testCase, testCase.DiscoveredData(), testRunContext, stepBinder, frameworkHandle));
                 }
 
-                Task.WhenAll(tasks).Wait();
-                runHooks.ExecuteAfterRun().Wait();
+                await Task
+                    .WhenAll(tasks)
+                    .ConfigureAwait(false);
+
+                await runHooks
+                    .ExecuteAfterRun()
+                    .ConfigureAwait(false);
             }
         }
 
@@ -134,11 +141,9 @@ namespace GherkinSpec.TestAdapter
 
             var executor = new StepsExecutor(stepBinder);
 
-            // Deliberately resume on same context to try to avoid Visual Studio Test Explorer "bug" (?) that doesn't
-            // always detect the end of the test run when multiple tests are run in parallel.
             var testResult = await executor
                 .Execute(testCase, testData, testRunContext, frameworkHandle)
-                .ConfigureAwait(true);
+                .ConfigureAwait(false);
 
             // https://github.com/Microsoft/vstest/blob/master/src/Microsoft.TestPlatform.CrossPlatEngine/Adapter/TestExecutionRecorder.cs <- comments here seem to suggest that we need to call RecordEnd just before RecordResult  
             frameworkHandle.RecordEnd(testCase, testResult.Outcome);
