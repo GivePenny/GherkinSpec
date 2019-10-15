@@ -11,7 +11,9 @@ namespace GherkinSpec.TestModel
         }
 
         public IServiceProvider ServiceProvider { get; set; }
+
         public ITestLogAccessor Logger { get; }
+
         public EventualConfiguration EventualSuccess { get; } = new EventualConfiguration();
     }
 }
