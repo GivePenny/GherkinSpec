@@ -9,10 +9,8 @@ namespace GherkinSpec.Model.Parsing
     {
         public Feature Parse(string featureText)
         {
-            using (var reader = new StringReader(featureText))
-            {
-                return Parse(reader);
-            }
+            using var reader = new StringReader(featureText);
+            return Parse(reader);
         }
 
         public Feature Parse(TextReader reader)

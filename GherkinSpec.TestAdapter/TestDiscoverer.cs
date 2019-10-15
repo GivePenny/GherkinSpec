@@ -166,10 +166,8 @@ namespace GherkinSpec.TestAdapter
 
         private static string ReadResourceText(Assembly assembly, string resourceName)
         {
-            using (var reader = new StreamReader(assembly.GetManifestResourceStream(resourceName)))
-            {
-                return reader.ReadToEnd();
-            }
+            using var reader = new StreamReader(assembly.GetManifestResourceStream(resourceName));
+            return reader.ReadToEnd();
         }
 
         private static bool IsFeatureResourceName(string resourceName)

@@ -7,10 +7,8 @@ namespace GherkinSpec.Model.UnitTests
     {
         public static string GetString(string resourceName)
         {
-            using (var reader = new StreamReader(GetStream(resourceName)))
-            {
-                return reader.ReadToEnd();
-            }
+            using var reader = new StreamReader(GetStream(resourceName));
+            return reader.ReadToEnd();
         }
 
         private static Stream GetStream(string resourceName)

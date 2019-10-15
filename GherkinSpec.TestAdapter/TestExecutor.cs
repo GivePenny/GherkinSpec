@@ -85,54 +85,51 @@ namespace GherkinSpec.TestAdapter
         {
             frameworkHandle.SendMessage(TestMessageLevel.Informational, "Running tests");
 
-            using (var defaultServiceProvider = new DefaultServiceProvider())
+            using var defaultServiceProvider = new DefaultServiceProvider();
+            var testRunContext = (TestRunContext)defaultServiceProvider.GetService(typeof(TestRunContext));
+
+            var runHooks = new RunHooks(
+                testRunContext,
+                mappedTests
+                    .Select(
+                        test => test
+                            .DiscoveredData()
+                            .Assembly)
+                    .Distinct());
+
+            await runHooks
+                .ExecuteBeforeRun()
+                .ConfigureAwait(false);
+
+            var stepBinder = new StepBinder();
+
+            var tasks = new List<Task>();
+
+            foreach (var testCase in mappedTests)
             {
-                var testRunContext = (TestRunContext)defaultServiceProvider.GetService(
-                    typeof(TestRunContext));
-
-                var runHooks = new RunHooks(
-                    testRunContext,
-                    mappedTests
-                        .Select(
-                            test => test
-                                .DiscoveredData()
-                                .Assembly)
-                        .Distinct());
-
-                await runHooks
-                    .ExecuteBeforeRun()
-                    .ConfigureAwait(false);
-
-                var stepBinder = new StepBinder();
-
-                var tasks = new List<Task>();
-                
-                foreach (var testCase in mappedTests)
+                if (isCancelling)
                 {
-                    if (isCancelling)
-                    {
-                        frameworkHandle.SendMessage(TestMessageLevel.Informational, "Test run cancelled");
-                        break;
-                    }
-
-                    if (testCase.DiscoveredData().IsIgnored)
-                    {
-                        testCase.MarkAsSkipped(frameworkHandle);
-                        continue;
-                    }
-
-                    tasks.Add(
-                        RunMappedTest(testCase, testCase.DiscoveredData(), testRunContext, stepBinder, frameworkHandle));
+                    frameworkHandle.SendMessage(TestMessageLevel.Informational, "Test run cancelled");
+                    break;
                 }
 
-                await Task
-                    .WhenAll(tasks)
-                    .ConfigureAwait(false);
+                if (testCase.DiscoveredData().IsIgnored)
+                {
+                    testCase.MarkAsSkipped(frameworkHandle);
+                    continue;
+                }
 
-                await runHooks
-                    .ExecuteAfterRun()
-                    .ConfigureAwait(false);
+                tasks.Add(
+                    RunMappedTest(testCase, testCase.DiscoveredData(), testRunContext, stepBinder, frameworkHandle));
             }
+
+            await Task
+                .WhenAll(tasks)
+                .ConfigureAwait(false);
+
+            await runHooks
+                .ExecuteAfterRun()
+                .ConfigureAwait(false);
         }
 
         private async Task RunMappedTest(TestCase testCase, DiscoveredTestData testData, TestRunContext testRunContext, StepBinder stepBinder, IFrameworkHandle frameworkHandle)
