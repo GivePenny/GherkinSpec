@@ -7,12 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="FeaturesToFind\Duplicate scenario names.feature" />
     <None Remove="FeaturesToFind\FindMe.feature" />
     <None Remove="FeaturesToFind\FindMe.gherkin" />
     <None Remove="FeaturesToFind\In a folder\Find me too.feature" />
+    <None Remove="FeaturesToFind\Second duplicate scenario names file.feature" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="FeaturesToFind\Duplicate scenario names.feature" />
     <EmbeddedResource Include="FeaturesToFind\FindMe.gherkin">
       <Generator></Generator>
     </EmbeddedResource>
@@ -22,6 +25,7 @@
     <EmbeddedResource Include="FeaturesToFind\In a folder\Find me too.feature">
       <Generator></Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="FeaturesToFind\Second duplicate scenario names file.feature" />
   </ItemGroup>
 
   <ItemGroup>
