@@ -31,7 +31,7 @@ namespace GherkinSpec.TestAdapter
                     .Select(test => test.Source)
                     .Distinct();
 
-                var testsMappedToScenarios = TestDiscoverer
+                var testsMappedToScenarios = new TestDiscoverer()
                     .DiscoverTests(sources, frameworkHandle)
                     .ToArray();
 
@@ -65,7 +65,9 @@ namespace GherkinSpec.TestAdapter
 
             try
             {
-                tests = TestDiscoverer.DiscoverTests(sources, frameworkHandle);
+                tests = new TestDiscoverer()
+                    .DiscoverTests(sources, frameworkHandle)
+                    .ToArray();
 
                 RunMappedTests(tests, frameworkHandle).Wait();
             }
