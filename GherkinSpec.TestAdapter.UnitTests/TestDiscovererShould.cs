@@ -11,9 +11,9 @@ namespace GherkinSpec.TestAdapter.UnitTests
     public class TestDiscovererShould
     {
         [TestMethod]
-        public void GracefullyHandleDuplicateScenarioNames()
+        public void GracefullyHandleDuplicateScenarioNamesInASource()
         {
-            var testCaseDiscoverySink = new TestCaseDiscoverySink();
+            var testCaseDiscoverySink = new MockTestCaseDiscoverySink();
             new TestDiscoverer().DiscoverTests(
                 new[]
                 {
@@ -40,26 +40,6 @@ namespace GherkinSpec.TestAdapter.UnitTests
                 testCaseDiscoverySink.DiscoveredTests.Count(
                     t => t.FullyQualifiedName == "Duplicate scenario (3)"
                         && t.DisplayName == "Duplicate scenario (3)"));
-        }
-
-        private class NullMessageLogger : IMessageLogger
-        {
-            public void SendMessage(TestMessageLevel testMessageLevel, string message)
-            {
-            }
-        }
-
-        private class TestCaseDiscoverySink : ITestCaseDiscoverySink
-        {
-            private readonly List<TestCase> discoveredTests = new List<TestCase>();
-
-            public IReadOnlyList<TestCase> DiscoveredTests
-                => discoveredTests.AsReadOnly();
-
-            public void SendTestCase(TestCase discoveredTest)
-            {
-                discoveredTests.Add(discoveredTest);
-            }
         }
     }
 }
