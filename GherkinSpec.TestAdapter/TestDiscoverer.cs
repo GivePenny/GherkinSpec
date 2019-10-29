@@ -17,9 +17,6 @@ namespace GherkinSpec.TestAdapter
     [FileExtension(".exe")]
     public class TestDiscoverer : ITestDiscoverer
     {
-        private readonly HashSet<string> discoveredFullyQualifiedTestNames = new HashSet<string>();
-        private readonly Regex uniqueTestCaseSuffixRegex = new Regex(" \\((\\d+)\\)$");
-
         public void DiscoverTests(
             IEnumerable<string> sources,
             IDiscoveryContext discoveryContext,
@@ -36,9 +33,10 @@ namespace GherkinSpec.TestAdapter
         {
             foreach (var source in sources)
             {
+                var uniqueTestCaseNameResolver = new UniqueTestCaseNameResolver();
                 foreach (var testCase in DiscoverTests(source, logger))
                 {
-                    EnsureTestCaseNameIsUnique(testCase);
+                    uniqueTestCaseNameResolver.EnsureTestCaseNameIsUnique(testCase);
                     yield return testCase;
                 }
             }
@@ -177,36 +175,5 @@ namespace GherkinSpec.TestAdapter
         private static bool IsFeatureResourceName(string resourceName)
             => resourceName.EndsWith(".feature")
                 || resourceName.EndsWith(".gherkin");
-
-        private void EnsureTestCaseNameIsUnique(TestCase testCase)
-        {
-            if (!discoveredFullyQualifiedTestNames.Contains(testCase.FullyQualifiedName))
-            {
-                discoveredFullyQualifiedTestNames.Add(testCase.FullyQualifiedName);
-                return;
-            }
-
-            var distinctTestCaseSuffixMatch = uniqueTestCaseSuffixRegex.Match(testCase.FullyQualifiedName);
-            if (!distinctTestCaseSuffixMatch.Success)
-            {
-                testCase.FullyQualifiedName += " (2)";
-                testCase.DisplayName += " (2)";
-            }
-            else
-            {
-                var nextDistinctTestCaseCounterValue = int.Parse(distinctTestCaseSuffixMatch.Groups[1].Value) + 1;
-
-                testCase.FullyQualifiedName = uniqueTestCaseSuffixRegex.Replace(
-                    testCase.FullyQualifiedName,
-                    $" ({nextDistinctTestCaseCounterValue})");
-
-                testCase.DisplayName = uniqueTestCaseSuffixRegex.Replace(
-                    testCase.DisplayName,
-                    $" ({nextDistinctTestCaseCounterValue})");
-            }
-
-            EnsureTestCaseNameIsUnique(testCase);
-            return;
-        }
     }
 }
