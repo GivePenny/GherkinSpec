@@ -52,8 +52,8 @@ phases:
           versioningScheme: byBuildNumber
           verbosityPack: Normal
       
-      - task: NuGetCommand@2
-        displayName: 'NuGet push'
+      - task: DotNetCoreCLI@2
+        displayName: 'dotnet push'
         inputs:
           command: push
           nuGetFeedType: external
