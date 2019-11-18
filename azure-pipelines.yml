@@ -20,14 +20,9 @@ phases:
       name: Private Linux
 
     steps:
-
-      - task: NuGetToolInstaller@0
-        displayName: 'Use NuGet tooling'
-      
-      - task: DotNetCoreInstaller@0
-        displayName: 'Use .NET Core sdk 2.2.101'
+      - task: NuGetAuthenticate@0
         inputs:
-          version: 2.2.101
+          nuGetServiceConnections: 'GivePenny Nuget'
 
       - task: DotNetCoreCLI@2
         displayName: 'Build'
