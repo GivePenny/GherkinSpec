@@ -17,7 +17,7 @@ Published package: https://www.nuget.org/packages/GivePenny.GherkinSpec.TestAdap
 
 ## Getting started
 
-**If you're upgrading to a new major version (e.g. 1.x to 2.0) please read [the changelog]()**
+**If you're upgrading to a new major version (e.g. 1.x to 2.0) please read [the changelog](Changelog.md)**
 
 The best way to pick GherkinSpec up is to see [the simple example repository](https://github.com/GivePenny/GherkinSpec.SimpleExample), download the code and just try it out.
 
