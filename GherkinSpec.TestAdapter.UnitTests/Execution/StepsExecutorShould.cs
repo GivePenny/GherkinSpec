@@ -64,14 +64,16 @@ namespace GherkinSpec.TestAdapter.UnitTests.Execution
 
             var testData = new DiscoveredTestData(testAssembly, testFeature, null, testFeature.Scenarios.First());
 
+            string capturedCultureName = null;
             var mockScenarioStepMapping = new Mock<IStepBinding>();
             mockStepBinder
                 .Setup(m => m.GetBindingFor(scenarioStep, testAssembly))
-                .Returns(mockScenarioStepMapping.Object);
+                .Returns(mockScenarioStepMapping.Object)
+                .Callback(() => capturedCultureName = CultureInfo.CurrentUICulture.Name);
 
             var testResult = await stepsExecutor.Execute(testCase, testData, testRunContext, mockLogger.Object);
 
-            Assert.AreEqual("nb-NO", CultureInfo.CurrentUICulture.Name);
+            Assert.AreEqual("nb-NO", capturedCultureName);
         }
 
         [TestMethod]
