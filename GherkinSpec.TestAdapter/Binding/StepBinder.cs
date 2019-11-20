@@ -3,6 +3,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -175,6 +176,6 @@ namespace GherkinSpec.TestAdapter.Binding
         private static object ConvertValue(string value, Type targetType)
             => TypeDescriptor
                 .GetConverter(targetType)
-                .ConvertFromString(value);
+                .ConvertFromString(null, CultureInfo.CurrentUICulture, value);
     }
 }

@@ -10,6 +10,12 @@ namespace GherkinSpec.TestAdapter.UnitTests.Binding
     [TestClass]
     public class StepBinderShould
     {
+        [TestInitialize]
+        public void Setup()
+        {
+            CultureInfo.CurrentUICulture = CultureInfo.InvariantCulture;
+        }
+
         [TestMethod]
         public void FindMethodWithPlainTextGiven()
         {
@@ -45,14 +51,17 @@ namespace GherkinSpec.TestAdapter.UnitTests.Binding
         public void FindMethodWithSingleDateTimeArgumentUsingInvariantCulture()
         {
             CultureInfo.CurrentUICulture = CultureInfo.InvariantCulture;
-            FindMethodWithSingleArgument("1/2/2100", new DateTime(2100,2,1));
+            FindMethodWithSingleArgument("1/2/2100", new DateTime(2100, 1, 2));
         }
 
-        [TestMethod]
-        public void FindMethodWithSingleDateTimeArgumentUsingSpecificCulture()
+        [DataTestMethod]
+        [DataRow("nb-NO", "1.2.2100")]
+        [DataRow("en-US", "2/1/2100")]
+        [DataRow("en-GB", "1/2/2100")]
+        public void FindMethodWithSingleDateTimeArgumentUsingSpecificCulture(string cultureCode, string correctDate)
         {
-            CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("nb-NO");
-            FindMethodWithSingleArgument("1.2.2100", new DateTime(2100, 2, 1));
+            CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(cultureCode);
+            FindMethodWithSingleArgument(correctDate, new DateTime(2100, 2, 1));
         }
 
         private void FindMethodWithSingleArgument<TArgumentType>(string stepValue, TArgumentType expectedArgumentValue)
