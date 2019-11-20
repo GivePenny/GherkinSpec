@@ -57,13 +57,14 @@ Feature: Feature title
 
 The following culture codes are fully supported today (Gherkin can be written in these languages):
 
-Code | Culture
------|--------
-en   | English (United States)
-en-GB| English (United Kingdom)
-en-US| English (United States)
-nb-NO| Norwegian
+Code  | Language | Country (defines cultural rules for parsing dates, times, numbers)
+------|----------|-------------------------------------------------------------------
+en    | English  | Neutral
+en-GB | English  | United Kingdom
+en-US | English  | United States
+nb    | Bokmål  | Neutral
+nb-NO | Bokmål  | Norway
 
-Additionally, any other culture code that is recognised by .NET Core is partially supported.  For partially supported cultures, GherkinSpec will accept that culture code so that dates, times and numbers can be written in the desired culture and parsed correctly.  Localised phrases and translations for keywords such as `Feature` aren't implemented for these cultures though and will fallback to English (United States).  This means that Features and Scenarios should be written in English if the culture-code you'd like to use isn't listed above.
+Additionally, [any other culture code that is recognised by .NET Core](https://lonewolfonline.net/list-net-culture-country-codes/) is partially supported.  For partially supported cultures, GherkinSpec will accept that culture code so that dates, times and numbers can be written in the desired culture and parsed correctly.  Localised phrases and translations for keywords such as `Feature` aren't implemented for these cultures though and will fallback to English (Neutral).  This means that Features and Scenarios should be written in English if the culture-code you'd like to use isn't listed above.
 
 Full support for more cultures is planned.  Please raise an issue on our GitHub issues list if you need a culture quickly.
