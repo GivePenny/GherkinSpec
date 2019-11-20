@@ -1,8 +1,8 @@
 using GherkinSpec.Model;
 using GherkinSpec.TestAdapter.Binding;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+using System;
+using System.Globalization;
 using System.Reflection;
 
 namespace GherkinSpec.TestAdapter.UnitTests.Binding
@@ -40,6 +40,20 @@ namespace GherkinSpec.TestAdapter.UnitTests.Binding
         [TestMethod]
         public void FindMethodWithSingleBooleanArgumentOfFalseAndCaseInsensitive()
             => FindMethodWithSingleArgument("fAlse", false);
+
+        [TestMethod]
+        public void FindMethodWithSingleDateTimeArgumentUsingInvariantCulture()
+        {
+            CultureInfo.CurrentUICulture = CultureInfo.InvariantCulture;
+            FindMethodWithSingleArgument("1/2/2100", new DateTime(2100,2,1));
+        }
+
+        [TestMethod]
+        public void FindMethodWithSingleDateTimeArgumentUsingSpecificCulture()
+        {
+            CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("nb-NO");
+            FindMethodWithSingleArgument("1.2.2100", new DateTime(2100, 2, 1));
+        }
 
         private void FindMethodWithSingleArgument<TArgumentType>(string stepValue, TArgumentType expectedArgumentValue)
         {

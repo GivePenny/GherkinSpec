@@ -11,6 +11,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -39,6 +40,38 @@ namespace GherkinSpec.TestAdapter.UnitTests.Execution
                 new Mock<ITestLogAccessor>().Object);
 
             testRunContext.EventualSuccess.DelayBetweenAttempts = TimeSpan.FromMilliseconds(250);
+        }
+
+        [TestMethod]
+        public async Task SetThreadUICultureToMatchFeatureCulture()
+        {
+            var scenarioStep = new GivenStep("Scenario step", DataTable.Empty, null);
+            var testFeature = new Feature("Feature", null,
+                Background.Empty,
+                new[]
+                {
+                    new Scenario(
+                        "Scenario",
+                        new[] { scenarioStep },
+                        1,
+                        Enumerable.Empty<Tag>())
+                },
+                Enumerable.Empty<ScenarioOutline>(),
+                Enumerable.Empty<Rule>(),
+                new[] {
+                    new Tag("culture(nb-NO)")
+                });
+
+            var testData = new DiscoveredTestData(testAssembly, testFeature, null, testFeature.Scenarios.First());
+
+            var mockScenarioStepMapping = new Mock<IStepBinding>();
+            mockStepBinder
+                .Setup(m => m.GetBindingFor(scenarioStep, testAssembly))
+                .Returns(mockScenarioStepMapping.Object);
+
+            var testResult = await stepsExecutor.Execute(testCase, testData, testRunContext, mockLogger.Object);
+
+            Assert.AreEqual("nb-NO", CultureInfo.CurrentUICulture.Name);
         }
 
         [TestMethod]

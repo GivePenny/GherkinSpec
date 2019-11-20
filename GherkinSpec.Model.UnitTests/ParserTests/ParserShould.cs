@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 
-namespace GherkinSpec.Model.UnitTests
+namespace GherkinSpec.Model.UnitTests.ParserTests
 {
     [TestClass]
     public class ParserShould

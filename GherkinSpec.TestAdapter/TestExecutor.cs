@@ -86,7 +86,7 @@ namespace GherkinSpec.TestAdapter
             frameworkHandle.SendMessage(TestMessageLevel.Informational, "Running tests");
 
             using var defaultServiceProvider = new DefaultServiceProvider();
-            var testRunContext = (TestRunContext)defaultServiceProvider.GetService(typeof(TestRunContext));
+            var testRunContext = defaultServiceProvider.GetService<TestRunContext>();
 
             var runHooks = new RunHooks(
                 testRunContext,

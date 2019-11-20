@@ -1,4 +1,5 @@
 ﻿using GherkinSpec.Model;
+using GherkinSpec.Model.Parsing;
 using GherkinSpec.TestAdapter.Binding;
 using GherkinSpec.TestModel;
 using Microsoft.Extensions.DependencyInjection;
@@ -50,6 +51,8 @@ namespace GherkinSpec.TestAdapter.Execution
                 }
                 else
                 {
+                    Localisation.SetUICultureFromTag(testData.Feature.Tags);
+
                     using (var serviceScope = testRunContext.ServiceProvider.CreateScope())
                     {
                         // Before Scenario hooks should run here (see https://docs.cucumber.io/gherkin/reference/#background)

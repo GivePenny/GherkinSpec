@@ -17,6 +17,8 @@ Published package: https://www.nuget.org/packages/GivePenny.GherkinSpec.TestAdap
 
 ## Getting started
 
+**If you're upgrading to a new major version (e.g. 1.x to 2.0) please read [the changelog]()**
+
 The best way to pick GherkinSpec up is to see [the simple example repository](https://github.com/GivePenny/GherkinSpec.SimpleExample), download the code and just try it out.
 
 If you want to create a new test project from scratch ...
@@ -47,6 +49,7 @@ Steps 1, 2 and 5 can be speeded up by creating your test project using one of th
 * Support for the full Gherkin syntax, including tables and doc-strings
 * Easy logging from within steps.
 * Support for clear tests of eventually consistent services via `[EventuallySucceeds]` attribute
+* Globalisation - supports specifications written in multiple languages
 
 ## Gotchas
 
@@ -72,12 +75,14 @@ Steps 1, 2 and 5 can be speeded up by creating your test project using one of th
 * [Feature-rich example repository](https://github.com/GivePenny/GherkinSpec.ComplexExample)
 
 ## Reference guide / concepts
+
 * [Feature discovery](docs/Feature-Discovery.md)
 * [Steps classes](docs/Steps.md)
 * [Before/after hooks](docs/Hooks.md)
 * [Dependency injection](docs/DependencyInjection.md)
 * [Logging](docs/Logging.md)
 * [Eventually-consistent service support](docs/EventuallyConsistentServices.md)
+* [Localisation](docs/Localisation.md)
 
 ## Third-party references and useful links
 
