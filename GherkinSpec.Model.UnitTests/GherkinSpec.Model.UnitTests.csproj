@@ -12,10 +12,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Resources\EventuallyConsistentScenario.feature" />
+    <None Remove="Resources\Localisation\Default culture.feature" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Resources\EventuallyConsistentScenario.feature" />
+    <EmbeddedResource Include="Resources\Localisation\Default culture.feature" />
+    <EmbeddedResource Include="Resources\Localisation\Feature.feature" />
   </ItemGroup>
 
   <ItemGroup>

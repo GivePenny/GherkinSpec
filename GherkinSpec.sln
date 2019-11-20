@@ -16,6 +16,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DB88CEF1-AA2C-44B1-9E92-98C4BF1C3FF0}"
 	ProjectSection(SolutionItems) = preProject
 		azure-pipelines.yml = azure-pipelines.yml
+		Changelog.md = Changelog.md
 		Licence.md = Licence.md
 		Readme.md = Readme.md
 	EndProjectSection
@@ -27,6 +28,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{288CE073-1
 		docs\EventuallyConsistentServices.md = docs\EventuallyConsistentServices.md
 		docs\Feature-Discovery.md = docs\Feature-Discovery.md
 		docs\Hooks.md = docs\Hooks.md
+		docs\Localisation.md = docs\Localisation.md
 		docs\Logging.md = docs\Logging.md
 		docs\MSTestProject.png = docs\MSTestProject.png
 		docs\Nuget-introduction.md = docs\Nuget-introduction.md

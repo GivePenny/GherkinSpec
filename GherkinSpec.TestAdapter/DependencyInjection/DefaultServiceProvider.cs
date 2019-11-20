@@ -43,6 +43,9 @@ namespace GherkinSpec.TestAdapter.DependencyInjection
                 instantiateIfNotFound: true,
                 permitOuterScopeSearch: true);
 
+        public T GetService<T>()
+            => (T)GetService(typeof(T));
+
         private object GetService(Type serviceType, List<Type> typesInStack, bool instantiateIfNotFound, bool permitOuterScopeSearch)
         {
             var builtInResult = TryGetBuiltInService(serviceType, typesInStack, instantiateIfNotFound, permitOuterScopeSearch);

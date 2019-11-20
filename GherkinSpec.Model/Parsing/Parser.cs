@@ -22,6 +22,8 @@ namespace GherkinSpec.Model.Parsing
 
             var featureTags = TagParser.ParseTagsIfPresent(reader);
 
+            Localisation.SetUICultureFromTag(featureTags);
+
             if (!reader.IsFeatureStartLine)
             {
                 throw new InvalidGherkinSyntaxException(

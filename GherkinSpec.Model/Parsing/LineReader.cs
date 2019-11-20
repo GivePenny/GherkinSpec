@@ -4,19 +4,32 @@ namespace GherkinSpec.Model.Parsing
 {
     class LineReader
     {
-        private const string FeatureLineStart = "Feature:";
-        private const string RuleLineStart = "Rule:";
-        private const string BackgroundLineStart = "Background:";
-        private const string ScenarioLineStart = "Scenario:";
-        private const string ScenarioOutlineLineStart = "Scenario Outline:";
-        private const string ExampleLineStart = "Example:";
-        private const string ExamplesLine = "Examples:";
-        public const string GivenLineStart = "Given ";
-        public const string WhenLineStart = "When ";
-        public const string ThenLineStart = "Then ";
-        private const string AndLineStart = "And ";
-        private const string ButLineStart = "But ";
+        private string FeatureLineStart => Resources.FeatureKeyword + ":";
+
+        private string RuleLineStart => Resources.RuleKeyword + ":";
+
+        private string BackgroundLineStart => Resources.BackgroundKeyword + ":";
+
+        private string ScenarioLineStart => Resources.ScenarioKeyword + ":";
+
+        private string ScenarioOutlineLineStart => Resources.ScenarioOutlineKeyword + ":";
+
+        private string ExampleLineStart => Resources.ExampleKeyword + ":";
+
+        private string ExamplesLine => Resources.ExamplesKeyword + ":";
+
+        public string GivenLineStart => Resources.GivenKeyword + " ";
+
+        public string WhenLineStart => Resources.WhenKeyword + " ";
+
+        public string ThenLineStart => Resources.ThenKeyword + " ";
+
+        private string AndLineStart => Resources.AndKeyword + " ";
+
+        private string ButLineStart => Resources.ButKeyword + " ";
+
         private const string TagLineStart = "@";
+
         private const string MultiLineStringLineStart = "\"\"\"";
 
         private readonly TextReader textReader;
@@ -27,7 +40,9 @@ namespace GherkinSpec.Model.Parsing
         }
 
         public string CurrentLineTrimmed { get; private set; }
+
         public string CurrentLineUntrimmed { get; private set; }
+
         public int CurrentLineNumber { get; private set; }
 
         public bool ReadNextLine()
