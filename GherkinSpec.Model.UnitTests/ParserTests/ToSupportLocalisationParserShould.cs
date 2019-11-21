@@ -24,6 +24,37 @@ namespace GherkinSpec.Model.UnitTests.ParserTests
             Assert.AreEqual(string.Empty, CultureInfo.CurrentUICulture.Name);
         }
 
+        [TestMethod]
+        public void ReadLocalisedScenarios()
+        {
+            var feature = ParseResource("Localisation.Feature.feature");
+
+            Assert.AreEqual(1, feature.Scenarios.Count());
+        }
+
+        [TestMethod]
+        public void ReadLocalisedScenarioStepTypes()
+        {
+            var feature = ParseResource("Localisation.Feature.feature");
+
+            var steps = feature.Scenarios.First().Steps;
+            Assert.AreEqual(3, steps.Count);
+            Assert.IsInstanceOfType(steps.First(), typeof(GivenStep));
+            Assert.IsInstanceOfType(steps.Second(), typeof(WhenStep));
+            Assert.IsInstanceOfType(steps.Third(), typeof(ThenStep));
+        }
+
+        [TestMethod]
+        public void ParseLocalisedScenarioStepTitles()
+        {
+            var feature = ParseResource("Localisation.Feature.feature");
+
+            var steps = feature.Scenarios.First().Steps;
+            Assert.AreEqual("given", steps.First().TitleAfterType);
+            Assert.AreEqual("when", steps.Second().TitleAfterType);
+            Assert.AreEqual("then", steps.Third().TitleAfterType);
+        }
+
         private Feature ParseResource(string resourceName)
             => new Parser().Parse(
                 Resources.GetString(resourceName));

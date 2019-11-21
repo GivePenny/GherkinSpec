@@ -75,7 +75,7 @@ namespace GherkinSpec.TestAdapter.Binding
                 if (candidate != null)
                 {
                     throw new StepBindingException(
-                        $"Found more than one step definitions matching the step '{step.Title}'. One was '{candidate.FullName}' and another was '{mapping.FullName}'. There may be more but the search was stopped here.");
+                        $"Found more than one step definitions matching the step '{step.Title}' of type '{step.GetType().Name}'. One was '{candidate.FullName}' and another was '{mapping.FullName}'. There may be more but the search was stopped here.");
                 }
 
                 candidate = mapping;
@@ -84,7 +84,7 @@ namespace GherkinSpec.TestAdapter.Binding
             if (candidate == null)
             {
                 throw new StepBindingException(
-                    $"Could not find a step definition to match the step '{step.Title}'.");
+                    $"Could not find a step definition to match the step '{step.Title}' (step type is a '{step.GetType().Name}').");
             }
 
             return candidate;
