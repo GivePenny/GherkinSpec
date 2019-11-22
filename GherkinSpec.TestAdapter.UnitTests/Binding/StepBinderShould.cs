@@ -55,20 +55,20 @@ namespace GherkinSpec.TestAdapter.UnitTests.Binding
         }
 
         [DataTestMethod]
-        [DataRow("nb-NO", "1.2.2100")]
-        [DataRow("en-US", "2/1/2100")]
-        [DataRow("en-GB", "1/2/2100")]
-        public void FindMethodWithSingleDateTimeArgumentUsingSpecificCulture(string cultureCode, string correctDate)
+        [DataRow("nb-NO", "1.2.2100", "Gitt")]
+        [DataRow("en-US", "2/1/2100", "Given")]
+        [DataRow("en-GB", "1/2/2100", "Given")]
+        public void FindMethodWithSingleDateTimeArgumentUsingSpecificCulture(string cultureCode, string correctDate, string localisedGivenLabel)
         {
             CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(cultureCode);
-            FindMethodWithSingleArgument(correctDate, new DateTime(2100, 2, 1));
+            FindMethodWithSingleArgument(correctDate, new DateTime(2100, 2, 1), localisedGivenLabel);
         }
 
-        private void FindMethodWithSingleArgument<TArgumentType>(string stepValue, TArgumentType expectedArgumentValue)
+        private void FindMethodWithSingleArgument<TArgumentType>(string stepValue, TArgumentType expectedArgumentValue, string localisedGivenLabel = "Given")
         {
             var mapper = new StepBinder();
             var mapping = mapper.GetBindingFor(
-                new GivenStep($"Given a single {typeof(TArgumentType).Name} match of {stepValue}", DataTable.Empty, null),
+                new GivenStep($"{localisedGivenLabel} a single {typeof(TArgumentType).Name} match of {stepValue}", DataTable.Empty, null),
                 Assembly.GetExecutingAssembly());
 
             Assert.AreEqual($"GivenASingle{typeof(TArgumentType).Name}Match", mapping.Name);
