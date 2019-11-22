@@ -22,6 +22,8 @@ namespace GherkinSpec.Model
 
         public static string GivenKeyword => resourceManager.GetString(nameof(GivenKeyword));
 
+        public static string[] IgnoreTagKeywords => resourceManager.GetString(nameof(IgnoreTagKeywords)).Split(';');
+
         public static string RuleKeyword => resourceManager.GetString(nameof(RuleKeyword));
 
         public static string ScenarioKeyword => resourceManager.GetString(nameof(ScenarioKeyword));
