@@ -38,10 +38,12 @@ namespace GherkinSpec.Model.UnitTests.ParserTests
             var feature = ParseResource("Localisation.Feature.feature");
 
             var steps = feature.Scenarios.First().Steps;
-            Assert.AreEqual(3, steps.Count);
+            Assert.AreEqual(5, steps.Count);
             Assert.IsInstanceOfType(steps.First(), typeof(GivenStep));
             Assert.IsInstanceOfType(steps.Second(), typeof(WhenStep));
             Assert.IsInstanceOfType(steps.Third(), typeof(ThenStep));
+            Assert.IsInstanceOfType(steps.Fourth(), typeof(ThenStep));
+            Assert.IsInstanceOfType(steps.Fifth(), typeof(ThenStep));
         }
 
         [TestMethod]
@@ -53,6 +55,8 @@ namespace GherkinSpec.Model.UnitTests.ParserTests
             Assert.AreEqual("given", steps.First().TitleAfterType);
             Assert.AreEqual("when", steps.Second().TitleAfterType);
             Assert.AreEqual("then", steps.Third().TitleAfterType);
+            Assert.AreEqual("and", steps.Fourth().TitleAfterType);
+            Assert.AreEqual("but", steps.Fifth().TitleAfterType);
         }
 
         private Feature ParseResource(string resourceName)

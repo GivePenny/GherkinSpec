@@ -5,3 +5,5 @@ Egenskap: Localised feature title
 	Gitt given
 	Når when
 	Så then
+	Og and
+	Men but
