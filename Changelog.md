@@ -9,4 +9,4 @@
 
 ### Changed
 
-* **BREAKING CHANGE**: Feature files now default to "the invariant culture" meaning that dates and numbers will be parsed according to UK English rules and a timezone of UTC. This [can be changed per-feature-file](docs/Localisation.md).
+* **BREAKING CHANGE**: Feature files now default to "the invariant culture" meaning that dates and numbers will be parsed according to US English rules and a timezone of UTC.  To keep your current tests working as they did, add a `@culture(...)` tag to the top of each file as per this [Localisation guide](docs/Localisation.md).

@@ -36,14 +36,8 @@ namespace GherkinSpec.Model
 
         public bool IsIgnored
             => Tags.Any(
-                tag =>
-                    string.Equals(
-                        tag.Label,
-                        "ignored",
-                        StringComparison.OrdinalIgnoreCase)
-                    || string.Equals(
-                        tag.Label,
-                        "ignore",
-                        StringComparison.OrdinalIgnoreCase));
+                tag => Localisation.IsLocalisedValue(
+                    tag.Label,
+                    Resources.IgnoreTagKeywords));
     }
 }

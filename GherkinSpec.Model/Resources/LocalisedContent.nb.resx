@@ -138,6 +138,9 @@
   <data name="GivenKeyword" xml:space="preserve">
     <value>Gitt</value>
   </data>
+  <data name="IgnoreTagKeywords" xml:space="preserve">
+    <value>ignorere;ignorert</value>
+  </data>
   <data name="RuleKeyword" xml:space="preserve">
     <value>Regel</value>
   </data>

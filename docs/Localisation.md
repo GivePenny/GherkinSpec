@@ -4,6 +4,8 @@
 
 By default, GherkinSpec expects Feature files to be written in English following standard culture-neutral conventions.  For example, keywords such as `Feature` and `Scenario` should be exactly those words.  Dates, times and numbers follow `MM/DD/YYYY`, UTC time zone and `1,234.56` conventions respectively.  This can be changed by adding a `@culture(xx-XX)` tag to the feature, where `xx-XX` is a culture and language code.  Supported culture codes are listed below.
 
+The `@culture(...)` tag does not need to be the first tag on the feature.
+
 ## How to Create a Feature for a Specific Culture
 
 This example shows a Norwegian feature file, notice that the `culture()` tag can itself be localised.
