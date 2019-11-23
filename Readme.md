@@ -86,6 +86,7 @@ Steps 1, 2 and 5 can be speeded up by creating your test project using one of th
 
 ## Third-party references and useful links
 
+* [Credits and contributors](docs/Credits.md)
 * [Full Gherkin syntax](https://docs.cucumber.io/gherkin/reference/)
 * Visual Studio Code Gherkin syntax highlighting and templating extensions:
   * [Steve Purves' extension](https://marketplace.visualstudio.com/items?itemName=stevejpurves.cucumber)
