@@ -10,9 +10,9 @@ This hook identifies a method that runs once before the whole test run.
 
 The method must be `public static` and must take exactly one argument of type `TestRunContext`.  It can have a `void` return type, or `async Task`.
 
-Typically this method is used to set up Dependency Injection and to load configuration.
+Typically this method is used to set up Dependency Injection and to load configuration.  See the [Configuration Reference](Configuration.md) article for configuration detail.
 
-For a more complete example, see the [feature-rich example code](https://github.com/GivePenny/GherkinSpec.ComplexExample)
+For a more complete example of a BeforeRun hook, see the [feature-rich example code](https://github.com/GivePenny/GherkinSpec.ComplexExample)
 
 Example:
 

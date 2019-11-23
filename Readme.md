@@ -83,6 +83,7 @@ Steps 1, 2 and 5 can be speeded up by creating your test project using one of th
 * [Logging](docs/Logging.md)
 * [Eventually-consistent service support](docs/EventuallyConsistentServices.md)
 * [Localisation](docs/Localisation.md)
+* [Configuration reference](docs/Configuration.md)
 
 ## Third-party references and useful links
 
