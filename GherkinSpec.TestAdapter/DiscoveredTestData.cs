@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace GherkinSpec.TestAdapter
 {
-    class DiscoveredTestData
+    public class DiscoveredTestData
     {
         public DiscoveredTestData(Assembly assembly, Feature feature, Rule rule, Scenario scenario)
         {
@@ -14,8 +14,11 @@ namespace GherkinSpec.TestAdapter
         }
 
         public Assembly Assembly { get; }
+
         public Feature Feature { get; }
+
         public Rule Rule { get; }
+
         public Scenario Scenario { get; }
 
         public bool IsIgnored

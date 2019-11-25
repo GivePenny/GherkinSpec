@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using System.Collections.Generic;
 
-namespace GherkinSpec.TestAdapter.UnitTests
+namespace GherkinSpec.TestAdapter.UnitTests.Mocks
 {
     class MockTestCaseDiscoverySink : ITestCaseDiscoverySink
     {

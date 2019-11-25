@@ -1,5 +1,4 @@
 ﻿using GherkinSpec.Model;
-using GherkinSpec.Model.Parsing;
 using GherkinSpec.TestAdapter.Binding;
 using GherkinSpec.TestModel;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace GherkinSpec.TestAdapter.Execution
 {
-    internal class StepsExecutor
+    internal class StepsExecutor : IStepsExecutor
     {
         public const string StepLogIndent = "  ";
 
