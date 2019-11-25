@@ -15,5 +15,7 @@ namespace GherkinSpec.TestModel
         public ITestLogAccessor Logger { get; }
 
         public EventualConfiguration EventualSuccess { get; } = new EventualConfiguration();
+
+        public int MaximumSimultaneousTestCases { get; set; } = 10;
     }
 }

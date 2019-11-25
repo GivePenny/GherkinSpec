@@ -1,5 +1,4 @@
-﻿using GherkinSpec.TestAdapter.Binding;
-using GherkinSpec.TestAdapter.DependencyInjection;
+﻿using GherkinSpec.TestAdapter.DependencyInjection;
 using GherkinSpec.TestAdapter.Execution;
 using GherkinSpec.TestModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
@@ -8,6 +7,7 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GherkinSpec.TestAdapter
@@ -18,10 +18,10 @@ namespace GherkinSpec.TestAdapter
         public const string ExecutorUri = "executor://GherkinSpec";
         public static readonly Uri ExecutorUriStronglyTyped = new Uri(ExecutorUri);
 
-        private bool isCancelling;
+        private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
         public void Cancel()
-            => isCancelling = true;
+            => cancellationTokenSource.Cancel();
 
         public void RunTests(IEnumerable<TestCase> tests, IRunContext runContext, IFrameworkHandle frameworkHandle)
         {
@@ -47,7 +47,8 @@ namespace GherkinSpec.TestAdapter
                                 mappedTest => mappedTest.Id == test.Id))
                     .Where(test => test != null);
 
-                RunMappedTests(mappedTests, frameworkHandle).Wait();
+                RunTestCases(mappedTests, frameworkHandle)
+                    .Wait();
             }
             catch (Exception exception)
             {
@@ -69,7 +70,8 @@ namespace GherkinSpec.TestAdapter
                     .DiscoverTests(sources, frameworkHandle)
                     .ToArray();
 
-                RunMappedTests(tests, frameworkHandle).Wait();
+                RunTestCases(tests, frameworkHandle)
+                    .Wait();
             }
             catch (Exception exception)
             {
@@ -81,74 +83,18 @@ namespace GherkinSpec.TestAdapter
             }
         }
 
-        private async Task RunMappedTests(IEnumerable<TestCase> mappedTests, IFrameworkHandle frameworkHandle)
+        private async Task RunTestCases(IEnumerable<TestCase> mappedTests, IFrameworkHandle frameworkHandle)
         {
-            frameworkHandle.SendMessage(TestMessageLevel.Informational, "Running tests");
-
             using var defaultServiceProvider = new DefaultServiceProvider();
             var testRunContext = defaultServiceProvider.GetService<TestRunContext>();
 
-            var runHooks = new RunHooks(
+            var testCaseExecutor = new TestCaseExecutor(
                 testRunContext,
-                mappedTests
-                    .Select(
-                        test => test
-                            .DiscoveredData()
-                            .Assembly)
-                    .Distinct());
+                stepsBinder => new StepsExecutor(stepsBinder));
 
-            await runHooks
-                .ExecuteBeforeRun()
+            await testCaseExecutor
+                .RunTestCases(mappedTests, frameworkHandle, cancellationTokenSource.Token)
                 .ConfigureAwait(false);
-
-            var stepBinder = new StepBinder();
-
-            var tasks = new List<Task>();
-
-            foreach (var testCase in mappedTests)
-            {
-                if (isCancelling)
-                {
-                    frameworkHandle.SendMessage(TestMessageLevel.Informational, "Test run cancelled");
-                    break;
-                }
-
-                if (testCase.DiscoveredData().IsIgnored)
-                {
-                    testCase.MarkAsSkipped(frameworkHandle);
-                    continue;
-                }
-
-                tasks.Add(
-                    RunMappedTest(testCase, testCase.DiscoveredData(), testRunContext, stepBinder, frameworkHandle));
-            }
-
-            await Task
-                .WhenAll(tasks)
-                .ConfigureAwait(false);
-
-            await runHooks
-                .ExecuteAfterRun()
-                .ConfigureAwait(false);
-        }
-
-        private async Task RunMappedTest(TestCase testCase, DiscoveredTestData testData, TestRunContext testRunContext, StepBinder stepBinder, IFrameworkHandle frameworkHandle)
-        {
-            frameworkHandle.SendMessage(TestMessageLevel.Informational, $"Starting test \"{testCase.DisplayName}\"");
-
-            frameworkHandle.RecordStart(testCase);
-
-            var executor = new StepsExecutor(stepBinder);
-
-            var testResult = await executor
-                .Execute(testCase, testData, testRunContext, frameworkHandle)
-                .ConfigureAwait(false);
-
-            // https://github.com/Microsoft/vstest/blob/master/src/Microsoft.TestPlatform.CrossPlatEngine/Adapter/TestExecutionRecorder.cs <- comments here seem to suggest that we need to call RecordEnd just before RecordResult  
-            frameworkHandle.RecordEnd(testCase, testResult.Outcome);
-            frameworkHandle.RecordResult(testResult);
-
-            frameworkHandle.SendMessage(TestMessageLevel.Informational, $"Finished test \"{testCase.DisplayName}\"");
         }
     }
 }
