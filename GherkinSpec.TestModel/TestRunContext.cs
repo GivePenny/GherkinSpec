@@ -16,6 +16,6 @@ namespace GherkinSpec.TestModel
 
         public EventualConfiguration EventualSuccess { get; } = new EventualConfiguration();
 
-        public int MaximumSimultaneousTestCases { get; set; } = 10;
+        public int MaximumSimultaneousTestCases { get; set; } = 20;
     }
 }
