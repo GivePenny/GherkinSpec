@@ -77,6 +77,27 @@ en-TT | English  | Trinidad and Tobago
 en-US | English  | United States
 en-ZA | English  | South Africa
 en-ZW | English  | Zimbabwe
+es    | Spanish  | Neutral
+es-AR | Spanish  | Argentina
+es-BO | Spanish  | Bolivia
+es-CL | Spanish  | Chile
+es-CO | Spanish  | Columbia
+es-CR | Spanish  | Costa Rica
+es-DO | Spanish  | Dominican Republic
+es-EC | Spanish  | Ecuador
+es-ES | Spanish  | Spain (International Sorting Rules)
+es-GT | Spanish  | Guatemala
+es-HN | Spanish  | Honduras
+es-MX | Spanish  | Mexico
+es-NI | Spanish  | Nicaragua
+es-PA | Spanish  | Panama
+es-PE | Spanish  | Peru
+es-PR | Spanish  | Puerto Rico
+es-PY | Spanish  | Paraguay
+es-SV | Spanish  | El Salvador
+es-US | Spanish  | United States
+es-UY | Spanish  | Uruguay
+es-VE | Spanish  | Venezuela
 fr    | French   | Neutral
 fr-BE | French   | Belgium
 fr-CA | French   | Canada
