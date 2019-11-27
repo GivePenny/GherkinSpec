@@ -22,6 +22,6 @@ GherkinSpec launches all test cases one at a time.  However, if any step returns
 
 For well-written test cases that are isolated from each other and have no side-effects that affect each other, this provides a tremendous amount of speed.  Typically this creates very fast suites of tests for (micro)services.
 
-To avoid overloading the test subject (GherkinSpec is intended to be used for functional tests, not performance tests), GherkinSpec will by default only allow up to 10 test cases to be started and awaited in the above manner.  This is configurable through the `MaximumSimultaneousTestCases` property.
+To avoid overloading the test subject (GherkinSpec is intended to be used for functional tests, not performance tests), GherkinSpec will by default only allow up to 20 test cases to be started and awaited in the above manner.  This is configurable through the `MaximumSimultaneousTestCases` property.
 
 Note that if no steps return `Task` objects then test cases will not run in parallel - there is no opportunity for a "currently running test" to yield for another test to start.
