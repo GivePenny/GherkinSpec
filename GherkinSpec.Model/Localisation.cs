@@ -39,5 +39,23 @@ namespace GherkinSpec.Model
 
             return false;
         }
+
+        public static bool StartsWithLocalisedValue(string value, string[] localisedPossibleValues, out string matchedPrefix)
+        {
+            if (value != null)
+            {
+                foreach (var possibleValue in localisedPossibleValues)
+                {
+                    if (value.StartsWith(possibleValue, StringComparison.OrdinalIgnoreCase))
+                    {
+                        matchedPrefix = possibleValue;
+                        return true;
+                    }
+                }
+            }
+
+            matchedPrefix = null;
+            return false;
+        }
     }
 }

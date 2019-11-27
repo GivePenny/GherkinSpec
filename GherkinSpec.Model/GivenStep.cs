@@ -18,28 +18,7 @@ namespace GherkinSpec.Model
         public string MultiLineStringArgument { get; }
 
         public string TitleAfterType
-        {
-            get
-            {
-                if (Title.StartsWith(Resources.GivenKeyword))
-                {
-                    return Title.Substring(Resources.GivenKeyword.Length + 1);
-                }
-
-                if (Title.StartsWith(Resources.AndKeyword))
-                {
-                    return Title.Substring(Resources.AndKeyword.Length + 1);
-                }
-
-                if (Title.StartsWith(Resources.ButKeyword))
-                {
-                    return Title.Substring(Resources.ButKeyword.Length + 1);
-                }
-
-                throw new InvalidOperationException(
-                    $"Unexpected format of step title found after successful parsing: {Title}");
-            }
-        }        
+            => StepTitleParser.GetTitleAfterType(Title, Resources.GivenPrefixes);        
 
         public IStep CreateAnother(string newTitle, DataTable tableArgument, string multiLineStringArgument)
             => new GivenStep(newTitle, tableArgument, multiLineStringArgument);

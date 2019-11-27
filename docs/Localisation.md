@@ -62,8 +62,28 @@ The following culture codes are fully supported today (Gherkin can be written in
 Code  | Language | Country (defines cultural rules for parsing dates, times, numbers)
 ------|----------|-------------------------------------------------------------------
 en    | English  | Neutral
+en-AU | English  | Australia
+en-BZ | English  | Belize
+en-CA | English  | Canada
 en-GB | English  | United Kingdom
+en-IE | English  | Ireland
+en-IN | English  | India
+en-JM | English  | Jamaica
+en-MY | English  | Malaysia
+en-NZ | English  | New Zealand
+en-PH | English  | Republic of the Philippines
+en-SG | English  | Singapore
+en-TT | English  | Trinidad and Tobago
 en-US | English  | United States
+en-ZA | English  | South Africa
+en-ZW | English  | Zimbabwe
+fr    | French   | Neutral
+fr-BE | French   | Belgium
+fr-CA | French   | Canada
+fr-CH | French   | Switzerland
+fr-FR | French   | France
+fr-LU | French   | Luxembourg
+fr-MC | French   | Monaco
 nb    | Bokmål   | Neutral
 nb-NO | Bokmål   | Norway
 
