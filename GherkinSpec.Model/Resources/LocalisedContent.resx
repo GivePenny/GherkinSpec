@@ -117,17 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AndKeyword" xml:space="preserve">
-    <value>And</value>
+  <data name="AndPrefixes" xml:space="preserve">
+    <value>And </value>
   </data>
   <data name="BackgroundKeyword" xml:space="preserve">
     <value>Background</value>
   </data>
-  <data name="ButKeyword" xml:space="preserve">
-    <value>But</value>
-  </data>
-  <data name="ExampleKeyword" xml:space="preserve">
-    <value>Example</value>
+  <data name="ButPrefixes" xml:space="preserve">
+    <value>But </value>
   </data>
   <data name="ExamplesKeyword" xml:space="preserve">
     <value>Examples</value>
@@ -135,8 +132,8 @@
   <data name="FeatureKeyword" xml:space="preserve">
     <value>Feature</value>
   </data>
-  <data name="GivenKeyword" xml:space="preserve">
-    <value>Given</value>
+  <data name="GivenPrefixes" xml:space="preserve">
+    <value>Given </value>
   </data>
   <data name="IgnoreTagKeywords" xml:space="preserve">
     <value>ignore;ignored</value>
@@ -144,16 +141,16 @@
   <data name="RuleKeyword" xml:space="preserve">
     <value>Rule</value>
   </data>
-  <data name="ScenarioKeyword" xml:space="preserve">
-    <value>Scenario</value>
-  </data>
   <data name="ScenarioOutlineKeyword" xml:space="preserve">
     <value>Scenario Outline</value>
   </data>
-  <data name="ThenKeyword" xml:space="preserve">
-    <value>Then</value>
+  <data name="ScenarioPrefixes" xml:space="preserve">
+    <value>Scenario:;Example:</value>
   </data>
-  <data name="WhenKeyword" xml:space="preserve">
-    <value>When</value>
+  <data name="ThenPrefixes" xml:space="preserve">
+    <value>Then </value>
+  </data>
+  <data name="WhenPrefixes" xml:space="preserve">
+    <value>When </value>
   </data>
 </root>

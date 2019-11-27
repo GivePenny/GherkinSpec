@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace GherkinSpec.Model.Parsing
 {
@@ -10,23 +11,9 @@ namespace GherkinSpec.Model.Parsing
 
         private string BackgroundLineStart => Resources.BackgroundKeyword + ":";
 
-        private string ScenarioLineStart => Resources.ScenarioKeyword + ":";
-
         private string ScenarioOutlineLineStart => Resources.ScenarioOutlineKeyword + ":";
 
-        private string ExampleLineStart => Resources.ExampleKeyword + ":";
-
         private string ExamplesLine => Resources.ExamplesKeyword + ":";
-
-        public string GivenLineStart => Resources.GivenKeyword + " ";
-
-        public string WhenLineStart => Resources.WhenKeyword + " ";
-
-        public string ThenLineStart => Resources.ThenKeyword + " ";
-
-        private string AndLineStart => Resources.AndKeyword + " ";
-
-        private string ButLineStart => Resources.ButKeyword + " ";
 
         private const string TagLineStart = "@";
 
@@ -99,13 +86,20 @@ namespace GherkinSpec.Model.Parsing
             => CurrentLineStartsWith(TagLineStart);
 
         public bool IsScenarioStartLine
-            => CurrentLineStartsWith(ScenarioLineStart)
-                || CurrentLineStartsWith(ExampleLineStart);
+            => CurrentLineStartsWithOneOf(Resources.ScenarioPrefixes);
 
         public string CurrentLineScenarioTitle
-            => CurrentLineStartsWith(ScenarioLineStart)
-                ? CurrentLineTrimmed.Substring(ScenarioLineStart.Length).Trim()
-                : CurrentLineTrimmed.Substring(ExampleLineStart.Length).Trim();
+        {
+            get
+            {
+                if (!CurrentLineStartsWithOneOf(Resources.ScenarioPrefixes, out var matchedPrefix))
+                {
+                    throw new InvalidOperationException();
+                }
+
+                return CurrentLineTrimmed.Substring(matchedPrefix.Length).Trim();
+            }
+        }
 
         public bool IsScenarioOutlineStartLine
             => CurrentLineStartsWith(ScenarioOutlineLineStart);
@@ -123,19 +117,19 @@ namespace GherkinSpec.Model.Parsing
             => CurrentLineStartsWith(MultiLineStringLineStart);
 
         public bool IsGivenLine
-            => CurrentLineStartsWith(GivenLineStart);
+            => CurrentLineStartsWithOneOf(Resources.GivenPrefixes);
 
         public bool IsWhenLine
-            => CurrentLineStartsWith(WhenLineStart);
+            => CurrentLineStartsWithOneOf(Resources.WhenPrefixes);
 
         public bool IsThenLine
-            => CurrentLineStartsWith(ThenLineStart);
+            => CurrentLineStartsWithOneOf(Resources.ThenPrefixes);
 
         public bool IsAndLine
-            => CurrentLineStartsWith(AndLineStart);
+            => CurrentLineStartsWithOneOf(Resources.AndPrefixes);
 
         public bool IsButLine
-            => CurrentLineStartsWith(ButLineStart);
+            => CurrentLineStartsWithOneOf(Resources.ButPrefixes);
 
         public bool IsStepLine
             => IsGivenLine || IsWhenLine || IsThenLine || IsAndLine || IsButLine;
@@ -145,5 +139,11 @@ namespace GherkinSpec.Model.Parsing
 
         private bool CurrentLineStartsWith(string prefix)
             => (CurrentLineTrimmed?.StartsWith(prefix)).GetValueOrDefault(false);
+
+        private bool CurrentLineStartsWithOneOf(string[] possiblePrefixes)
+            => Localisation.StartsWithLocalisedValue(CurrentLineTrimmed, possiblePrefixes, out _);
+
+        private bool CurrentLineStartsWithOneOf(string[] possiblePrefixes, out string matchedPrefix)
+            => Localisation.StartsWithLocalisedValue(CurrentLineTrimmed, possiblePrefixes, out matchedPrefix);
     }
 }

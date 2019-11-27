@@ -118,39 +118,39 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AndPrefixes" xml:space="preserve">
-    <value>Og </value>
+    <value>Et que ;Et qu';Et </value>
   </data>
   <data name="BackgroundKeyword" xml:space="preserve">
-    <value>Bakgrunn</value>
+    <value>Contexte</value>
   </data>
   <data name="ButPrefixes" xml:space="preserve">
-    <value>Men </value>
+    <value>Mais que ;Mais qu';Mais ;</value>
   </data>
   <data name="ExamplesKeyword" xml:space="preserve">
-    <value>Eksempler</value>
+    <value>Exemples</value>
   </data>
   <data name="FeatureKeyword" xml:space="preserve">
-    <value>Egenskap</value>
+    <value>Fonctionnalité</value>
   </data>
   <data name="GivenPrefixes" xml:space="preserve">
-    <value>Gitt </value>
+    <value>Soit ;Sachant que ;Sachant qu';Sachant ;Etant donné que ;Etant donné qu';Etant donné ;Etant donnée ;Etant donnés ;Etant données ;Étant donné que ;Étant donné qu';Étant donné ;Étant donnée ;Étant donnés ;Étant données </value>
   </data>
   <data name="IgnoreTagKeywords" xml:space="preserve">
-    <value>ignorere;ignorert</value>
+    <value>ignorer;ignoré</value>
   </data>
   <data name="RuleKeyword" xml:space="preserve">
-    <value>Regel</value>
+    <value>Règle</value>
   </data>
   <data name="ScenarioOutlineKeyword" xml:space="preserve">
-    <value>Abstrakt Scenario</value>
+    <value>Plan du scénario</value>
   </data>
   <data name="ScenarioPrefixes" xml:space="preserve">
-    <value>Scenario:;Eksempel:</value>
+    <value>Scenario:;Exemple:</value>
   </data>
   <data name="ThenPrefixes" xml:space="preserve">
-    <value>Så </value>
+    <value>Alors ;Donc </value>
   </data>
   <data name="WhenPrefixes" xml:space="preserve">
-    <value>Når </value>
+    <value>Quand ;Lorsque ;Lorsqu'</value>
   </data>
 </root>
