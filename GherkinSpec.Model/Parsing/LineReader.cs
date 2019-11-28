@@ -5,14 +5,6 @@ namespace GherkinSpec.Model.Parsing
 {
     class LineReader
     {
-        private string FeatureLineStart => Resources.FeatureKeyword + ":";
-
-        private string RuleLineStart => Resources.RuleKeyword + ":";
-
-        private string BackgroundLineStart => Resources.BackgroundKeyword + ":";
-
-        private string ScenarioOutlineLineStart => Resources.ScenarioOutlineKeyword + ":";
-
         private string ExamplesLine => Resources.ExamplesKeyword + ":";
 
         private const string TagLineStart = "@";
@@ -68,19 +60,19 @@ namespace GherkinSpec.Model.Parsing
                 CurrentLineUntrimmed.Length - CurrentLineUntrimmed.TrimStart().Length);
 
         public bool IsFeatureStartLine
-            => CurrentLineStartsWith(FeatureLineStart);
+            => CurrentLineStartsWithOneOf(Resources.FeaturePrefixes);
 
         public string CurrentLineFeatureTitle
-            => CurrentLineTrimmed.Substring(FeatureLineStart.Length).Trim();
+            => CurrentLineTitle(Resources.FeaturePrefixes);
 
         public bool IsRuleStartLine
-            => CurrentLineStartsWith(RuleLineStart);
+            => CurrentLineStartsWithOneOf(Resources.RulePrefixes);
 
         public string CurrentLineRuleTitle
-            => CurrentLineTrimmed.Substring(RuleLineStart.Length).Trim();
+            => CurrentLineTitle(Resources.RulePrefixes);
 
         public bool IsBackgroundStartLine
-            => CurrentLineStartsWith(BackgroundLineStart);
+            => CurrentLineStartsWithOneOf(Resources.BackgroundPrefixes);
 
         public bool IsTagLine
             => CurrentLineStartsWith(TagLineStart);
@@ -89,23 +81,13 @@ namespace GherkinSpec.Model.Parsing
             => CurrentLineStartsWithOneOf(Resources.ScenarioPrefixes);
 
         public string CurrentLineScenarioTitle
-        {
-            get
-            {
-                if (!CurrentLineStartsWithOneOf(Resources.ScenarioPrefixes, out var matchedPrefix))
-                {
-                    throw new InvalidOperationException();
-                }
-
-                return CurrentLineTrimmed.Substring(matchedPrefix.Length).Trim();
-            }
-        }
+            => CurrentLineTitle(Resources.ScenarioPrefixes);
 
         public bool IsScenarioOutlineStartLine
-            => CurrentLineStartsWith(ScenarioOutlineLineStart);
+            => CurrentLineStartsWithOneOf(Resources.ScenarioOutlinePrefixes);
 
         public string CurrentLineScenarioOutlineTitle
-            => CurrentLineTrimmed.Substring(ScenarioOutlineLineStart.Length).Trim();
+            => CurrentLineTitle(Resources.ScenarioOutlinePrefixes);
 
         public bool IsExamplesStartLine
             => CurrentLineTrimmed == ExamplesLine;
@@ -145,5 +127,15 @@ namespace GherkinSpec.Model.Parsing
 
         private bool CurrentLineStartsWithOneOf(string[] possiblePrefixes, out string matchedPrefix)
             => Localisation.StartsWithLocalisedValue(CurrentLineTrimmed, possiblePrefixes, out matchedPrefix);
+
+        private string CurrentLineTitle(string[] expectedPossiblePrefixes)
+        {
+            if (!CurrentLineStartsWithOneOf(expectedPossiblePrefixes, out var matchedPrefix))
+            {
+                throw new InvalidOperationException();
+            }
+
+            return CurrentLineTrimmed.Substring(matchedPrefix.Length).Trim();
+        }
     }
 }
