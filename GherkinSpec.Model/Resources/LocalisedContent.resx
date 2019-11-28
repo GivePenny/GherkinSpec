@@ -119,6 +119,7 @@
   </resheader>
   <data name="AndPrefixes" xml:space="preserve">
     <value>And </value>
+    <comment>DON'T FORGET CULTURE TAG IF ADDING NEW LANGUAGE</comment>
   </data>
   <data name="BackgroundPrefixes" xml:space="preserve">
     <value>Background:</value>

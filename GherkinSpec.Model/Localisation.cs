@@ -9,7 +9,7 @@ namespace GherkinSpec.Model
     public static class Localisation
     {
         private static readonly Regex cultureTagRegex = new Regex(
-            @"(culture|kultur)\((?<code>[\w\-]{2,5})\)",
+            @"(culture|kultur|cultura)\((?<code>[\w\-]{2,5})\)",
             RegexOptions.ExplicitCapture);
 
         public static void SetUICultureFromTag(IEnumerable<Tag> featureTags)
