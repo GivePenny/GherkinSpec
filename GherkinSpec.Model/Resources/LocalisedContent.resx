@@ -120,8 +120,8 @@
   <data name="AndPrefixes" xml:space="preserve">
     <value>And </value>
   </data>
-  <data name="BackgroundKeyword" xml:space="preserve">
-    <value>Background</value>
+  <data name="BackgroundPrefixes" xml:space="preserve">
+    <value>Background:</value>
   </data>
   <data name="ButPrefixes" xml:space="preserve">
     <value>But </value>
@@ -129,8 +129,8 @@
   <data name="ExamplesKeyword" xml:space="preserve">
     <value>Examples</value>
   </data>
-  <data name="FeatureKeyword" xml:space="preserve">
-    <value>Feature</value>
+  <data name="FeaturePrefixes" xml:space="preserve">
+    <value>Feature:</value>
   </data>
   <data name="GivenPrefixes" xml:space="preserve">
     <value>Given </value>
@@ -138,11 +138,11 @@
   <data name="IgnoreTagKeywords" xml:space="preserve">
     <value>ignore;ignored</value>
   </data>
-  <data name="RuleKeyword" xml:space="preserve">
-    <value>Rule</value>
+  <data name="RulePrefixes" xml:space="preserve">
+    <value>Rule:</value>
   </data>
-  <data name="ScenarioOutlineKeyword" xml:space="preserve">
-    <value>Scenario Outline</value>
+  <data name="ScenarioOutlinePrefixes" xml:space="preserve">
+    <value>Scenario Outline:</value>
   </data>
   <data name="ScenarioPrefixes" xml:space="preserve">
     <value>Scenario:;Example:</value>

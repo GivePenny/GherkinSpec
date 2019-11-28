@@ -118,39 +118,39 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AndPrefixes" xml:space="preserve">
-    <value>Et que ;Et qu';Et </value>
+    <value>Und </value>
   </data>
   <data name="BackgroundPrefixes" xml:space="preserve">
-    <value>Contexte:</value>
+    <value>Grundlage:;Hintergrund:;Voraussetzungen:;Vorbedingungen:</value>
   </data>
   <data name="ButPrefixes" xml:space="preserve">
-    <value>Mais que ;Mais qu';Mais </value>
+    <value>Aber </value>
   </data>
   <data name="ExamplesKeyword" xml:space="preserve">
-    <value>Exemples</value>
+    <value>Beispiele</value>
   </data>
   <data name="FeaturePrefixes" xml:space="preserve">
-    <value>Fonctionnalité:</value>
+    <value>Funktionalität:;Funktion:</value>
   </data>
   <data name="GivenPrefixes" xml:space="preserve">
-    <value>Soit ;Sachant que ;Sachant qu';Sachant ;Etant donné que ;Etant donné qu';Etant donné ;Etant donnée ;Etant donnés ;Etant données ;Étant donné que ;Étant donné qu';Étant donné ;Étant donnée ;Étant donnés ;Étant données </value>
+    <value>Angenommen ;Gegeben sei ;Gegeben seien </value>
   </data>
   <data name="IgnoreTagKeywords" xml:space="preserve">
-    <value>ignorer;ignoré</value>
+    <value>ignorieren;ignoriert</value>
   </data>
   <data name="RulePrefixes" xml:space="preserve">
-    <value>Règle:</value>
+    <value>Rule:;Regel:</value>
   </data>
   <data name="ScenarioOutlinePrefixes" xml:space="preserve">
-    <value>Plan du scénario:</value>
+    <value>Szenariogrundriss:;Szenarien:</value>
   </data>
   <data name="ScenarioPrefixes" xml:space="preserve">
-    <value>Scenario:;Exemple:</value>
+    <value>Beispiel:;Szenario:</value>
   </data>
   <data name="ThenPrefixes" xml:space="preserve">
-    <value>Alors ;Donc </value>
+    <value>Dann </value>
   </data>
   <data name="WhenPrefixes" xml:space="preserve">
-    <value>Quand ;Lorsque ;Lorsqu'</value>
+    <value>Wenn </value>
   </data>
 </root>

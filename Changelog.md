@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.1
+
+### Added
+
+* Support for French, German and Spanish languages.
+
+### Changed
+
+* Default maximum number of test cases run in parallel has been changed to 20. [Can be altered in configuration](docs/Configuration.md).
+
 ## 2.0
 
 ### Added

@@ -10,23 +10,23 @@ namespace GherkinSpec.Model
 
         public static string[] AndPrefixes => resourceManager.GetString(nameof(AndPrefixes)).Split(';');
 
-        public static string BackgroundKeyword => resourceManager.GetString(nameof(BackgroundKeyword));
+        public static string[] BackgroundPrefixes => resourceManager.GetString(nameof(BackgroundPrefixes)).Split(';');
 
         public static string[] ButPrefixes => resourceManager.GetString(nameof(ButPrefixes)).Split(';');
 
         public static string ExamplesKeyword => resourceManager.GetString(nameof(ExamplesKeyword));
 
-        public static string FeatureKeyword => resourceManager.GetString(nameof(FeatureKeyword));
+        public static string[] FeaturePrefixes => resourceManager.GetString(nameof(FeaturePrefixes)).Split(';');
 
         public static string[] GivenPrefixes => resourceManager.GetString(nameof(GivenPrefixes)).Split(';');
 
         public static string[] IgnoreTagKeywords => resourceManager.GetString(nameof(IgnoreTagKeywords)).Split(';');
 
-        public static string RuleKeyword => resourceManager.GetString(nameof(RuleKeyword));
+        public static string[] RulePrefixes => resourceManager.GetString(nameof(RulePrefixes)).Split(';');
 
         public static string[] ScenarioPrefixes => resourceManager.GetString(nameof(ScenarioPrefixes)).Split(';');
 
-        public static string ScenarioOutlineKeyword => resourceManager.GetString(nameof(ScenarioOutlineKeyword));
+        public static string[] ScenarioOutlinePrefixes => resourceManager.GetString(nameof(ScenarioOutlinePrefixes)).Split(';');
 
         public static string[] ThenPrefixes => resourceManager.GetString(nameof(ThenPrefixes)).Split(';');
 

@@ -120,8 +120,8 @@
   <data name="AndPrefixes" xml:space="preserve">
     <value>Y ;E </value>
   </data>
-  <data name="BackgroundKeyword" xml:space="preserve">
-    <value>Antecedentes</value>
+  <data name="BackgroundPrefixes" xml:space="preserve">
+    <value>Antecedentes:</value>
   </data>
   <data name="ButPrefixes" xml:space="preserve">
     <value>Pero </value>
@@ -129,20 +129,20 @@
   <data name="ExamplesKeyword" xml:space="preserve">
     <value>Ejemplos</value>
   </data>
-  <data name="FeatureKeyword" xml:space="preserve">
-    <value>Característica</value>
+  <data name="FeaturePrefixes" xml:space="preserve">
+    <value>Característica:</value>
   </data>
   <data name="GivenPrefixes" xml:space="preserve">
     <value>Dado ;Dada ;Dados ;Dadas </value>
   </data>
   <data name="IgnoreTagKeywords" xml:space="preserve">
-    <value>TODO</value>
+    <value>ignorar;ignorado</value>
   </data>
-  <data name="RuleKeyword" xml:space="preserve">
-    <value>Regla</value>
+  <data name="RulePrefixes" xml:space="preserve">
+    <value>Regla:</value>
   </data>
-  <data name="ScenarioOutlineKeyword" xml:space="preserve">
-    <value>Esquema del escenario</value>
+  <data name="ScenarioOutlinePrefixes" xml:space="preserve">
+    <value>Esquema del escenario:</value>
   </data>
   <data name="ScenarioPrefixes" xml:space="preserve">
     <value>Ejemplo:;Escenario:</value>
