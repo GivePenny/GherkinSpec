@@ -89,7 +89,7 @@ namespace GherkinSpec.TestAdapter.Execution
                     .Execute(testCase, testData, testRunContext, frameworkHandle)
                     .ConfigureAwait(false);
 
-                // https://github.com/Microsoft/vstest/blob/master/src/Microsoft.TestPlatform.CrossPlatEngine/Adapter/TestExecutionRecorder.cs <- comments here seem to suggest that we need to call RecordEnd just before RecordResult  
+                // https://github.com/Microsoft/vstest/blob/main/src/Microsoft.TestPlatform.CrossPlatEngine/Adapter/TestExecutionRecorder.cs <- comments here seem to suggest that we need to call RecordEnd just before RecordResult  
                 frameworkHandle.RecordEnd(testCase, testResult.Outcome);
                 frameworkHandle.RecordResult(testResult);
 

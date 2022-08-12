@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0
+
+### Changed
+
+* Updated project target frameworks (to `netstandard2.1` for published packages & `net6.0` for unit test projects).
+
 ## 2.1
 
 ### Added

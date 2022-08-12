@@ -54,7 +54,7 @@ Steps 1, 2 and 5 can be speeded up by creating your test project using one of th
 ## Gotchas
 
 * Make sure you add the Test SDK package to your test project, again see the csproj for the simple example (e.g. `<PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />`).  If you don't then tests won't get detected.
-* When creating a new .feature file, make sure that it is added as an Embedded Resource (see the [csproj of the simple example](https://github.com/GivePenny/GherkinSpec.SimpleExample/blob/master/GherkinSpec.SimpleExample.Tests/GherkinSpec.SimpleExample.Tests.csproj) - in Visual Studio this can also be set in the Properties pane when the file is selected).
+* When creating a new .feature file, make sure that it is added as an Embedded Resource (see the [csproj of the simple example](https://github.com/GivePenny/GherkinSpec.SimpleExample/blob/main/GherkinSpec.SimpleExample.Tests/GherkinSpec.SimpleExample.Tests.csproj) - in Visual Studio this can also be set in the Properties pane when the file is selected).
 
 ```xml
   <ItemGroup>
