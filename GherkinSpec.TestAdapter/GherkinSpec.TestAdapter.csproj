@@ -1,33 +1,35 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>latest</LangVersion>
     <PackageId>GivePenny.GherkinSpec.TestAdapter</PackageId>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.0.108-alpha</Version>
+    <Version>0.0.110-alpha</Version>
     <Authors>GivePenny</Authors>
     <Company>GivePenny</Company>
     <Product>GherkinSpec</Product>
     <Copyright>Copyright 2018-2019 Raising Technology Ltd</Copyright>
     <BuildOutputTargetFolder>build</BuildOutputTargetFolder>
-    <ContentTargetFolders>build/netstandard2.0</ContentTargetFolders>
+    <ContentTargetFolders>build/netstandard2.1</ContentTargetFolders>
     <Description>Cross-platform Gherkin test adapter for .NET Core (true .NET Standard).  Write tests in Gherkin and steps in a .NET language.  Supports dependency injection in steps classes, async/await and running tests in parallel.  Use any assertions library or unit test framework.  Needs no Visual Studio Extension or generated designer files.  See https://github.com/GivePenny/GherkinSpec.SimpleExample for an example test project.</Description>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/GivePenny/GherkinSpec/master/Licence.md</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/GivePenny/GherkinSpec</PackageProjectUrl>
     <RepositoryUrl>https://github.com/GivePenny/GherkinSpec</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>Gherkin, BDD, TDD</PackageTags>
     <PackageIconUrl>https://secure.gravatar.com/avatar/96b7defc765a3a242e00557bb65d37ef?s=256</PackageIconUrl>
+    <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="GivePenny.GherkinSpec.TestAdapter.props" />
+    <None Include="../icon.png" Pack="true" PackagePath="/" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.0.1" />
-    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="16.4.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.2.0" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,15 +43,15 @@
     <ProjectReference Include="..\GherkinSpec.TestModel\GherkinSpec.TestModel.csproj" PrivateAssets="All" />
     <_PackageFiles Include="$(OutputPath)\GherkinSpec.Model.dll">
       <BuildAction>None</BuildAction>
-      <PackagePath>lib/netstandard2.0</PackagePath>
+      <PackagePath>lib/netstandard2.1</PackagePath>
     </_PackageFiles>
     <_PackageFiles Include="$(OutputPath)\**\GherkinSpec.Model.resources.dll">
       <BuildAction>None</BuildAction>
-      <PackagePath>lib/netstandard2.0</PackagePath>
+      <PackagePath>lib/netstandard2.1</PackagePath>
     </_PackageFiles>
     <_PackageFiles Include="$(OutputPath)\GherkinSpec.TestModel.dll">
       <BuildAction>None</BuildAction>
-      <PackagePath>lib/netstandard2.0</PackagePath>
+      <PackagePath>lib/netstandard2.1</PackagePath>
     </_PackageFiles>
   </ItemGroup>
 
