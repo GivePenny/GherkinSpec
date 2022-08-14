@@ -21,7 +21,8 @@ namespace GherkinSpec.TestAdapter.Execution
 
         public async Task ExecuteBeforeRun()
         {
-            foreach (var stepsClass in StepsClasses.FindInAssemblyAndReferencedAssemblies(assembliesToScan))
+            foreach (var stepsClass in StepsClasses.FindInAssemblyAndReferencedAssemblies(assembliesToScan)
+                         .SelectMany(s => s.Types))
             {
                 foreach (var method in FindMethodsWithAttribute<BeforeRunAttribute>(stepsClass))
                 {
@@ -39,7 +40,8 @@ namespace GherkinSpec.TestAdapter.Execution
 
         public async Task ExecuteAfterRun()
         {
-            foreach (var stepsClass in StepsClasses.FindInAssemblyAndReferencedAssemblies(assembliesToScan))
+            foreach (var stepsClass in StepsClasses.FindInAssemblyAndReferencedAssemblies(assembliesToScan)
+                         .SelectMany(s => s.Types))
             {
                 foreach (var method in FindMethodsWithAttribute<AfterRunAttribute>(stepsClass))
                 {
@@ -52,7 +54,8 @@ namespace GherkinSpec.TestAdapter.Execution
         private IEnumerable<MethodInfo> FindMethodsWithAttribute<TAttribute>(Type type)
             where TAttribute : Attribute
             => type
-                .GetMethods(BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance)
+                .GetMethods(BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Static |
+                            BindingFlags.Instance)
                 .Where(method => method.GetCustomAttributes<TAttribute>(true).Any());
 
         private async Task ExecuteMethod(Type type, MethodInfo method)

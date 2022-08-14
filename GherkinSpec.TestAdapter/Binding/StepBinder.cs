@@ -46,23 +46,23 @@ namespace GherkinSpec.TestAdapter.Binding
                 $"Unsupported attribute type \"{step.GetType().FullName}\".");
         }
 
-        private void EnsureHasBeenScanned(Assembly stepsAssembly)
+        private void EnsureHasBeenScanned(Assembly testAssembly)
         {
-            if (scannedAssemblies.Contains(stepsAssembly))
+            if (scannedAssemblies.Contains(testAssembly))
             {
                 return;
             }
 
             lock (scannedAssemblies)
             {
-                if (scannedAssemblies.Contains(stepsAssembly))
+                if (scannedAssemblies.Contains(testAssembly))
                 {
                     return;
                 }
 
                 var scanner = new MethodScanner(regularExpressionsToGivenMethods, regularExpressionsToWhenMethods, regularExpressionsToThenMethods);
-                scanner.Scan(stepsAssembly);
-                scannedAssemblies.Add(stepsAssembly);
+                scanner.Scan(testAssembly);
+                scannedAssemblies.Add(testAssembly);
             }
         }
 

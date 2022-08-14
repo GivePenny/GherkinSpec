@@ -1,8 +1,10 @@
 ﻿using GherkinSpec.TestModel;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using GherkinSpec.TestModel;
 
 namespace GherkinSpec.TestAdapter.Binding
 {
@@ -22,34 +24,54 @@ namespace GherkinSpec.TestAdapter.Binding
             this.regularExpressionsToThenMethods = regularExpressionsToThenMethods;
         }
 
-        public void Scan(Assembly stepsAssembly)
+        public void Scan(Assembly testAssembly)
         {
-            foreach (var type in StepsClasses.FindInAssemblyAndReferencedAssemblies(stepsAssembly))
+            foreach (var stepsClassesAndBindingTypes in StepsClasses.FindInAssemblyAndReferencedAssemblies(testAssembly))
             {
-                Scan(type);
+                Scan(stepsClassesAndBindingTypes);
             }
         }
 
-        private void Scan(Type type)
+        private void Scan((IEnumerable<Type> Types, BindingTypesAttribute BindingTypes) stepsClassesAndBindingType)
         {
-            foreach (var method in type.GetMethods(
-                BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance))
+            foreach (var method in stepsClassesAndBindingType.Types.SelectMany(t => t.GetMethods(
+                BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance)))
             {
-                Scan<GivenAttribute>(method, regularExpressionsToGivenMethods);
-                Scan<WhenAttribute>(method, regularExpressionsToWhenMethods);
-                Scan<ThenAttribute>(method, regularExpressionsToThenMethods);
+                Scan(
+                    stepsClassesAndBindingType.BindingTypes.GivenStepAttributeType,
+                    stepsClassesAndBindingType.BindingTypes.StepAttributeMatchExpressionSelectorType,
+                    method,
+                    regularExpressionsToGivenMethods);
+                
+                Scan(
+                    stepsClassesAndBindingType.BindingTypes.WhenStepAttributeType,
+                    stepsClassesAndBindingType.BindingTypes.StepAttributeMatchExpressionSelectorType,
+                    method,
+                    regularExpressionsToWhenMethods);
+                
+                Scan(
+                    stepsClassesAndBindingType.BindingTypes.ThenStepAttributeType,
+                    stepsClassesAndBindingType.BindingTypes.StepAttributeMatchExpressionSelectorType,
+                    method,
+                    regularExpressionsToThenMethods);
             }
         }
 
-        private void Scan<TAttribute>(MethodInfo method, Dictionary<Regex, MethodInfo> regularExpressionsToMethods)
-            where TAttribute : Attribute, IStepAttribute
+        private void Scan(
+            Type attributeType,
+            Type stepAttributeMatchExpressionSelectorType,
+            MethodInfo method,
+            Dictionary<Regex, MethodInfo> regularExpressionsToMethods)
         {
-            var attributes = method.GetCustomAttributes<TAttribute>(true);
+            var stepAttributeMatchExpressionSelector = (IStepAttributeMatchExpressionSelector)Activator
+                .CreateInstance(stepAttributeMatchExpressionSelectorType);
+            
+            var attributes = method.GetCustomAttributes(attributeType, true);
             foreach (var attribute in attributes)
             {
                 var regex = GetRegex(
                     method.DeclaringType.FullName + "::" + method.Name,
-                    attribute.MatchExpression);
+                    stepAttributeMatchExpressionSelector.SelectMatchExpression(attribute));
 
                 regularExpressionsToMethods.Add(regex, method);
             }

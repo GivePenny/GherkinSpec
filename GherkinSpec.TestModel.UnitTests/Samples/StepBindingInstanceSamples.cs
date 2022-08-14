@@ -4,7 +4,7 @@
     public class StepBindingInstanceSamples
     {
         [Given("a plain (.+) in a non-static method")]
-        public void GivenANonStaticPlainTextMatch(string value)
+        public void GivenANonStaticPlainTextMatch(string _)
         {
         }
     }
