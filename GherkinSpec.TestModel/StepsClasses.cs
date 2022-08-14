@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using GherkinSpec.TestModel;
 
 namespace GherkinSpec.TestModel
 {
@@ -10,34 +11,45 @@ namespace GherkinSpec.TestModel
     {
         // Test runners use an isolated appdomain so the cache can be static as it will be discarded after each test run or when the assembly
         // is changed and re-built.
-        private static readonly ConcurrentDictionary<Assembly, Type[]> cachedTypesByAssembly = new ConcurrentDictionary<Assembly, Type[]>();
+        private static readonly ConcurrentDictionary<Assembly, (Type[], BindingTypesAttribute)> CachedTypesByAssembly =
+            new();
 
-        public static IEnumerable<Type> FindInAssemblyAndReferencedAssemblies(Assembly assembly)
-            => assembly
+        public static IEnumerable<(IEnumerable<Type> Types, BindingTypesAttribute BindingTypes)> FindInAssemblyAndReferencedAssemblies(Assembly assembly)
+        {
+            return assembly
                 .GetReferencedAssemblies()
                 .Select(
-                    a => 
+                    a =>
                         Assembly.Load(a.FullName))
-                .SelectMany(FindIn)
-                .Concat(FindIn(assembly));
+                .Select(FindIn)
+                .Append(FindIn(assembly));
+        }
 
-        public static IEnumerable<Type> FindInAssemblyAndReferencedAssemblies(IEnumerable<Assembly> assemblies)
+        public static IEnumerable<(IEnumerable<Type> Types, BindingTypesAttribute BindingTypes)> FindInAssemblyAndReferencedAssemblies(IEnumerable<Assembly> assemblies)
             => assemblies.SelectMany(FindInAssemblyAndReferencedAssemblies);
 
-        public static IEnumerable<Type> FindIn(IEnumerable<Assembly> assemblies)
-            => assemblies.SelectMany(FindIn);
+        public static IEnumerable<(IEnumerable<Type> Types, BindingTypesAttribute BindingTypes)> FindIn(IEnumerable<Assembly> assemblies)
+            => assemblies.Select(FindIn);
 
-        public static IEnumerable<Type> FindIn(Assembly assembly)
-            => cachedTypesByAssembly.GetOrAdd(
+        public static (IEnumerable<Type> Types, BindingTypesAttribute BindingTypes) FindIn(Assembly assembly)
+        {
+            var bindingTypes = (BindingTypesAttribute)assembly
+                   .GetCustomAttributes(typeof(BindingTypesAttribute), true)
+                   .FirstOrDefault()
+               ?? new BindingTypesAttribute();
+
+            return CachedTypesByAssembly.GetOrAdd(
                 assembly,
-                keyAssembly => keyAssembly
+                keyAssembly => (keyAssembly
                     .GetTypes()
                     .Where(
                         type => type.IsClass
-                            && type.IsPublic
-                            && type.GetCustomAttributes(
-                                typeof(StepsAttribute),
-                                true).Any())
-                    .ToArray());
+                                && type.IsPublic
+                                && type.GetCustomAttributes(
+                                    bindingTypes.StepsClassAttributeType,
+                                    true).Any())
+                    .ToArray(),
+                        bindingTypes));
+        }
     }
 }

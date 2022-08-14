@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GherkinSpec.TestModel
 {
@@ -14,6 +14,7 @@ namespace GherkinSpec.TestModel
         {
             foreach (var type in StepsClasses
                 .FindIn(assembly)
+                .Types
                 .Where(IsNotStaticOrAbstract))
             {
                 services.AddScoped(type);
