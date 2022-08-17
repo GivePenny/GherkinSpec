@@ -10,13 +10,13 @@ using System.Text.RegularExpressions;
 
 namespace GherkinSpec.TestAdapter.Binding
 {
-    class StepBinder : IStepBinder
+    internal class StepBinder : IStepBinder
     {
-        private readonly List<Assembly> scannedAssemblies = new List<Assembly>();
-        private readonly Dictionary<Regex, MethodInfo> regularExpressionsToGivenMethods = new Dictionary<Regex, MethodInfo>();
-        private readonly Dictionary<Regex, MethodInfo> regularExpressionsToWhenMethods = new Dictionary<Regex, MethodInfo>();
-        private readonly Dictionary<Regex, MethodInfo> regularExpressionsToThenMethods = new Dictionary<Regex, MethodInfo>();
-        private readonly ConcurrentDictionary<IStep, IStepBinding> cachedStepBindings = new ConcurrentDictionary<IStep, IStepBinding>();
+        private readonly List<Assembly> scannedAssemblies = new();
+        private readonly Dictionary<Regex, MethodInfo> regularExpressionsToGivenMethods = new();
+        private readonly Dictionary<Regex, MethodInfo> regularExpressionsToWhenMethods = new();
+        private readonly Dictionary<Regex, MethodInfo> regularExpressionsToThenMethods = new();
+        private readonly ConcurrentDictionary<IStep, IStepBinding> cachedStepBindings = new();
 
         public IStepBinding GetBindingFor(IStep step, Assembly testAssembly)
             => cachedStepBindings.GetOrAdd(
@@ -95,11 +95,10 @@ namespace GherkinSpec.TestAdapter.Binding
             foreach (var regexMethodPair in regularExpressionsToMethods)
             {
                 var match = regexMethodPair.Key.Match(step.TitleAfterType);
-                if (match != null && match.Success)
+                if (match.Success)
                 {
                     var stepArguments = match
                         .Groups
-                        .Cast<Group>()
                         .Skip(1)
                         .Select(group => group.Value);
 

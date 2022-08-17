@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 
 namespace GherkinSpec.TestAdapter
 {
-    static class TestCaseExtensions
+    internal static class TestCaseExtensions
     {
         public static DiscoveredTestData DiscoveredData(this TestCase testCase)
             => (DiscoveredTestData)testCase.LocalExtensionData;

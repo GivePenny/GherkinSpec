@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GherkinSpec.Model
+﻿namespace GherkinSpec.Model
 {
     public class ThenStep : IStep
     {

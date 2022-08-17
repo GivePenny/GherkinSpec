@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace GherkinSpec.Model.Parsing
 {
-    static class TagParser
+    internal static class TagParser
     {
         public static IEnumerable<Tag> ParseTagsIfPresent(LineReader reader)
         {

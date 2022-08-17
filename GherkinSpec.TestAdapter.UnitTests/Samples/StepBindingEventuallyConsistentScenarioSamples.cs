@@ -6,7 +6,7 @@ namespace GherkinSpec.TestAdapter.UnitTests.Samples
     [Steps]
     public class StepBindingEventuallyConsistentScenarioSamples
     {
-        int whenCalls = 0;
+        private int whenCalls;
 
         [Given("some setup")]
         public void GivenSomeSetup()

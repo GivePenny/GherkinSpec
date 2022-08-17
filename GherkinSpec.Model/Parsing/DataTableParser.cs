@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace GherkinSpec.Model.Parsing
 {
-    static class DataTableParser
+    internal static class DataTableParser
     {
         public static DataTable ParseDataTable(LineReader reader)
         {
@@ -14,7 +14,7 @@ namespace GherkinSpec.Model.Parsing
             {
                 rows.Add(ParseDataTableRow(reader, ref columnNames));
                 reader.ReadNextLine();
-            };
+            }
 
             return new DataTable(rows);
         }

@@ -1,6 +1,6 @@
 ﻿namespace GherkinSpec.Model.Parsing
 {
-    static class StringExtensions
+    internal static class StringExtensions
     {
         public static string RemoveFirstAndLastPipes(this string text, int lineNumber)
         {

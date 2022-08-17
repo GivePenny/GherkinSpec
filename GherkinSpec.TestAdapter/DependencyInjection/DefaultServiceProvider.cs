@@ -9,7 +9,7 @@ namespace GherkinSpec.TestAdapter.DependencyInjection
 {
     internal class DefaultServiceProvider : IServiceProvider, IDisposable
     {
-        private readonly List<object> instances = new List<object>();
+        private readonly List<object> instances = new();
         private readonly DefaultServiceProvider outerScopeProvider;
 
         public DefaultServiceProvider()
@@ -29,7 +29,7 @@ namespace GherkinSpec.TestAdapter.DependencyInjection
             {
                 foreach (var instance in instances
                     .OfType<IDisposable>()
-                    .Where(it => it != this))
+                    .Where(it => !ReferenceEquals(it, this)))
                 {
                     instance.Dispose();
                 }

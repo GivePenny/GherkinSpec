@@ -13,7 +13,7 @@ namespace GherkinSpec.TestAdapter.UnitTests.Binding
     [TestClass]
     public class StepBindingShould
     {
-        private readonly Mock<IServiceProvider> mockServiceProvider = new Mock<IServiceProvider>();
+        private readonly Mock<IServiceProvider> mockServiceProvider = new();
 
         [TestMethod]
         public void IdentifyStepsMarkedAsEventuallySuccessfull()

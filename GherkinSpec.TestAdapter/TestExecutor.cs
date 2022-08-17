@@ -16,18 +16,20 @@ namespace GherkinSpec.TestAdapter
     public class TestExecutor : ITestExecutor
     {
         public const string ExecutorUri = "executor://GherkinSpec";
-        public static readonly Uri ExecutorUriStronglyTyped = new Uri(ExecutorUri);
+        public static readonly Uri ExecutorUriStronglyTyped = new(ExecutorUri);
 
-        private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        private readonly CancellationTokenSource cancellationTokenSource = new();
 
         public void Cancel()
             => cancellationTokenSource.Cancel();
 
         public void RunTests(IEnumerable<TestCase> tests, IRunContext runContext, IFrameworkHandle frameworkHandle)
         {
+            var testCases = tests as TestCase[] ?? tests.ToArray();
+            
             try
             {
-                var sources = tests
+                var sources = testCases
                     .Select(test => test.Source)
                     .Distinct();
 
@@ -35,12 +37,12 @@ namespace GherkinSpec.TestAdapter
                     .DiscoverTests(sources, frameworkHandle)
                     .ToArray();
 
-                var unmappedTests = tests
+                var unmappedTests = testCases
                     .Where(test => !testsMappedToScenarios.Any(mappedTest => mappedTest.Id == test.Id));
 
                 unmappedTests.MarkAsNotFound(frameworkHandle);
 
-                var mappedTests = tests
+                var mappedTests = testCases
                     .Select(
                         test => testsMappedToScenarios
                             .FirstOrDefault(
@@ -56,7 +58,7 @@ namespace GherkinSpec.TestAdapter
                     TestMessageLevel.Error,
                     $"Skipping test run because of an early exception: {exception}");
 
-                tests.TryMarkAsFailed(frameworkHandle, exception.Message, exception.StackTrace);
+                testCases.TryMarkAsFailed(frameworkHandle, exception.Message, exception.StackTrace);
             }
         }
 

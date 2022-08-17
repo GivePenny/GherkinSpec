@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GherkinSpec.TestAdapter.Execution
 {
-    class ScenarioExecutor
+    internal class ScenarioExecutor
     {
         private readonly IStepBinder stepBinder;
 
@@ -22,10 +22,11 @@ namespace GherkinSpec.TestAdapter.Execution
         public async Task ExecuteSteps(IServiceProvider serviceProvider, TestResult testResult, IEnumerable<IStep> steps, DiscoveredTestData testData, TestRunContext testRunContext)
         {
             var startTime = DateTime.UtcNow;
-
-            for (var stepIndex = 0; stepIndex < steps.Count(); stepIndex++)
+            var stepsArray = steps as IStep[] ?? steps.ToArray();
+            
+            for (var stepIndex = 0; stepIndex < stepsArray.Length; stepIndex++)
             {
-                var step = steps.ElementAt(stepIndex);
+                var step = stepsArray.ElementAt(stepIndex);
 
                 testResult.Messages.Add(
                     new TestResultMessage(
@@ -59,9 +60,9 @@ namespace GherkinSpec.TestAdapter.Execution
                         throw;
                     }
 
-                    var previousStepsInReverse = steps.Take(stepIndex + 1).Reverse();
+                    var previousStepsInReverse = stepsArray.Take(stepIndex + 1).Reverse();
                     var lastWhenStep = previousStepsInReverse.First(s => s is WhenStep);
-                    stepIndex = steps.ToList().IndexOf(lastWhenStep);
+                    stepIndex = stepsArray.ToList().IndexOf(lastWhenStep);
                     await Task.Delay(testData.Scenario.EventuallyConsistentConfiguration.RetryInterval).ConfigureAwait(false);
                     continue;
                 }

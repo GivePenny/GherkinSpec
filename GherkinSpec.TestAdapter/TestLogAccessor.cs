@@ -6,9 +6,9 @@ using System.Threading;
 
 namespace GherkinSpec.TestAdapter
 {
-    class TestLogAccessor : ITestLogAccessor
+    internal class TestLogAccessor : ITestLogAccessor
     {
-        private readonly AsyncLocal<TestResult> asyncLocalTestResult = new AsyncLocal<TestResult>();
+        private readonly AsyncLocal<TestResult> asyncLocalTestResult = new();
 
         internal void SetCurrentTestResult(TestResult result)
         {

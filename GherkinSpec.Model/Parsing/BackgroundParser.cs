@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GherkinSpec.Model.Parsing
 {
-    static class BackgroundParser
+    internal static class BackgroundParser
     {
         public static Background ParseBackgroundIfPresent(LineReader reader)
         {

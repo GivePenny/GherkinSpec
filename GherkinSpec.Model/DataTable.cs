@@ -11,7 +11,7 @@ namespace GherkinSpec.Model
             Rows = rows.ToList().AsReadOnly();
         }
 
-        public static DataTable Empty { get; } = new DataTable(
+        public static DataTable Empty { get; } = new(
             Enumerable.Empty<DataTableRow>());
 
         public IEnumerable<string> ColumnNames

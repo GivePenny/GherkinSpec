@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace GherkinSpec.TestAdapter.Execution
 {
-    class TestCaseExecutor
+    internal class TestCaseExecutor
     {
         private readonly TestRunContext testRunContext;
         private readonly Func<StepBinder, IStepsExecutor> stepsExecutorFactory;
@@ -25,10 +25,11 @@ namespace GherkinSpec.TestAdapter.Execution
         public async Task RunTestCases(IEnumerable<TestCase> testCases, IFrameworkHandle frameworkHandle, CancellationToken cancellationToken)
         {
             frameworkHandle.SendMessage(TestMessageLevel.Informational, "Running tests");
+            var testCasesArray = testCases as TestCase[] ?? testCases.ToArray();
 
             var runHooks = new RunHooks(
                 testRunContext,
-                testCases
+                testCasesArray
                     .Select(
                         test => test
                             .DiscoveredData()
@@ -44,7 +45,7 @@ namespace GherkinSpec.TestAdapter.Execution
 
             var tasks = new List<Task>();
 
-            foreach (var testCase in testCases)
+            foreach (var testCase in testCasesArray)
             {
                 if (cancellationToken.IsCancellationRequested)
                 {

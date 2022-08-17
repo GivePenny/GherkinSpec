@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace GherkinSpec.Model.Parsing
 {
-    static class ScenarioParser
+    internal static class ScenarioParser
     {
         public static Scenario ParseScenario(LineReader reader, IEnumerable<Tag> tags)
         {

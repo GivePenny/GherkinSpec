@@ -42,7 +42,7 @@ namespace GherkinSpec.TestAdapter.UnitTests.Execution
 
             var mockStepsExecutor = new Mock<IStepsExecutor>();
 
-            var testCaseExecutor = new TestCaseExecutor(context, binder =>
+            var testCaseExecutor = new TestCaseExecutor(context, _ =>
             {
                 if(testCasesInProgress > 1)
                 {

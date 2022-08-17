@@ -25,7 +25,7 @@ namespace GherkinSpec.TestAdapter.Execution
 
         public async Task<TestResult> Execute(TestCase testCase, DiscoveredTestData testData, TestRunContext testRunContext, IMessageLogger logger)
         {
-            const double SmallestTimeRecognisedByTestRunnerInSeconds = 0.0005;
+            const double smallestTimeRecognisedByTestRunnerInSeconds = 0.0005;
 
             var testResult = new TestResult(testCase);
             var startTicks = Stopwatch.GetTimestamp();
@@ -50,7 +50,7 @@ namespace GherkinSpec.TestAdapter.Execution
                 }
                 else
                 {
-                    Localisation.SetUICultureFromTag(testData.Feature.Tags);
+                    Localisation.SetUiCultureFromTag(testData.Feature.Tags);
 
                     using (var serviceScope = testRunContext.ServiceProvider.CreateScope())
                     {
@@ -61,7 +61,8 @@ namespace GherkinSpec.TestAdapter.Execution
 
                         if (testData.Rule != null)
                         {
-                            allScenarioSteps = allScenarioSteps.Concat(testData.Rule.Background.Steps);
+                            allScenarioSteps = allScenarioSteps.Concat(
+                                testData.Rule.Background?.Steps ?? Enumerable.Empty<IStep>());
                         }
 
                         allScenarioSteps = allScenarioSteps.Concat(testData.Scenario.Steps);
@@ -75,7 +76,7 @@ namespace GherkinSpec.TestAdapter.Execution
 
                 testResult.Duration = TimeSpan.FromSeconds(
                     Math.Max(
-                        SmallestTimeRecognisedByTestRunnerInSeconds,
+                        smallestTimeRecognisedByTestRunnerInSeconds,
                         (Stopwatch.GetTimestamp() - startTicks) / Stopwatch.Frequency));
             }
             catch (Exception exception)

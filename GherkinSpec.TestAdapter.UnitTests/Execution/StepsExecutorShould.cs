@@ -21,8 +21,8 @@ namespace GherkinSpec.TestAdapter.UnitTests.Execution
     [TestClass]
     public class StepsExecutorShould
     {
-        private readonly Mock<IStepBinder> mockStepBinder = new Mock<IStepBinder>();
-        private readonly Mock<IMessageLogger> mockLogger = new Mock<IMessageLogger>();
+        private readonly Mock<IStepBinder> mockStepBinder = new();
+        private readonly Mock<IMessageLogger> mockLogger = new();
         private Assembly testAssembly;
         private TestCase testCase;
         private TestRunContext testRunContext;
@@ -43,7 +43,7 @@ namespace GherkinSpec.TestAdapter.UnitTests.Execution
         }
 
         [TestMethod]
-        public async Task SetThreadUICultureToMatchFeatureCulture()
+        public async Task SetThreadUiCultureToMatchFeatureCulture()
         {
             var scenarioStep = new GivenStep("Scenario step", DataTable.Empty, null);
             var testFeature = new Feature("Feature", null,
@@ -71,7 +71,7 @@ namespace GherkinSpec.TestAdapter.UnitTests.Execution
                 .Returns(mockScenarioStepMapping.Object)
                 .Callback(() => capturedCultureName = CultureInfo.CurrentUICulture.Name);
 
-            var testResult = await stepsExecutor.Execute(testCase, testData, testRunContext, mockLogger.Object);
+            await stepsExecutor.Execute(testCase, testData, testRunContext, mockLogger.Object);
 
             Assert.AreEqual("nb-NO", capturedCultureName);
         }
@@ -113,7 +113,7 @@ namespace GherkinSpec.TestAdapter.UnitTests.Execution
                 .Returns(mockScenarioStepMapping.Object)
                 .Callback(() => Assert.AreEqual(1, invocationOrder++));
 
-            var testResult = await stepsExecutor.Execute(testCase, testData, testRunContext, mockLogger.Object);
+            await stepsExecutor.Execute(testCase, testData, testRunContext, mockLogger.Object);
             
             mockBackgroundStepMapping.Verify(m => m.Execute(It.IsAny<IServiceProvider>(), It.IsAny<Collection<TestResultMessage>>()), Times.Once);
             mockScenarioStepMapping.Verify(m => m.Execute(It.IsAny<IServiceProvider>(), It.IsAny<Collection<TestResultMessage>>()), Times.Once);
@@ -173,7 +173,7 @@ namespace GherkinSpec.TestAdapter.UnitTests.Execution
                 .Returns(mockRuleScenarioStepMapping.Object)
                 .Callback(() => Assert.AreEqual(2, invocationOrder++));
 
-            var testResult = await stepsExecutor.Execute(testCase, testData, testRunContext, mockLogger.Object);
+            await stepsExecutor.Execute(testCase, testData, testRunContext, mockLogger.Object);
 
             mockFeatureBackgroundStepMapping.Verify(m => m.Execute(It.IsAny<IServiceProvider>(), It.IsAny<Collection<TestResultMessage>>()), Times.Once);
             mockRuleBackgroundStepMapping.Verify(m => m.Execute(It.IsAny<IServiceProvider>(), It.IsAny<Collection<TestResultMessage>>()), Times.Once);
@@ -355,7 +355,7 @@ namespace GherkinSpec.TestAdapter.UnitTests.Execution
                         "Scenario",
                         new IStep[] { givenStep, whenStep, thenStep },
                         1,
-                        new List<Tag> { new Tag("eventuallyConsistent(retryInterval=00:00:01;within=00:00:05)") })
+                        new List<Tag> { new("eventuallyConsistent(retryInterval=00:00:01;within=00:00:05)") })
                 },
                 Enumerable.Empty<ScenarioOutline>(),
                 Enumerable.Empty<Rule>(),

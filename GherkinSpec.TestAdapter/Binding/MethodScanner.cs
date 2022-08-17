@@ -1,5 +1,4 @@
-﻿using GherkinSpec.TestModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -8,7 +7,7 @@ using GherkinSpec.TestModel;
 
 namespace GherkinSpec.TestAdapter.Binding
 {
-    class MethodScanner
+    internal class MethodScanner
     {
         private readonly Dictionary<Regex, MethodInfo> regularExpressionsToGivenMethods;
         private readonly Dictionary<Regex, MethodInfo> regularExpressionsToWhenMethods;

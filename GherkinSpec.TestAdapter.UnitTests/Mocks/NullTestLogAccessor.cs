@@ -1,9 +1,8 @@
 ﻿using GherkinSpec.TestModel;
-using System;
 
 namespace GherkinSpec.TestAdapter.UnitTests.Mocks
 {
-    class NullTestLogAccessor : ITestLogAccessor
+    internal class NullTestLogAccessor : ITestLogAccessor
     {
         public bool IsInRunningTest => true;
 

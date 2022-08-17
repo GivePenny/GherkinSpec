@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GherkinSpec.TestAdapter
 {
-    static class CommonPrefixStripper
+    internal static class CommonPrefixStripper
     {
         public static void StripNamePrefixesSharedByAllTestCases(List<TestCase> cases)
         {

@@ -1,9 +1,5 @@
 ﻿using GherkinSpec.TestAdapter.UnitTests.Mocks;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace GherkinSpec.TestAdapter.UnitTests

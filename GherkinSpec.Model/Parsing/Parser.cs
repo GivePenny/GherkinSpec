@@ -20,9 +20,9 @@ namespace GherkinSpec.Model.Parsing
         {
             reader.ReadNextLine();
 
-            var featureTags = TagParser.ParseTagsIfPresent(reader);
+            var featureTags = TagParser.ParseTagsIfPresent(reader).ToArray();
 
-            Localisation.SetUICultureFromTag(featureTags);
+            Localisation.SetUiCultureFromTag(featureTags);
 
             if (!reader.IsFeatureStartLine)
             {
@@ -50,7 +50,7 @@ namespace GherkinSpec.Model.Parsing
             {
                 return new Feature(
                     featureTitle,
-                    featureNarrative.ToString()?.Trim(),
+                    featureNarrative.ToString().Trim(),
                     Background.Empty,
                     Enumerable.Empty<Scenario>(),
                     Enumerable.Empty<ScenarioOutline>(),
@@ -69,7 +69,7 @@ namespace GherkinSpec.Model.Parsing
 
             return new Feature(
                 featureTitle,
-                featureNarrative.ToString()?.Trim(),
+                featureNarrative.ToString().Trim(),
                 featureBackground,
                 featureScenarios,
                 featureScenarioOutlines,
