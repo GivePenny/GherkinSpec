@@ -12,10 +12,10 @@ namespace GherkinSpec.TestAdapter.UnitTests
         {
             var cases = new List<TestCase>
             {
-                new TestCase() { FullyQualifiedName = "A1.B1" },
-                new TestCase() { FullyQualifiedName = "A1.B1.C1" },
-                new TestCase() { FullyQualifiedName = "A1.B1.C2" },
-                new TestCase() { FullyQualifiedName = "A1.B2" },
+                new() { FullyQualifiedName = "A1.B1" },
+                new() { FullyQualifiedName = "A1.B1.C1" },
+                new() { FullyQualifiedName = "A1.B1.C2" },
+                new() { FullyQualifiedName = "A1.B2" },
             };
 
             CommonPrefixStripper.StripNamePrefixesSharedByAllTestCases(cases);
@@ -31,9 +31,9 @@ namespace GherkinSpec.TestAdapter.UnitTests
         {
             var cases = new List<TestCase>
             {
-                new TestCase() { FullyQualifiedName = "A1.B1" },
-                new TestCase() { FullyQualifiedName = "A1.B1.C1" },
-                new TestCase() { FullyQualifiedName = "A1.B1.C2" }
+                new() { FullyQualifiedName = "A1.B1" },
+                new() { FullyQualifiedName = "A1.B1.C1" },
+                new() { FullyQualifiedName = "A1.B1.C2" }
             };
 
             CommonPrefixStripper.StripNamePrefixesSharedByAllTestCases(cases);
@@ -48,8 +48,8 @@ namespace GherkinSpec.TestAdapter.UnitTests
         {
             var cases = new List<TestCase>
             {
-                new TestCase() { FullyQualifiedName = "A1.B1.C1" },
-                new TestCase() { FullyQualifiedName = "A1.B1.C2" }
+                new() { FullyQualifiedName = "A1.B1.C1" },
+                new() { FullyQualifiedName = "A1.B1.C2" }
             };
 
             CommonPrefixStripper.StripNamePrefixesSharedByAllTestCases(cases);

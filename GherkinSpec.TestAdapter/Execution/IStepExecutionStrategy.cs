@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GherkinSpec.TestAdapter.Execution
 {
-    interface IStepExecutionStrategy
+    internal interface IStepExecutionStrategy
     {
         Task Execute(IStepBinding stepBinding, IServiceProvider serviceProvider, Collection<TestResultMessage> messages, TestRunContext testRunContext);
     }

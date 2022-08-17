@@ -15,7 +15,7 @@ namespace GherkinSpec.Model
         public IReadOnlyCollection<GivenStep> Steps { get; }
 
         public static Background Empty
-            => new Background(
+            => new(
                 Enumerable.Empty<GivenStep>(), 0);
     }
 }

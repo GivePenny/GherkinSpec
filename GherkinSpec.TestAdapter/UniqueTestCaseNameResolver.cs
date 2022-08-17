@@ -4,10 +4,10 @@ using System.Text.RegularExpressions;
 
 namespace GherkinSpec.TestAdapter
 {
-    class UniqueTestCaseNameResolver
+    internal class UniqueTestCaseNameResolver
     {
-        private static readonly Regex uniqueTestCaseSuffixRegex = new Regex(" \\((\\d+)\\)$");
-        private readonly HashSet<string> discoveredFullyQualifiedTestNames = new HashSet<string>();
+        private static readonly Regex UniqueTestCaseSuffixRegex = new(" \\((\\d+)\\)$");
+        private readonly HashSet<string> discoveredFullyQualifiedTestNames = new();
 
         public void EnsureTestCaseNameIsUnique(TestCase testCase)
         {
@@ -17,7 +17,7 @@ namespace GherkinSpec.TestAdapter
                 return;
             }
 
-            var distinctTestCaseSuffixMatch = uniqueTestCaseSuffixRegex.Match(testCase.FullyQualifiedName);
+            var distinctTestCaseSuffixMatch = UniqueTestCaseSuffixRegex.Match(testCase.FullyQualifiedName);
             if (!distinctTestCaseSuffixMatch.Success)
             {
                 testCase.FullyQualifiedName += " (2)";
@@ -27,17 +27,16 @@ namespace GherkinSpec.TestAdapter
             {
                 var nextDistinctTestCaseCounterValue = int.Parse(distinctTestCaseSuffixMatch.Groups[1].Value) + 1;
 
-                testCase.FullyQualifiedName = uniqueTestCaseSuffixRegex.Replace(
+                testCase.FullyQualifiedName = UniqueTestCaseSuffixRegex.Replace(
                     testCase.FullyQualifiedName,
                     $" ({nextDistinctTestCaseCounterValue})");
 
-                testCase.DisplayName = uniqueTestCaseSuffixRegex.Replace(
+                testCase.DisplayName = UniqueTestCaseSuffixRegex.Replace(
                     testCase.DisplayName,
                     $" ({nextDistinctTestCaseCounterValue})");
             }
 
             EnsureTestCaseNameIsUnique(testCase);
-            return;
         }
     }
 }

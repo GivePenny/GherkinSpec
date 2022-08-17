@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace GherkinSpec.TestAdapter.UnitTests.Mocks
 {
-    class MockFeature : Feature
+    internal class MockFeature : Feature
     {
         public MockFeature() : base(
             "Test feature",

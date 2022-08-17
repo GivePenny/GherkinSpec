@@ -191,7 +191,7 @@ namespace GherkinSpec.TestAdapter.UnitTests.Binding
         }
 
         private DataTable NonEmptyDataTable
-            => new DataTable(
+            => new(
                 new[]
                 {
                     new DataTableRow(

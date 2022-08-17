@@ -2,7 +2,7 @@
 
 namespace GherkinSpec.Model
 {
-    static class StepTitleParser
+    internal static class StepTitleParser
     {
         public static string GetTitleAfterType(string title, string[] currentStepTitlePrefixes)
         {

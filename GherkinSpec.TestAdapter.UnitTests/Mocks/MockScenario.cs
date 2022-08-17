@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace GherkinSpec.TestAdapter.UnitTests.Mocks
 {
-    class MockScenario : Scenario
+    internal class MockScenario : Scenario
     {
         public MockScenario() : base(
             "Test scenario",

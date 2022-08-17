@@ -2,7 +2,7 @@
 
 namespace GherkinSpec.TestAdapter.DependencyInjection
 {
-    class DefaultServiceProviderScopeFactory : IServiceScopeFactory
+    internal class DefaultServiceProviderScopeFactory : IServiceScopeFactory
     {
         private readonly DefaultServiceProvider outerScopeProvider;
 

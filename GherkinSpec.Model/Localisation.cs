@@ -8,13 +8,13 @@ namespace GherkinSpec.Model
 {
     public static class Localisation
     {
-        private static readonly Regex cultureTagRegex = new Regex(
+        private static readonly Regex CultureTagRegex = new(
             @"(culture|kultur|cultura)\((?<code>[\w\-]{2,5})\)",
             RegexOptions.ExplicitCapture);
 
-        public static void SetUICultureFromTag(IEnumerable<Tag> featureTags)
+        public static void SetUiCultureFromTag(IEnumerable<Tag> featureTags)
         {
-            var cultureTag = featureTags.FirstOrDefault(tag => cultureTagRegex.IsMatch(tag.Label));
+            var cultureTag = featureTags.FirstOrDefault(tag => CultureTagRegex.IsMatch(tag.Label));
 
             if (cultureTag == null)
             {
@@ -22,7 +22,7 @@ namespace GherkinSpec.Model
                 return;
             }
 
-            var cultureCode = cultureTagRegex.Match(cultureTag.Label).Groups[1].Captures[0].Value;
+            var cultureCode = CultureTagRegex.Match(cultureTag.Label).Groups[1].Captures[0].Value;
 
             CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(cultureCode);
         }

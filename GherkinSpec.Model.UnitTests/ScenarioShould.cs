@@ -18,7 +18,7 @@ namespace GherkinSpec.Model.UnitTests
 
             var scenario = new Scenario("Title", Enumerable.Empty<IStep>(), 0, new List<Tag>
             {
-                new Tag(tagLabel)
+                new(tagLabel)
             });
 
             Assert.IsTrue(scenario.IsIgnored);
@@ -29,7 +29,7 @@ namespace GherkinSpec.Model.UnitTests
         {
             var scenario = new Scenario("Title", Enumerable.Empty<IStep>(), 0, new List<Tag>
             {
-                new Tag("eventuallyConsistent")
+                new("eventuallyConsistent")
             });
 
             Assert.IsTrue(scenario.IsEventuallyConsistent);
@@ -40,7 +40,7 @@ namespace GherkinSpec.Model.UnitTests
         {
             var scenario = new Scenario("Title", Enumerable.Empty<IStep>(), 0, new List<Tag>
             {
-                new Tag("eventuallyConsistent()")
+                new("eventuallyConsistent()")
             });
 
             Assert.IsTrue(scenario.IsEventuallyConsistent);
@@ -51,7 +51,7 @@ namespace GherkinSpec.Model.UnitTests
         {
             var scenario = new Scenario("Title", Enumerable.Empty<IStep>(), 0, new List<Tag>
             {
-                new Tag("eventuallyConsistent(within=00:00:20)")
+                new("eventuallyConsistent(within=00:00:20)")
             });
 
             Assert.IsTrue(scenario.IsEventuallyConsistent);
@@ -62,7 +62,7 @@ namespace GherkinSpec.Model.UnitTests
         {
             var scenario = new Scenario("Title", Enumerable.Empty<IStep>(), 0, new List<Tag>
             {
-                new Tag("eventuallyConsistent(retryInterval=00:00:05)")
+                new("eventuallyConsistent(retryInterval=00:00:05)")
             });
 
             Assert.IsTrue(scenario.IsEventuallyConsistent);
@@ -75,7 +75,7 @@ namespace GherkinSpec.Model.UnitTests
         {
             var scenario = new Scenario("Title", Enumerable.Empty<IStep>(), 0, new List<Tag>
             {
-                new Tag(label)
+                new(label)
             });
 
             Assert.IsTrue(scenario.IsEventuallyConsistent);

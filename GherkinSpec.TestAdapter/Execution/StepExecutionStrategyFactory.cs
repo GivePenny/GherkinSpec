@@ -2,25 +2,25 @@
 
 namespace GherkinSpec.TestAdapter.Execution
 {
-    static class StepExecutionStrategyFactory
+    internal static class StepExecutionStrategyFactory
     {
-        private readonly static ExecuteOnceStepStrategy executeOnceStepStrategy = new ExecuteOnceStepStrategy();
-        private readonly static EventuallySuccessfulStepStrategy eventuallySuccesfulStepStrategy = new EventuallySuccessfulStepStrategy();
-        private readonly static MustNotEventuallyFailStepStrategy mustNotEventuallyFailStepStrategy = new MustNotEventuallyFailStepStrategy();
+        private static readonly ExecuteOnceStepStrategy ExecuteOnceStepStrategy = new();
+        private static readonly EventuallySuccessfulStepStrategy EventuallySuccessfulStepStrategy = new();
+        private static readonly MustNotEventuallyFailStepStrategy MustNotEventuallyFailStepStrategy = new();
 
         public static IStepExecutionStrategy GetFor(IStepBinding binding)
         {
             if (binding.IsSuccessEventual)
             {
-                return eventuallySuccesfulStepStrategy;
+                return EventuallySuccessfulStepStrategy;
             }
 
             if (binding.IsMarkedMustNotEventuallyFail)
             {
-                return mustNotEventuallyFailStepStrategy;
+                return MustNotEventuallyFailStepStrategy;
             }
 
-            return executeOnceStepStrategy;
+            return ExecuteOnceStepStrategy;
         }
     }
 }

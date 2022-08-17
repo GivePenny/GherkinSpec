@@ -6,7 +6,7 @@ namespace GherkinSpec.TestAdapter.UnitTests.Samples
     [Steps]
     public class StepBindingEventuallyConsistentStepSamples
     {
-        int calls = 0;
+        private int calls;
 
         [Then("this eventually succeeds")]
         [EventuallySucceeds]

@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace GherkinSpec.Model.UnitTests
 {
-    static class IEnumerableExtensions
+    internal static class EnumerableExtensions
     {
         public static T Second<T>(this IEnumerable<T> items)
             => items.Skip(1).First();

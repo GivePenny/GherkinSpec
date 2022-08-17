@@ -28,7 +28,8 @@ namespace GherkinSpec.Model.Parsing
                 .Replace("(", string.Empty)
                 .Replace(")", string.Empty)
                 .Split(';')
-                .Select(s => s.Trim());
+                .Select(s => s.Trim())
+                .ToArray();
 
             if (TimeSpan
                     .TryParse(

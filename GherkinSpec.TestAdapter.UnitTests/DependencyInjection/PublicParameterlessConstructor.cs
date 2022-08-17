@@ -1,6 +1,6 @@
 ﻿namespace GherkinSpec.TestAdapter.UnitTests.DependencyInjection
 {
-    class PublicParameterlessConstructor
+    internal class PublicParameterlessConstructor
     {
         public PublicParameterlessConstructor()
         {

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace GherkinSpec.TestAdapter.UnitTests.Mocks
 {
-    class MockTestCaseDiscoverySink : ITestCaseDiscoverySink
+    internal class MockTestCaseDiscoverySink : ITestCaseDiscoverySink
     {
-        private readonly List<TestCase> discoveredTests = new List<TestCase>();
+        private readonly List<TestCase> discoveredTests = new();
 
         public IReadOnlyList<TestCase> DiscoveredTests
             => discoveredTests.AsReadOnly();

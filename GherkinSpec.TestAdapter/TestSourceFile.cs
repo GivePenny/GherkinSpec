@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace GherkinSpec.TestAdapter
 {
-    class TestSourceFile
+    internal class TestSourceFile
     {
         public TestSourceFile(string sourceFileName, IEnumerable<string> relevantFolderNames)
         {

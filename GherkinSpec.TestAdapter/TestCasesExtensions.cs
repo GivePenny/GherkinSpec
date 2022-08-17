@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace GherkinSpec.TestAdapter
 {
-    static class TestCasesExtensions
+    internal static class TestCasesExtensions
     {
         public static void TryMarkAsFailed(this IEnumerable<TestCase> testCases, IFrameworkHandle frameworkHandle, string errorMessage, string errorStackTrace)
         {

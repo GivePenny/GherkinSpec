@@ -1,7 +1,4 @@
-﻿using GherkinSpec.Model.Parsing;
-using System;
-
-namespace GherkinSpec.Model
+﻿namespace GherkinSpec.Model
 {
     public class WhenStep : IStep
     {

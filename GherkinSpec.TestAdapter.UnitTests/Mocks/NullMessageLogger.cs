@@ -2,7 +2,7 @@
 
 namespace GherkinSpec.TestAdapter.UnitTests.Mocks
 {
-    class NullMessageLogger : IMessageLogger
+    internal class NullMessageLogger : IMessageLogger
     {
         public void SendMessage(TestMessageLevel testMessageLevel, string message)
         {

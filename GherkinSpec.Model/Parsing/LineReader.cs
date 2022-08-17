@@ -3,7 +3,7 @@ using System.IO;
 
 namespace GherkinSpec.Model.Parsing
 {
-    class LineReader
+    internal class LineReader
     {
         private string ExamplesLine => Resources.ExamplesKeyword + ":";
 

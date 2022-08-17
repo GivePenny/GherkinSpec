@@ -3,7 +3,7 @@ using System;
 
 namespace GherkinSpec.TestAdapter.DependencyInjection
 {
-    class DefaultServiceProviderScope : IServiceScope
+    internal class DefaultServiceProviderScope : IServiceScope
     {
         public DefaultServiceProviderScope(DefaultServiceProvider outerScopeProvider)
         {

@@ -2,12 +2,12 @@
 
 namespace GherkinSpec.Model.Parsing
 {
-    class FeatureContentParser
+    internal class FeatureContentParser
     {
-        private bool isInRule = false;
-        private IEnumerable<Tag> ruleTags = null;
-        private string ruleTitle = null;
-        private Background ruleBackground = null;
+        private bool isInRule;
+        private IEnumerable<Tag> ruleTags;
+        private string ruleTitle;
+        private Background ruleBackground;
         private List<Scenario> activeScenariosList;
         private List<ScenarioOutline> activeScenarioOutlinesList;
         private readonly List<Rule> featureRules;

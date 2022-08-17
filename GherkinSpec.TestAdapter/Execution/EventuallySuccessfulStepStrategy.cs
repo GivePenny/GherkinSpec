@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 
 namespace GherkinSpec.TestAdapter.Execution
 {
-    class EventuallySuccessfulStepStrategy : IStepExecutionStrategy
+    internal class EventuallySuccessfulStepStrategy : IStepExecutionStrategy
     {
         public async Task Execute(IStepBinding stepBinding, IServiceProvider serviceProvider, Collection<TestResultMessage> messages, TestRunContext testRunContext)
         {

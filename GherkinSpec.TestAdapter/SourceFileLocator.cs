@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace GherkinSpec.TestAdapter
 {
-    class SourceFileLocator
+    internal class SourceFileLocator
     {
         private readonly string assemblyDllPath;
 
