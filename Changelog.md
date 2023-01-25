@@ -5,6 +5,7 @@
 ### Added
 
 * Support for specified binding attribute types (see the [`Custom Binding Attribute Types documentation`](./docs/CustomBindingAttributeTypes.md)).
+* "Location" trait added to discovered test cases, to allow for better IDE test explorer grouping.
 
 ### Changed
 

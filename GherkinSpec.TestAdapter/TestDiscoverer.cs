@@ -16,6 +16,8 @@ namespace GherkinSpec.TestAdapter
     [FileExtension(".exe")]
     public class TestDiscoverer : ITestDiscoverer
     {
+        private const string LocationTraitName = "Location";
+
         public void DiscoverTests(
             IEnumerable<string> sources,
             IDiscoveryContext discoveryContext,
@@ -101,7 +103,11 @@ namespace GherkinSpec.TestAdapter
                         DisplayName = scenario.Title,
                         LocalExtensionData = new DiscoveredTestData(assembly, feature, null, scenario),
                         CodeFilePath = featureSourceFile.SourceFileName,
-                        LineNumber = scenario.StartingLineNumber
+                        LineNumber = scenario.StartingLineNumber,
+                        Traits =
+                        {
+                            new Trait(LocationTraitName, cleanedFeatureFolderAndName)
+                        }
                     };
 
                     AddCategoryTraits(feature, rule: null, scenario, testCase);
@@ -121,7 +127,11 @@ namespace GherkinSpec.TestAdapter
                             DisplayName = scenario.Title,
                             LocalExtensionData = new DiscoveredTestData(assembly, feature, rule, scenario),
                             CodeFilePath = featureSourceFile.SourceFileName,
-                            LineNumber = scenario.StartingLineNumber
+                            LineNumber = scenario.StartingLineNumber,
+                            Traits =
+                            {
+                                new Trait(LocationTraitName, cleanedRuleFolderAndName)
+                            }
                         };
 
                         AddCategoryTraits(feature, rule, scenario, testCase);
