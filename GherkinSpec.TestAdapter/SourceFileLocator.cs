@@ -59,7 +59,10 @@ namespace GherkinSpec.TestAdapter
                         .Replace('/', '.')
                         .Replace('\\', '.');
 
-                    if (resourceName.EndsWith(possibleResourcifiedName))
+                    var possibleResourceIdentityName = (featureFileFolder + "\\" + featureFileName)[1..];
+
+                    if (resourceName.EndsWith(possibleResourcifiedName)
+                        || resourceName == possibleResourceIdentityName)
                     {
                         return new TestSourceFile(
                             featureFile,
