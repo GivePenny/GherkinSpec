@@ -23,19 +23,19 @@ namespace GherkinSpec.TestAdapter.UnitTests
             Assert.AreEqual(
                 1,
                 testCaseDiscoverySink.DiscoveredTests.Count(
-                    t => t.FullyQualifiedName == "Duplicate scenario"
+                    t => t.FullyQualifiedName == "Duplicate scenario names.Duplicate scenario"
                         && t.DisplayName == "Duplicate scenario"));
 
             Assert.AreEqual(
                 1,
                 testCaseDiscoverySink.DiscoveredTests.Count(
-                    t => t.FullyQualifiedName == "Duplicate scenario (2)"
+                    t => t.FullyQualifiedName == "Duplicate scenario names.Duplicate scenario (2)"
                         && t.DisplayName == "Duplicate scenario (2)"));
 
             Assert.AreEqual(
                 1,
                 testCaseDiscoverySink.DiscoveredTests.Count(
-                    t => t.FullyQualifiedName == "Duplicate scenario (3)"
+                    t => t.FullyQualifiedName == "Duplicate scenario names.Duplicate scenario (3)"
                         && t.DisplayName == "Duplicate scenario (3)"));
         }
     }
